@@ -1,0 +1,54 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+	xmlns:p="http://primefaces.org/ui">
+<!-- PAgina para JSF -->
+<h:head>
+	<title>Ejemplo de Java Server Faces</title>
+	<style>
+.center {
+	margin: auto;
+	width: 50%;
+	padding: 20% 0;
+}
+</style>
+</h:head>
+<h:body>
+
+	<h:form id="form" styleClass="center" style="width:400px;">
+		<p:panel id="panel" header="Sistema de pagos"
+			style="margin-bottom:10px;">
+			<h:panelGrid columns="2" cellpadding="5">
+				<h:outputLabel for="username" value="Usuario:" />
+				<p:inputText value="#{LoginUser.username}" id="username"
+					required="true" label="username" />
+				<h:outputLabel for="password" value="Clave:" />
+				<p:password value="#{LoginUser.password}" id="password"
+					required="true" label="password" />
+				<f:facet name="footer">
+					<p:commandButton id="loginButton" value="Entrar"
+						action="#{LoginUser.userLogin}" update=":mensajes"
+						oncomplete="manejarLogin(xhr, status, args)" ajax="false" />
+				</f:facet>
+			</h:panelGrid>
+			<p:messages id="messages" style="width:300px; font-size:10px;" />
+		</p:panel>
+	</h:form>
+	<script type="text/javascript">
+		//<![CDATA[
+		function manejarLogin(xhr, status, args) {
+			if (!args.validationFailed && args.estaLogeado) {
+				setTimeout(function() {
+					window.location = args.view;
+				}, 500);
+			}
+		}
+		//]]>
+	</script>
+
+</h:body>
+
+</html>
