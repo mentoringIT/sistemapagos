@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pageflow:Pageflow xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:pageflow="http://www.sybase.com/suade/pageflow" id="pf14833867011771" configfile="/sistemapagosweb/WebContent/WEB-INF/faces-config.xml">
+  <nodes xsi:type="pageflow:PFPage" name="index.xhtml" id="pf14846088499242" referenceLink="//@navigationRule.0/@fromViewId|" outlinks="pf14846088499243 pf14846088499244" path="/index.xhtml"/>
+  <nodes xsi:type="pageflow:PFPage" name="inicioLogin.xhtml" id="pf14846088499245" referenceLink="//@navigationRule.0/@navigationCase.0/@toViewId|" inlinks="pf14846088499243" path="inicioLogin.xhtml"/>
+  <nodes xsi:type="pageflow:PFPage" name="inicioFail.xhtml" id="pf14846088499246" referenceLink="//@navigationRule.0/@navigationCase.1/@toViewId|" inlinks="pf14846088499244" path="inicioFail.xhtml"/>
+  <links id="pf14846088499243" target="pf14846088499245" source="pf14846088499242" outcome="login"/>
+  <links id="pf14846088499244" target="pf14846088499246" source="pf14846088499242" outcome="fail"/>
+</pageflow:Pageflow>
