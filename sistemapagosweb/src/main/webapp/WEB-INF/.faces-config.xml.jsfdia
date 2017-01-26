@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<PROCESS model-entity="JSFProcess">
+ <PROCESS-ITEM NAME="rules:#index.xhtml" PATH="/index.xhtml"
+  SHAPE="32,17,0,0" model-entity="JSFProcessGroup">
+  <PROCESS-ITEM ID="rules:#index.xhtml:0" NAME="item"
+   PATH="/index.xhtml" model-entity="JSFProcessItem">
+   <PROCESS-ITEM-OUTPUT ID="login::menuPrincipal.xhtml" NAME="output"
+    PATH="menuPrincipal.xhtml" TARGET="rules:menuPrincipal.xhtml"
+    TITLE="login" model-entity="JSFProcessItemOutput"/>
+   <PROCESS-ITEM-OUTPUT ID="fail::inicioFail.xhtml" NAME="output1"
+    PATH="inicioFail.xhtml" TARGET="rules:inicioFail.xhtml" TITLE="fail" model-entity="JSFProcessItemOutput"/>
+  </PROCESS-ITEM>
+ </PROCESS-ITEM>
+ <PROCESS-ITEM NAME="rules:inicioFail.xhtml" PATH="inicioFail.xhtml"
+  SHAPE="256,177,0,0" model-entity="JSFProcessGroup"/>
+ <PROCESS-ITEM NAME="rules:menuPrincipal.xhtml"
+  PATH="menuPrincipal.xhtml" SHAPE="256,33,0,0" model-entity="JSFProcessGroup">
+  <PROCESS-ITEM ID="rules:menuPrincipal.xhtml:0" NAME="item"
+   PATH="menuPrincipal.xhtml" model-entity="JSFProcessItem">
+   <PROCESS-ITEM-OUTPUT ID="students::menuAlumnos.xhtml" NAME="output"
+    PATH="menuAlumnos.xhtml" TARGET="rules:menuAlumnos.xhtml"
+    TITLE="students" model-entity="JSFProcessItemOutput"/>
+  </PROCESS-ITEM>
+ </PROCESS-ITEM>
+ <PROCESS-ITEM NAME="rules:menuAlumnos.xhtml" PATH="menuAlumnos.xhtml"
+  SHAPE="464,17,0,0" model-entity="JSFProcessGroup">
+  <PROCESS-ITEM ID="rules:menuAlumnos.xhtml:0" NAME="item"
+   PATH="menuAlumnos.xhtml" model-entity="JSFProcessItem">
+   <PROCESS-ITEM-OUTPUT ID="make::realizarPagoAlumnos.xhtml"
+    NAME="output" PATH="realizarPagoAlumnos.xhtml"
+    TARGET="rules:realizarPagoAlumnos.xhtml" TITLE="make" model-entity="JSFProcessItemOutput"/>
+   <PROCESS-ITEM-OUTPUT ID="search::buscarPagoAlumnos.xhtml"
+    NAME="output1" PATH="buscarPagoAlumnos.xhtml"
+    TARGET="rules:buscarPagoAlumnos.xhtml" TITLE="search" model-entity="JSFProcessItemOutput"/>
+  </PROCESS-ITEM>
+ </PROCESS-ITEM>
+ <PROCESS-ITEM NAME="rules:realizarPagoAlumnos.xhtml"
+  PATH="realizarPagoAlumnos.xhtml" SHAPE="672,33,0,0" model-entity="JSFProcessGroup">
+  <PROCESS-ITEM ID="rules:realizarPagoAlumnos.xhtml:0" NAME="item"
+   PATH="realizarPagoAlumnos.xhtml" model-entity="JSFProcessItem">
+   <PROCESS-ITEM-OUTPUT ID="existing::pagoAlumnoExistente.xhtml"
+    NAME="output" PATH="pagoAlumnoExistente.xhtml"
+    TARGET="rules:pagoAlumnoExistente.xhtml" TITLE="existing" model-entity="JSFProcessItemOutput"/>
+   <PROCESS-ITEM-OUTPUT ID="new::pagoAlumnoNuevo.xhtml" NAME="output1"
+    PATH="pagoAlumnoNuevo.xhtml" TARGET="rules:pagoAlumnoNuevo.xhtml"
+    TITLE="new" model-entity="JSFProcessItemOutput"/>
+  </PROCESS-ITEM>
+ </PROCESS-ITEM>
+ <PROCESS-ITEM NAME="rules:buscarPagoAlumnos.xhtml"
+  PATH="buscarPagoAlumnos.xhtml" SHAPE="688,177,0,0" model-entity="JSFProcessGroup"/>
+ <PROCESS-ITEM NAME="rules:pagoAlumnoExistente.xhtml"
+  PATH="pagoAlumnoExistente.xhtml" SHAPE="912,17,0,0" model-entity="JSFProcessGroup">
+  <PROCESS-ITEM ID="rules:pagoAlumnoExistente.xhtml:0" NAME="item"
+   PATH="pagoAlumnoExistente.xhtml" model-entity="JSFProcessItem">
+   <PROCESS-ITEM-OUTPUT ID="next::prueba.xhtml" NAME="output"
+    PATH="prueba.xhtml" TARGET="rules:prueba.xhtml" TITLE="next" model-entity="JSFProcessItemOutput"/>
+  </PROCESS-ITEM>
+ </PROCESS-ITEM>
+ <PROCESS-ITEM NAME="rules:pagoAlumnoNuevo.xhtml"
+  PATH="pagoAlumnoNuevo.xhtml" SHAPE="912,161,0,0" model-entity="JSFProcessGroup"/>
+ <PROCESS-ITEM NAME="rules:prueba.xhtml" PATH="prueba.xhtml"
+  SHAPE="1120,33,0,0" model-entity="JSFProcessGroup"/>
+</PROCESS>
