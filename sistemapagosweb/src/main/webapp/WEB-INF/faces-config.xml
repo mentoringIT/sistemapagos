@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<faces-config xmlns="http://xmlns.jcp.org/xml/ns/javaee"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee 
+	http://xmlns.jcp.org/xml/ns/javaee/web-facesconfig_2_2.xsd"
+	version="2.2">
+	<managed-bean>
+		<managed-bean-name>LoginUser</managed-bean-name>
+		<managed-bean-class>mx.com.mentoringit.web.beans.UserBean</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+		<managed-property>
+			<property-name>userService</property-name>
+			<value>#{userService}</value>
+		</managed-property>
+	</managed-bean>
+	
+	<managed-bean>
+		<managed-bean-name>StudentList</managed-bean-name>
+		<managed-bean-class>mx.com.mentoringit.web.beans.StudentBean</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+		<managed-property>
+			<property-name>studentService</property-name>
+			<value>#{studentService}</value>
+		</managed-property>
+	</managed-bean>
+	
+	<managed-bean>
+		<managed-bean-name>CourseList</managed-bean-name>
+		<managed-bean-class>mx.com.mentoringit.web.beans.CourseBean</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+		<managed-property>
+			<property-name>courseService</property-name>
+			<value>#{courseService}</value>
+		</managed-property>
+	</managed-bean>
+
+	<navigation-rule>
+		<from-view-id>/index.xhtml</from-view-id>
+		<navigation-case>
+			<from-outcome>login</from-outcome>
+			<to-view-id>menuPrincipal.xhtml</to-view-id>
+		</navigation-case>
+		<navigation-case>
+			<from-outcome>fail</from-outcome>
+			<to-view-id>inicioFail.xhtml</to-view-id>
+		</navigation-case>
+	</navigation-rule>
+	
+	<navigation-rule>
+		<from-view-id>menuPrincipal.xhtml</from-view-id>
+		<navigation-case>
+			<from-outcome>students</from-outcome>
+			<to-view-id>menuAlumnos.xhtml</to-view-id>
+		</navigation-case>
+	</navigation-rule>
+	
+	<navigation-rule>
+		<from-view-id>menuAlumnos.xhtml</from-view-id>
+		<navigation-case>
+			<from-outcome>make</from-outcome>
+			<to-view-id>realizarPagoAlumnos.xhtml</to-view-id>
+		</navigation-case>
+		<navigation-case>
+			<from-outcome>search</from-outcome>
+			<to-view-id>buscarPagoAlumnos.xhtml</to-view-id>
+		</navigation-case>
+	</navigation-rule>
+	
+	<navigation-rule>
+		<from-view-id>realizarPagoAlumnos.xhtml</from-view-id>
+		<navigation-case>
+			<from-outcome>existing</from-outcome>
+			<to-view-id>pagoAlumnoExistente.xhtml</to-view-id>
+		</navigation-case>
+		<navigation-case>
+			<from-outcome>new</from-outcome>
+			<to-view-id>pagoAlumnoNuevo.xhtml</to-view-id>
+		</navigation-case>
+	</navigation-rule>
+	
+	<navigation-rule>
+		<from-view-id>pagoAlumnoExistente.xhtml</from-view-id>
+		<navigation-case>
+			<from-outcome>next</from-outcome>
+			<to-view-id>prueba.xhtml</to-view-id>
+		</navigation-case>		
+	</navigation-rule>
+	
+	
+	
+	<application>
+		<el-resolver>org.springframework.web.jsf.el.SpringBeanFacesELResolver</el-resolver>
+	</application>
+
+</faces-config>

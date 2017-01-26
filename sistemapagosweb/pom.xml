@@ -75,7 +75,7 @@
 		<!-- modelo de datos de sistemapagos -->
 		<dependency>
 			<groupId>mx.com.mentoringit</groupId>
-			<artifactId>encuestasmodel</artifactId>
+			<artifactId>sistemapagosmodel</artifactId>
 			<version>0.0.1-SNAPSHOT</version>
 		</dependency>
 	</dependencies>
