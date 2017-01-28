@@ -41,8 +41,8 @@ public class CourseService implements ICourseService {
 	}
 
 	@Override
-	public List<StudentDTO> student(Integer id) throws Exception {
-		return regDAO.select(id);
+	public List<StudentDTO> student(Integer id, String date) throws Exception {
+		return regDAO.select(id,date);
 	}
 
 	

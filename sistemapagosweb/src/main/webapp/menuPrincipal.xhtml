@@ -1,25 +1,25 @@
-<?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
-	xmlns:h="http://java.sun.com/jsf/html"
-	xmlns:f="http://java.sun.com/jsf/core"
 	xmlns:ui="http://java.sun.com/jsf/facelets"
-	xmlns:fn="http://java.sun.com/jsp/jstl/functions"
-	xmlns:p="http://primefaces.org/ui">
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pm="http://primefaces.org/ui">
 
-<!-- PAgina para JSF -->
-<head>
-<title>Menú Principal</title>
-</head>
-
-<h:body>
-
-	<h3>MENTORING IT Knowledge and experience</h3>
-
-
-
-	<h:form id="form">
-		<p:panel>
+<h:head><title>Menú Principal</title>
+<style>
+/* 	CSS para centrar el formulario de login */
+.center {
+	margin: auto;
+	width: 80%;
+	padding: 20% 0;
+}
+</style>
+</h:head>
+<body>
+	
+<h:form id="form" styleClass="center">
+		<p:panel header="Menú Principal">
 			<h:panelGrid columns="2" cellpadding="5">
 				<p:commandButton value="Buscar o hacer pago de alumnos"
 					action="students" />
@@ -28,7 +28,5 @@
 			</h:panelGrid>
 		</p:panel>
 	</h:form>
-
-</h:body>
-
+</body>
 </html>

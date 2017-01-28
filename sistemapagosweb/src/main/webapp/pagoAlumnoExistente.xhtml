@@ -3,59 +3,66 @@
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:f="http://java.sun.com/jsf/core"
 	xmlns:h="http://java.sun.com/jsf/html"
-	xmlns:p="http://primefaces.org/ui"
-	xmlns:pm="http://primefaces.org/ui">
+	xmlns:p="http://primefaces.org/ui" xmlns:pm="http://primefaces.org/ui">
 
-<h:head><title>Pago alumno existente</title>
-<style>
+<h:head>
+	<title>Pago alumno existente</title>
+	<style>
 /* 	CSS para centrar el formulario de login */
 .center {
 	margin: auto;
 	width: 80%;
-	padding: 8% 0;
+	padding: 15% 0;
 }
 </style>
 </h:head>
-<body>
-	
+<h:body>
+
 	<h:form id="form1" styleClass="center">
-	<p:panel header="Pago Alumno Existente">
-	<pm:fieldset>	
-	<h:panelGrid columns="2" cellpadding="5">	
-			<p:outputLabel value="Curso" />			
-			<p:selectOneMenu id="course" value="#{CourseList.idCourse}" >
-				<f:selectItem itemLabel="--Seleccione Curso--" itemValue="0" />
-				<f:selectItems value="#{CourseList.listaC}" var="c" itemValue="#{c.id}" itemLabel="#{c.name}"/>
-				<p:ajax process=":form1:course" update=":form1:student"/>
-			</p:selectOneMenu>	
-	
-			<p:outputLabel value="Nombre del alumno" />
-			<p:selectOneMenu id="student" disabled="#{CourseList.idCourse eq null or CourseList.idCourse eq 0}">
-				<f:selectItem itemLabel="--Seleccione Alumno--" itemValue="0"/>
-				<f:selectItems value="#{CourseList.listaA}" var="a" itemValue="#{a.id}"  itemLabel="#{a.name}"/>
-			</p:selectOneMenu>
-	
-			<p:outputLabel value="Pago o Monto" />
-			<p:spinner min="0"/>
-	
-			<p:outputLabel value="No. de Pago" />
-			<p:spinner min="0"/>
-	
-			<p:outputLabel value="Debe" />
-			<p:spinner min="0"/>
-	
-			<p:outputLabel value="Forma de pago" />
-			<p:selectOneMenu>
-				<f:selectItem itemValue="0" itemLabel="--Seleccione opcion--" />
-				<f:selectItem itemValue="1" itemLabel="Tarjeta"/>
-				<f:selectItem itemValue="2" itemLabel="Efectivo"/>
-				<f:selectItem itemValue="2" itemLabel="Deposito"/>				
-			</p:selectOneMenu>
-		</h:panelGrid>	
-	</pm:fieldset>		
-</p:panel>
-		
+		<p:panel header="Pago alumno existente">
+			<pm:fieldset>
+				<h:panelGrid columns="2" cellpadding="5">
+					<p:outputLabel value="Curso" />
+					<p:selectOneMenu id="course" value="#{CourseList.idCourse}">
+						<f:selectItem itemLabel="--Seleccione Curso--" itemValue="0" />
+						<f:selectItems value="#{CourseList.listaC}" var="c" itemValue="#{c.id}" itemLabel="#{c.name}" />
+						<p:ajax process=":form1:course" update=":form1:student" />
+					</p:selectOneMenu>
+
+					<p:outputLabel value="Fecha:" />
+					<p:calendar onclick="true" id="date" value="#{CourseList.date}" showOn="button" >
+<!-- 					<p:ajax partialSubmit="true" process=":form1:date" update="@this" />	 -->
+					</p:calendar>
+
+					<p:outputLabel value="Nombre del alumno" />
+					<p:selectOneMenu id="student"
+						disabled="#{CourseList.idCourse eq null or CourseList.idCourse eq 0}">
+						<f:selectItem itemLabel="--Seleccione Alumno--" itemValue="0" />
+						<f:selectItems value="#{CourseList.listaA}" var="a"	itemValue="#{a.id}" itemLabel="#{a.name}" />
+					</p:selectOneMenu>
+
+					<p:outputLabel value="Pago o Monto" />
+					<p:spinner  prefix="$" min="0" />
+
+					<p:outputLabel value="No. de Pago" />
+					<p:spinner min="0" />
+
+					<p:outputLabel value="Debe" />
+					<p:spinner prefix="$" min="0" />
+
+					<p:outputLabel value="Forma de pago" />
+					<p:selectOneMenu>
+						<f:selectItem itemValue="0" itemLabel="--Seleccione opcion--" />
+						<f:selectItem itemValue="1" itemLabel="Tarjeta" />
+						<f:selectItem itemValue="2" itemLabel="Efectivo" />
+						<f:selectItem itemValue="2" itemLabel="Deposito" />
+					</p:selectOneMenu>
+				</h:panelGrid>
+				
+			</pm:fieldset>
+		</p:panel>
+
 
 	</h:form>
-</body>
+</h:body>
 </html>
