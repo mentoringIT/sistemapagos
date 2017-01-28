@@ -13,7 +13,7 @@
 			<value>#{userService}</value>
 		</managed-property>
 	</managed-bean>
-	
+
 	<managed-bean>
 		<managed-bean-name>StudentList</managed-bean-name>
 		<managed-bean-class>mx.com.mentoringit.web.beans.StudentBean</managed-bean-class>
