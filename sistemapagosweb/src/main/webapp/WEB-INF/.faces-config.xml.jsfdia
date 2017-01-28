@@ -7,12 +7,10 @@
    <PROCESS-ITEM-OUTPUT ID="login::menuPrincipal.xhtml" NAME="output"
     PATH="menuPrincipal.xhtml" TARGET="rules:menuPrincipal.xhtml"
     TITLE="login" model-entity="JSFProcessItemOutput"/>
-   <PROCESS-ITEM-OUTPUT ID="fail::inicioFail.xhtml" NAME="output1"
-    PATH="inicioFail.xhtml" TARGET="rules:inicioFail.xhtml" TITLE="fail" model-entity="JSFProcessItemOutput"/>
+   <PROCESS-ITEM-OUTPUT ID="fail::#index.xhtml" NAME="output1"
+    PATH="/index.xhtml" TARGET="rules:#index.xhtml" TITLE="fail" model-entity="JSFProcessItemOutput"/>
   </PROCESS-ITEM>
  </PROCESS-ITEM>
- <PROCESS-ITEM NAME="rules:inicioFail.xhtml" PATH="inicioFail.xhtml"
-  SHAPE="256,177,0,0" model-entity="JSFProcessGroup"/>
  <PROCESS-ITEM NAME="rules:menuPrincipal.xhtml"
   PATH="menuPrincipal.xhtml" SHAPE="256,33,0,0" model-entity="JSFProcessGroup">
   <PROCESS-ITEM ID="rules:menuPrincipal.xhtml:0" NAME="item"
