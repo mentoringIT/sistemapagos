@@ -1,2 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<pageflow:Pageflow xmlns:pageflow="http://www.sybase.com/suade/pageflow" id="pf14833970052472" configfile="/holaJSF/src/main/webapp/WEB-INF/faces-config.xml"/>
+<pageflow:Pageflow xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:pageflow="http://www.sybase.com/suade/pageflow" id="pf14833970052472" configfile="/sistemapagosweb/src/main/webapp/WEB-INF/faces-config.xml">
+  <nodes xsi:type="pageflow:PFPage" name="index.xhtml" x="122" y="370" id="pf14856383821890" referenceLink="//@navigationRule.0/@fromViewId|" outlinks="pf14856383821891 pf14856383821892" path="/index.xhtml"/>
+  <nodes xsi:type="pageflow:PFPage" name="menuPrincipal.xhtml" x="338" y="178" id="pf14856383821893" referenceLink="//@navigationRule.1/@fromViewId|" outlinks="pf14856383821894" inlinks="pf14856383821891" path="menuPrincipal.xhtml"/>
+  <nodes xsi:type="pageflow:PFPage" name="inicioFail.xhtml" x="338" y="562" id="pf14856383821895" referenceLink="//@navigationRule.0/@navigationCase.1/@toViewId|" inlinks="pf14856383821892" path="inicioFail.xhtml"/>
+  <nodes xsi:type="pageflow:PFPage" name="menuAlumnos.xhtml" x="554" y="178" id="pf14856383821896" referenceLink="//@navigationRule.2/@fromViewId|" outlinks="pf14856383821897 pf14856383821898" inlinks="pf14856383821894" path="menuAlumnos.xhtml"/>
+  <nodes xsi:type="pageflow:PFPage" name="realizarPagoAlumnos.xhtml" x="770" y="178" id="pf14856383821899" referenceLink="//@navigationRule.3/@fromViewId|" outlinks="pf148563838218910 pf148563838218911" inlinks="pf14856383821897" path="realizarPagoAlumnos.xhtml"/>
+  <nodes xsi:type="pageflow:PFPage" name="buscarPagoAlumnos.xhtml" x="770" y="562" id="pf148563838218912" referenceLink="//@navigationRule.2/@navigationCase.1/@toViewId|" inlinks="pf14856383821898" path="buscarPagoAlumnos.xhtml"/>
+  <nodes xsi:type="pageflow:PFPage" name="pagoAlumnoExistente.xhtml" x="986" y="178" id="pf148563838218913" referenceLink="//@navigationRule.4/@fromViewId|" outlinks="pf148563838218914" inlinks="pf148563838218910" path="pagoAlumnoExistente.xhtml"/>
+  <nodes xsi:type="pageflow:PFPage" name="pagoAlumnoNuevo.xhtml" x="986" y="562" id="pf148563838219015" referenceLink="//@navigationRule.3/@navigationCase.1/@toViewId|" inlinks="pf148563838218911" path="pagoAlumnoNuevo.xhtml"/>
+  <nodes xsi:type="pageflow:PFPage" name="prueba.xhtml" x="1202" y="178" id="pf148563838219016" referenceLink="//@navigationRule.4/@navigationCase.0/@toViewId|" inlinks="pf148563838218914" path="prueba.xhtml"/>
+  <links id="pf14856383821891" target="pf14856383821893" source="pf14856383821890" outcome="login"/>
+  <links id="pf14856383821892" target="pf14856383821895" source="pf14856383821890" outcome="fail"/>
+  <links id="pf14856383821894" target="pf14856383821896" source="pf14856383821893" outcome="students"/>
+  <links id="pf14856383821897" target="pf14856383821899" source="pf14856383821896" outcome="make"/>
+  <links id="pf14856383821898" target="pf148563838218912" source="pf14856383821896" outcome="search"/>
+  <links id="pf148563838218910" target="pf148563838218913" source="pf14856383821899" outcome="existing"/>
+  <links id="pf148563838218911" target="pf148563838219015" source="pf14856383821899" outcome="new"/>
+  <links id="pf148563838218914" target="pf148563838219016" source="pf148563838218913" outcome="next"/>
+</pageflow:Pageflow>
