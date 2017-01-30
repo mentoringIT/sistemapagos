@@ -1,8 +1,7 @@
 package mx.com.mentoringit.web.beans;
 
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
+
 import java.util.List;
 
 import javax.faces.bean.ManagedBean;
@@ -22,8 +21,7 @@ public class CourseBean {
 	private List<CourseDTO> listaC;	
 	private List<StudentDTO> listaA;
 	private ICourseService courseService;
-	private Date date;	
-	
+		
 
 	public CourseBean() {}	
 	
@@ -55,19 +53,6 @@ public class CourseBean {
 		this.idCourse = idCourse;
 	}
 
-
-
-	public Date getDate() {
-		System.out.println("method get "+ this.date);
-		return date;
-	}
-
-
-
-	public void setDate(Date date) {
-		System.out.println("method set");
-		this.date = date;
-	}
 	
 	public void selectCourse(){
 		try {
@@ -80,7 +65,7 @@ public class CourseBean {
 	
 	public void selectStudent(){
 		try {
-			listaA = this.courseService.student(idCourse, "2017-01-01");
+			listaA = this.courseService.student(idCourse);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
