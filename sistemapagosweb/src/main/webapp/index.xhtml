@@ -30,8 +30,7 @@
 				<f:facet name="footer">
 					<p:commandButton id="loginButton" value="Entrar"
 						action="#{LoginUser.userLogin}" update=":mensajes"
-						oncomplete="manejarLogin(xhr, status, args)" ajax="false"
-						tabindex="3" />
+						oncomplete="manejarLogin(xhr, status, args)" ajax="false" tabindex="3"/>
 				</f:facet>
 			</h:panelGrid>
 			<p:messages id="messages" style="width:300px; font-size:10px;" />

@@ -30,13 +30,13 @@
 					</p:selectOneMenu>
 
 					<p:outputLabel value="Fecha:" />
-					<p:calendar onclick="true" id="date" value="#{CourseList.date}" showOn="button" >
+					<p:calendar id="date" showOn="button" >
 <!-- 					<p:ajax partialSubmit="true" process=":form1:date" update="@this" />	 -->
 					</p:calendar>
 
 					<p:outputLabel value="Nombre del alumno" />
-					<p:selectOneMenu id="student"
-						disabled="#{CourseList.idCourse eq null or CourseList.idCourse eq 0}">
+					<p:selectOneMenu id="student" disabled="#{CourseList.idCourse eq null or CourseList.idCourse eq 0}"
+					editable="true">
 						<f:selectItem itemLabel="--Seleccione Alumno--" itemValue="0" />
 						<f:selectItems value="#{CourseList.listaA}" var="a"	itemValue="#{a.id}" itemLabel="#{a.name}" />
 					</p:selectOneMenu>

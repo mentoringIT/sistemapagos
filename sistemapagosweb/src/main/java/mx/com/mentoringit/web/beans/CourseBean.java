@@ -1,7 +1,8 @@
 package mx.com.mentoringit.web.beans;
 
 
-
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 import javax.faces.bean.ManagedBean;
@@ -22,6 +23,7 @@ public class CourseBean {
 	private List<StudentDTO> listaA;
 	private ICourseService courseService;
 		
+	
 
 	public CourseBean() {}	
 	
