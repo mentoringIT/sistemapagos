@@ -25,7 +25,7 @@
 					
 					<p:outputLabel value="Curso" />
 					<p:selectOneMenu id="course" value="#{CourseList.idCourse}"
-					filter="true" filterMatchMode="startsWith">
+					filter="true" filterMatchMode="contains" height="100">
 					
 						<f:selectItem itemLabel="--Seleccione Curso--" itemValue="0" />
 						<f:selectItems value="#{CourseList.listaC}" var="c"
@@ -39,8 +39,8 @@
 
 					<p:outputLabel value="Nombre del alumno" />
 					<p:selectOneMenu id="student" value="#{CourseList.idStudent}"
-					filter="true" filterMatchMode="startsWith"
-					disabled="#{CourseList.idCourse eq null or CourseList.idCourse eq 0}">
+					filter="true" filterMatchMode="contains"
+					disabled="#{CourseList.idCourse eq null or CourseList.idCourse eq 0}" height="100">
 					
 						<f:selectItem itemLabel="--Seleccione Alumno--" itemValue="0" />
 						<f:selectItems value="#{CourseList.listaA}" var="s"
