@@ -17,7 +17,8 @@ import mx.com.mentoringit.web.services.ICourseService;
 @SessionScoped
 public class CourseBean {
 	
-	private Integer idCourse;	
+	private Integer idCourse;
+	private Integer idStudent;
 	
 	private List<CourseDTO> listaC;	
 	private List<StudentDTO> listaA;
@@ -56,6 +57,18 @@ public class CourseBean {
 	}
 
 	
+	public Integer getIdStudent() {
+		return idStudent;
+	}
+
+
+
+	public void setIdStudent(Integer idStudent) {
+		this.idStudent = idStudent;
+	}
+
+
+
 	public void selectCourse(){
 		try {
 			listaC = this.courseService.course();
@@ -66,8 +79,9 @@ public class CourseBean {
 	}
 	
 	public void selectStudent(){
+		
 		try {
-			listaA = this.courseService.student(idCourse);
+			listaA = this.courseService.student(idCourse);			
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

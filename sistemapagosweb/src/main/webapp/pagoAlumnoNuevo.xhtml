@@ -22,10 +22,14 @@
 		<p:panel header="Pago alumno nuevo">
 			<pm:fieldset>
 				<h:panelGrid columns="2" cellpadding="5">
+				
 					<p:outputLabel value="Curso" />
-					<p:selectOneMenu id="course" value="#{CourseList.idCourse}">
+					<p:selectOneMenu id="course" value="#{CourseList.idCourse}"
+					filter="true" filterMatchMode="startsWith">
+					
 						<f:selectItem itemLabel="--Seleccione Curso--" itemValue="0" />
-						<f:selectItems value="#{CourseList.listaC}" var="c" itemValue="#{c.id}" itemLabel="#{c.name}" />
+						<f:selectItems value="#{CourseList.listaC}" var="c"
+							itemValue="#{c.id}" itemLabel="#{c.name}" />
 					</p:selectOneMenu>
 
 					<p:outputLabel value="Presio" />
