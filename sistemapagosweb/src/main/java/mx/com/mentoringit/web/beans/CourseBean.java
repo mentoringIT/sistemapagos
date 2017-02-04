@@ -22,6 +22,7 @@ public class CourseBean {
 	
 	private List<CourseDTO> listaC;	
 	private List<StudentDTO> listaA;
+	private List<StudentDTO> listaAllS;
 	private ICourseService courseService;
 		
 	
@@ -29,6 +30,13 @@ public class CourseBean {
 	public CourseBean() {}	
 	
 	
+
+	public List<StudentDTO> getListaAllS() {
+		selectAllStudent();
+		return listaAllS;
+	}
+
+
 
 	public List<StudentDTO> getListaA() {
 		selectStudent();
@@ -82,6 +90,16 @@ public class CourseBean {
 		
 		try {
 			listaA = this.courseService.student(idCourse);			
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+public void selectAllStudent(){
+		
+		try {
+			listaAllS = this.courseService.allStudent();			
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

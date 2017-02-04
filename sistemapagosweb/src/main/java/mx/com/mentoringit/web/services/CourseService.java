@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import mx.com.mentoringit.model.dao.CourseDAO;
 import mx.com.mentoringit.model.dao.RegistrationDAO;
+import mx.com.mentoringit.model.dao.StudentDAO;
 import mx.com.mentoringit.model.dto.CourseDTO;
 import mx.com.mentoringit.model.dto.StudentDTO;
 
@@ -15,7 +16,15 @@ public class CourseService implements ICourseService {
 	
 	private CourseDAO courseDAO;
 	private RegistrationDAO regDAO;
-	
+	private StudentDAO studentDAO;	
+
+	public StudentDAO getStudentDAO() {
+		return studentDAO;
+	}
+	@Autowired
+	public void setStudentDAO(StudentDAO studentDAO) {
+		this.studentDAO = studentDAO;
+	}
 
 	public RegistrationDAO getRegDAO() {
 		return regDAO;
@@ -43,6 +52,11 @@ public class CourseService implements ICourseService {
 	@Override
 	public List<StudentDTO> student(Integer id) throws Exception {
 		return regDAO.select(id);
+	}
+	
+	@Override
+	public List<StudentDTO> allStudent() throws Exception{
+		return studentDAO.select();		
 	}
 
 	

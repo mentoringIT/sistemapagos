@@ -43,7 +43,7 @@
 					disabled="#{CourseList.idCourse eq null or CourseList.idCourse eq 0}" height="100">
 					
 						<f:selectItem itemLabel="--Seleccione Alumno--" itemValue="0" />
-						<f:selectItems value="#{CourseList.listaA}" var="s"
+						<f:selectItems value="#{CourseList.listaAllS}" var="s"
 							itemValue="#{s.id}" itemLabel="#{s.name}" />
 					</p:selectOneMenu>
 
