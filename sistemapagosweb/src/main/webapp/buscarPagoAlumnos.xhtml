@@ -3,23 +3,37 @@
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:f="http://java.sun.com/jsf/core"
 	xmlns:h="http://java.sun.com/jsf/html"
-	xmlns:p="http://primefaces.org/ui">
+	xmlns:p="http://primefaces.org/ui" xmlns:pm="http://primefaces.org/ui">
 
-<h:head><title>Menú Busqueda Pagos Alumnos</title></h:head>
+<h:head>
+	<title>Menú pagos alumnos</title>
+	<style>
+/* 	CSS para centrar el formulario de login */
+.center {
+	margin: auto;
+	width: 50%;
+	padding: 8% 0;
+}
+</style>
+</h:head>
 <body>
-	<h3>Ejemplo Login</h3>
 
-	<h4>Welcome</h4>
+	<h:form id="form1" styleClass="center">
+		<p:panel header="Menú Pago Alumno">
+			<pm:fieldset>
+				<h:panelGrid columns="2" cellpadding="5">
+					<p:commandButton value="Alumno" action="student" />
+					<p:commandButton value="Ultimos pagos" action="last" />
+				</h:panelGrid>
+			</pm:fieldset>
+			<p:toolbar>
+				<f:facet name="right">
+					<p:commandButton value="Atras" action="back" />
+				</f:facet>
+			</p:toolbar>	
+		</p:panel>
 
-	<h:form id="form">
-		<div>
-			<h3>MENTORING IT Knowledge and experience</h3>
 
-			<p:commandButton value="Alumno" action="send" />
-			<p:commandButton value="Ultimos pagos" action="send" />
-
-		</div>
 	</h:form>
-
 </body>
 </html>

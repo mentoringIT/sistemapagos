@@ -64,6 +64,10 @@
 			<from-outcome>search</from-outcome>
 			<to-view-id>buscarPagoAlumnos.xhtml</to-view-id>
 		</navigation-case>
+		<navigation-case>
+			<from-outcome>back</from-outcome>
+			<to-view-id>menuPrincipal.xhtml</to-view-id>
+		</navigation-case>
 	</navigation-rule>
 	
 	<navigation-rule>
@@ -75,6 +79,18 @@
 		<navigation-case>
 			<from-outcome>new</from-outcome>
 			<to-view-id>pagoAlumnoNuevo.xhtml</to-view-id>
+		</navigation-case>
+		<navigation-case>
+			<from-outcome>back</from-outcome>
+			<to-view-id>menuAlumnos.xhtml</to-view-id>
+		</navigation-case>
+	</navigation-rule>
+	
+	<navigation-rule>
+		<from-view-id>buscarPagoAlumnos.xhtml</from-view-id>
+		<navigation-case>
+			<from-outcome>back</from-outcome>
+			<to-view-id>menuAlumnos.xhtml</to-view-id>
 		</navigation-case>
 	</navigation-rule>
 	

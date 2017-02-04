@@ -6,12 +6,12 @@
 	xmlns:p="http://primefaces.org/ui" xmlns:pm="http://primefaces.org/ui">
 
 <h:head>
-	<title>Pago alumno existente</title>
+	<title>Menú pagos alumnos</title>
 	<style>
 /* 	CSS para centrar el formulario de login */
 .center {
 	margin: auto;
-	width: 80%;
+	width: 50%;
 	padding: 8% 0;
 }
 </style>
@@ -26,6 +26,11 @@
 					<p:commandButton value="Alumno nuevo" action="new" />
 				</h:panelGrid>
 			</pm:fieldset>
+			<p:toolbar>
+				<f:facet name="right">
+					<p:commandButton value="Atras" action="back" />
+				</f:facet>
+			</p:toolbar>	
 		</p:panel>
 
 
