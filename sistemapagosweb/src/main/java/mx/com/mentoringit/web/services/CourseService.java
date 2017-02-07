@@ -75,12 +75,12 @@ public class CourseService implements ICourseService {
 	
 
 	@Override
-	public List<CourseDTO> course() throws Exception {		
+	public List<CourseDTO> allCourse() throws Exception {		
 		return courseDAO.select() ;
 	}
 
 	@Override
-	public List<StudentDTO> student(Integer id) throws Exception {
+	public List<StudentDTO> studentByCourse(Integer id) throws Exception {
 		return regDAO.select(id);
 	}
 	
@@ -90,13 +90,19 @@ public class CourseService implements ICourseService {
 	}
 	
 	@Override
-	public List<ProductDTO> dates(int id, String date1, String date2) throws Exception{
+	public List<ProductDTO> startDates(int id, String date1, String date2) throws Exception{
 		return productDAO.startDate(id, date1, date2);
 	}
 
 	@Override
-	public void paymetStudent(PaymentDTO payment) throws Exception {
+	public void insertPayment(PaymentDTO payment) throws Exception {
 		this.paymentDAO.insertPayment(payment);
+		
+	}
+
+	@Override
+	public List<PaymentDTO> selectPayment(Integer idStudent, Integer idProduct) throws Exception {
+		return paymentDAO.selectPayment(idStudent, idProduct);
 		
 	}
 	

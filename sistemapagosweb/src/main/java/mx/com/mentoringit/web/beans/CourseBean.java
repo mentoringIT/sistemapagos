@@ -29,7 +29,11 @@ public class CourseBean {
 	private String type_payment;
 	private Date date_payment;
 	private String date_payment2;
-	private Integer date_start;
+	private Integer idProduct;
+	
+	private Double totalCourse;
+	private Double totalPayment;
+	private Double remaining;
 	
 	private List<CourseDTO> listaC;
 	private List<StudentDTO> listaA;
@@ -43,7 +47,7 @@ public class CourseBean {
 	//obtiene todos los cursos
 	public void selectCourse() {
 		try {
-			listaC = this.courseService.course();
+			listaC = this.courseService.allCourse();
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -53,7 +57,7 @@ public class CourseBean {
 	public void selectStudent() {
 
 		try {
-			listaA = this.courseService.student(idCourse);
+			listaA = this.courseService.studentByCourse(idCourse);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -74,13 +78,14 @@ public class CourseBean {
 		public void stratDates() {
 
 			try {
-				listaD = this.courseService.dates(this.idCourse, getFormatDate1(), getFormatDate2());
+				listaD = this.courseService.startDates(this.idCourse, getFormatDate1(), getFormatDate2());
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
 
+		//inserta el pago en la base
 		public String insertPayment(){
 			PaymentDTO payment = new PaymentDTO();
 			
@@ -91,16 +96,41 @@ public class CourseBean {
 			payment.setType_payment(this.type_payment);
 			payment.setDate_payment(this.date_payment);
 			payment.setTotal_course(this.total);
-			payment.setProduct_id(this.date_start);
+			payment.setProduct_id(this.idProduct);
 			
 			try {
-				this.courseService.paymetStudent(payment);
+				this.courseService.insertPayment(payment);
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 			
 			return "next";
+			
+		}
+		
+		public void totals(){
+			
+			try {
+				PaymentDTO payment = new PaymentDTO();
+				List<PaymentDTO> listaP;
+				listaP = this.courseService.selectPayment(idStudent, idProduct);
+				
+				for (int i = 0; i < listaP.size(); i++) {
+					if(i == 0){
+						payment = listaP.get(i);
+						this.totalCourse = payment.getTotal_course();
+					}
+					this.totalPayment = this.totalPayment + listaP.get(i).getAmount_payment();
+				}
+				
+				
+				this.remaining = this.totalCourse - this.totalPayment;
+				
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 			
 		}
 
@@ -231,12 +261,36 @@ public class CourseBean {
 		this.type_payment = forma_pago;
 	}
 
-	public Integer getDate_start() {
-		return date_start;
+	public Double getTotalCourse() {
+		return totalCourse;
 	}
 
-	public void setDate_start(Integer fecha_inicio) {
-		this.date_start = fecha_inicio;
+	public void setTotalCourse(Double totalCourse) {
+		this.totalCourse = totalCourse;
+	}
+
+	public Double getTotalPayment() {
+		return totalPayment;
+	}
+
+	public void setTotalPayment(Double totalPayment) {
+		this.totalPayment = totalPayment;
+	}
+
+	public Double getRemaining() {
+		return remaining;
+	}
+
+	public void setRemaining(Double remaining) {
+		this.remaining = remaining;
+	}
+
+	public Integer getIdProduct() {
+		return idProduct;
+	}
+
+	public void setIdProduct(Integer idProduct) {
+		this.idProduct = idProduct;
 	}
 
 	
