@@ -9,7 +9,30 @@
 <body>
 
 	<h:form>
-		<p:outputLabel value="#{CourseList.date}"/>
+		<p:outputLabel value="curso: "/>
+		<p:outputLabel value="#{CourseList.idCourse}"/>
+		<br />
+		<p:outputLabel value="fecha inicio: "/>
+		<p:outputLabel value="#{CourseList.date_start}"/>
+		<br />
+		<p:outputLabel value="alumno: "/>
+		<p:outputLabel value="#{CourseList.idStudent}"/>
+		<br />
+		<p:outputLabel value="total curso: "/>
+		<p:outputLabel value="#{CourseList.total}"/>
+		<br />
+		<p:outputLabel value="monto: "/>
+		<p:outputLabel value="#{CourseList.amount}"/>
+		<br />
+		<p:outputLabel value="numero pago: "/>
+		<p:outputLabel value="#{CourseList.num_payment}"/>
+		<br />
+		<p:outputLabel value="forma pago: "/>
+		<p:outputLabel value="#{CourseList.type_payment}"/>
+		<br />
+		<p:outputLabel value="fecha pago: "/>
+		<p:outputLabel value="#{CourseList.date_payment2}"/>
+		
 	</h:form>
 
 </body>
