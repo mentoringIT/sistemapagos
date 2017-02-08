@@ -31,15 +31,28 @@
 						<f:selectItems value="#{CourseList.listaC}" var="c"
 							itemValue="#{c.id}" itemLabel="#{c.name}" />
 					</p:selectOneMenu>
-
-					<p:outputLabel value="Precio" />
-					<p:spinner  prefix="$" min="0"/>
 					
-					<p:outputLabel value="Inicio curso" />
-					<p:calendar showOn="button" >		
-					</p:calendar>
+					<p:outputLabel value="Fecha inicio" />
+					<h:panelGrid id="consultaFecha" columns="2" cellpadding="5" >
+						<p:calendar  navigator="true" showOn="button" 
+						/>
+						<p:calendar  navigator="true" showOn="button" 
+						/>
 
-					<p:outputLabel value="Nombre del alumno" />
+						<p:selectOneMenu id="fechas" >
+							<f:selectItem itemLabel="--Fechas de inicio--" />
+							<f:selectItems />
+								<p:ajax process=":form1:fechas" />
+						</p:selectOneMenu>
+
+						<h:panelGrid>
+							<p:commandButton id="busqueda" value="buscar">
+<!-- 								<p:ajax process=":form1:busqueda" update="" /> -->
+							</p:commandButton>
+						</h:panelGrid>
+					</h:panelGrid>							
+
+					<p:outputLabel value="Nombre(s)" />
 					<p:inputText/>
 					<p:outputLabel value="Apellido paterno" />
 					<p:inputText/>
@@ -48,17 +61,21 @@
 					<p:outputLabel value="Tel. o Cel.:" />
 					<p:inputText/>
 					
+					<p:outputLabel value="Correo:" />
+					<p:inputText/>	
+					
 					<p:outputLabel value="Fecha pago:" />
 					<p:calendar showOn="button" >		
 					</p:calendar>
+					
+					<p:outputLabel value="Precio" />
+					<p:spinner  prefix="$" min="0"/>
+					
 					<p:outputLabel value="Pago o Monto" />
 					<p:spinner  prefix="$" min="0" />
 
 					<p:outputLabel value="No. de Pago" />
 					<p:spinner min="0" />
-
-					<p:outputLabel value="Debe" />
-					<p:spinner prefix="$" min="0" />
 
 					<p:outputLabel value="Forma de pago" />
 					<p:selectOneMenu>
@@ -71,6 +88,14 @@
 				
 			</pm:fieldset>
 		</p:panel>
+		<p:toolbar>
+			<f:facet name="left">
+				<p:commandButton value="Siguente" />
+			</f:facet>
+			<f:facet name="right">
+				<p:commandButton value="Atras" action="back" />
+			</f:facet>
+		</p:toolbar>
 
 
 	</h:form>

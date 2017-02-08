@@ -99,9 +99,24 @@
 		<navigation-case>
 			<from-outcome>next</from-outcome>
 			<to-view-id>prueba.xhtml</to-view-id>
+		</navigation-case>
+		<navigation-case>
+			<from-outcome>back</from-outcome>
+			<to-view-id>realizarPagoAlumnos.xhtml</to-view-id>
 		</navigation-case>		
 	</navigation-rule>
 	
+	<navigation-rule>
+		<from-view-id>pagoAlumnoNuevo.xhtml</from-view-id>
+		<navigation-case>
+			<from-outcome>next</from-outcome>
+			<to-view-id>prueba.xhtml</to-view-id>
+		</navigation-case>
+		<navigation-case>
+			<from-outcome>back</from-outcome>
+			<to-view-id>realizarPagoAlumnos.xhtml</to-view-id>
+		</navigation-case>		
+	</navigation-rule>
 	
 	
 	<application>
