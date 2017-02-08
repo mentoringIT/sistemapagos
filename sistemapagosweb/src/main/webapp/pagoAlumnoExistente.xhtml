@@ -30,15 +30,18 @@
 						<f:selectItem itemLabel="--Seleccione Curso--" itemValue="0" />
 						<f:selectItems value="#{CourseList.listaC}" var="c"
 							itemValue="#{c.id}" itemLabel="#{c.name}" />
-						<p:ajax process=":form1:course" update=":form1:student" />
+						<p:ajax process=":form1:course" update=":form1:consultaFecha" />
 					</p:selectOneMenu>
 					
 					<p:outputLabel value="Fecha inicio" />
-					<h:panelGrid columns="2" cellpadding="5">
-						<p:calendar value="#{CourseList.date1}" showOn="button" />
-						<p:calendar value="#{CourseList.date2}" showOn="button" />
+					<h:panelGrid id="consultaFecha" columns="2" cellpadding="5" >
+						<p:calendar value="#{CourseList.date1}" navigator="true" showOn="button" 
+						disabled="#{CourseList.idCourse eq 0 or CourseList.idCourse eq null}"/>
+						<p:calendar value="#{CourseList.date2}" navigator="true" showOn="button" 
+						disabled="#{CourseList.idCourse eq 0 or CourseList.idCourse eq null}"/>
 
-						<p:selectOneMenu id="fechas" value="#{CourseList.idProduct}" >
+						<p:selectOneMenu id="fechas" value="#{CourseList.idProduct}" 
+						disabled="#{CourseList.idCourse eq 0 or CourseList.idCourse eq null}">
 							<f:selectItem itemLabel="--Fechas de inicio--" />
 							<f:selectItems value="#{CourseList.listaD}" var="d"
 								itemValue="#{d.id}" itemLabel="#{d.start_date}" />
@@ -47,11 +50,13 @@
 
 						<h:panelGrid>
 							<p:commandButton id="busqueda" value="buscar"
-								action="#{CourseList.stratDates}">
-								<p:ajax process=":form1:busqueda" update=":form1:fechas" />
+								action="#{CourseList.startDates}" update=":form1:fechas"
+								disabled="#{CourseList.idCourse eq 0 or CourseList.idCourse eq null}">
+<!-- 								<p:ajax process=":form1:busqueda" update="" /> -->
 							</p:commandButton>
 						</h:panelGrid>
 					</h:panelGrid>
+					
 					<p:outputLabel value="Fecha pago" />
 					<p:calendar value="#{CourseList.date_payment}" showOn="button" />
 
@@ -62,11 +67,13 @@
 						<f:selectItem itemLabel="--Seleccione Alumno--" itemValue="0" />
 						<f:selectItems value="#{CourseList.listaAllS}" var="s"
 							itemValue="#{s.id}" itemLabel="#{s.name}" />
-						<p:ajax listener="#{CourseList.totals}" process=":form1:student" update=":form1:totals" />	
+						<p:ajax listener="#{CourseList.totals}" process=":form1:student" 
+						update=":form1:totals :form1:total1" />	
 					</p:selectOneMenu>
 
 					<p:outputLabel value="Total curso" />
-					<p:spinner value="#{CourseList.total}" prefix="$" min="0" />
+					<p:spinner id="total1" value="#{CourseList.total}" prefix="$" min="0" 
+					disabled="#{CourseList.totalCourse > 0 }"/>
 
 					<p:outputLabel value="Pago o Monto" />
 					<p:spinner value="#{CourseList.amount}" prefix="$" min="0" />
@@ -87,8 +94,10 @@
 				<h:panelGrid id="totals" columns="2" cellpadding="5">
 					<p:outputLabel value="Costo curso: " />
 					<p:outputLabel value="#{CourseList.totalCourse}" />
+					
 					<p:outputLabel value="Total pagado: " />
 					<p:outputLabel value="#{CourseList.totalPayment}" />
+					
 					<p:outputLabel value="Restante: " />
 					<p:outputLabel value="#{CourseList.remaining}" />
 				</h:panelGrid>

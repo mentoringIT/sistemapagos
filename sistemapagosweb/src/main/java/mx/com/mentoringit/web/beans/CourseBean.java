@@ -23,7 +23,7 @@ public class CourseBean {
 	private Date date2;
 	private String formatDate1;
 	private String formatDate2;
-	private Double total;
+	private Double total = 0.0;
 	private Double amount;
 	private Integer num_payment;
 	private String type_payment;
@@ -77,7 +77,7 @@ public class CourseBean {
 	}
 
 	// obtiene las fechas de inicio
-	public void stratDates() {
+	public void startDates() {
 
 		try {
 			listaD = this.courseService.startDates(this.idCourse, getFormatDate1(), getFormatDate2());
@@ -119,17 +119,21 @@ public class CourseBean {
 
 			List<PaymentDTO> listaP;
 			listaP = this.courseService.selectPayment(idStudent, idProduct);
+			
+			if (listaP.size() != 0) {
+				for (int i = 0; i < listaP.size(); i++) {
+					if (i == 0) {
 
-			for (int i = 0; i < listaP.size(); i++) {
-				if (i == 0) {
-
-					this.totalCourse = listaP.get(i).getTotal_course();
+						this.totalCourse = listaP.get(i).getTotal_course();
+						this.total = this.totalCourse;
+					}
+					this.totalPayment = this.totalPayment + listaP.get(i).getAmount_payment();
 				}
-				this.totalPayment = this.totalPayment + listaP.get(i).getAmount_payment();
+
+				this.remaining = this.totalCourse - this.totalPayment;
+			} else {
+				this.total = 0.0;
 			}
-
-			this.remaining = this.totalCourse - this.totalPayment;
-
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
