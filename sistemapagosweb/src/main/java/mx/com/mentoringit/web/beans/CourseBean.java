@@ -24,10 +24,10 @@ public class CourseBean {
 	private String formatDate1;
 	private String formatDate2;
 	private Double total = 0.0;
-	private Double amount;
-	private Integer num_payment;
+	private Double amount = 0.0;
+	private Integer num_payment = 1;
 	private String type_payment;
-	private Date date_payment;
+	private Date date_payment = new Date();
 	private String date_payment2;
 	private Integer idProduct;
 

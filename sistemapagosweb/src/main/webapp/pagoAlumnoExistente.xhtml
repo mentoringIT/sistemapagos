@@ -25,9 +25,9 @@
 
 					<p:outputLabel value="Curso" />
 					<p:selectOneMenu id="course" value="#{CourseList.idCourse}"
-						filter="true" filterMatchMode="contains" height="100">
+						filter="true" filterMatchMode="contains" height="100" >
 
-						<f:selectItem itemLabel="--Seleccione Curso--" itemValue="0" />
+						<f:selectItem itemLabel="--Seleccione Curso--" />
 						<f:selectItems value="#{CourseList.listaC}" var="c"
 							itemValue="#{c.id}" itemLabel="#{c.name}" />
 						<p:ajax process=":form1:course" update=":form1:consultaFecha" />
@@ -45,7 +45,7 @@
 							<f:selectItem itemLabel="--Fechas de inicio--" />
 							<f:selectItems value="#{CourseList.listaD}" var="d"
 								itemValue="#{d.id}" itemLabel="#{d.start_date}" />
-								<p:ajax process=":form1:fechas"/>
+								<p:ajax process=":form1:fechas" />
 						</p:selectOneMenu>
 
 						<h:panelGrid>
@@ -57,33 +57,33 @@
 						</h:panelGrid>
 					</h:panelGrid>
 					
-					<p:outputLabel value="Fecha pago" />
-					<p:calendar value="#{CourseList.date_payment}" showOn="button" />
-
 					<p:outputLabel value="Nombre del alumno" />
 					<p:selectOneMenu id="student" value="#{CourseList.idStudent}"
-						filter="true" filterMatchMode="contains" height="100">
+						filter="true" filterMatchMode="contains" height="100" >
 
-						<f:selectItem itemLabel="--Seleccione Alumno--" itemValue="0" />
+						<f:selectItem itemLabel="--Seleccione Alumno--"/>
 						<f:selectItems value="#{CourseList.listaAllS}" var="s"
 							itemValue="#{s.id}" itemLabel="#{s.name}" />
 						<p:ajax listener="#{CourseList.totals}" process=":form1:student" 
 						update=":form1:totals :form1:total1" />	
 					</p:selectOneMenu>
-
+					
+					<p:outputLabel value="Fecha pago" />
+					<p:calendar value="#{CourseList.date_payment}" showOn="button" />
+					
 					<p:outputLabel value="Total curso" />
 					<p:spinner id="total1" value="#{CourseList.total}" prefix="$" min="0" 
-					disabled="#{CourseList.totalCourse > 0 }"/>
+					disabled="#{CourseList.totalCourse > 0 }" required="true"/>
 
 					<p:outputLabel value="Pago o Monto" />
-					<p:spinner value="#{CourseList.amount}" prefix="$" min="0" />
+					<p:spinner value="#{CourseList.amount}" prefix="$" min="0" required="true"/>
 
 					<p:outputLabel value="No. de Pago" />
 					<p:spinner value="#{CourseList.num_payment}" min="0" />
 
 					<p:outputLabel value="Forma de pago" />
-					<p:selectOneMenu value="#{CourseList.type_payment}">
-						<f:selectItem itemValue="0" itemLabel="--Seleccione opcion--" />
+					<p:selectOneMenu value="#{CourseList.type_payment}" >
+						<f:selectItem  itemLabel="--Seleccione opcion--" />
 						<f:selectItem itemValue="Tarjeta" itemLabel="Tarjeta" />
 						<f:selectItem itemValue="Efectivo" itemLabel="Efectivo" />
 						<f:selectItem itemValue="Deposito" itemLabel="Deposito" />
