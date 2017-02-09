@@ -24,65 +24,72 @@
 				<h:panelGrid columns="2" cellpadding="5">
 				
 					<p:outputLabel value="Curso" />
-					<p:selectOneMenu id="course" value="#{CourseList.idCourse}"
+					<p:selectOneMenu id="course" value="#{NewStudent.idCourse}"
 					filter="true" filterMatchMode="contains" height="100">
 					
 						<f:selectItem itemLabel="--Seleccione Curso--" itemValue="0" />
-						<f:selectItems value="#{CourseList.listaC}" var="c"
+						<f:selectItems value="#{NewStudent.listaC}" var="c"
 							itemValue="#{c.id}" itemLabel="#{c.name}" />
+							<p:ajax process=":form1:course" update=":form1:consultaFecha" />
 					</p:selectOneMenu>
 					
 					<p:outputLabel value="Fecha inicio" />
 					<h:panelGrid id="consultaFecha" columns="2" cellpadding="5" >
-						<p:calendar  navigator="true" showOn="button" 
-						/>
-						<p:calendar  navigator="true" showOn="button" 
-						/>
+						<p:calendar  value="#{NewStudent.date1}" navigator="true" showOn="button" 
+						disabled="#{NewStudent.idCourse eq 0 or NewStudent.idCourse eq null}"/>
+						<p:calendar  value="#{NewStudent.date2}" navigator="true" showOn="button" 
+						disabled="#{NewStudent.idCourse eq 0 or NewStudent.idCourse eq null}"/>
 
-						<p:selectOneMenu id="fechas" >
+						<p:selectOneMenu id="fechas" value="#{NewStudent.idProduct}"
+						disabled="#{NewStudent.idCourse eq 0 or NewStudent.idCourse eq null}">
 							<f:selectItem itemLabel="--Fechas de inicio--" />
-							<f:selectItems />
+							<f:selectItems value="#{NewStudent.listaD}" var="d"
+								itemValue="#{d.id}" itemLabel="#{d.start_date}"/>								
 								<p:ajax process=":form1:fechas" />
 						</p:selectOneMenu>
 
 						<h:panelGrid>
-							<p:commandButton id="busqueda" value="buscar">
-<!-- 								<p:ajax process=":form1:busqueda" update="" /> -->
+							<p:commandButton id="busqueda" value="buscar"
+							action="#{NewStudent.startDates}" update=":form1:fechas"
+							disabled="#{NewStudent.idCourse eq 0 or NewStudent.idCourse eq null}">
 							</p:commandButton>
 						</h:panelGrid>
 					</h:panelGrid>							
 
 					<p:outputLabel value="Nombre(s)" />
-					<p:inputText/>
+					<p:inputText value="#{NewStudent.name}"/>
+					
 					<p:outputLabel value="Apellido paterno" />
-					<p:inputText/>
+					<p:inputText value="#{NewStudent.pLastName}"/>
+					
 					<p:outputLabel value="Apellido materno" />
-					<p:inputText/>
+					<p:inputText value="#{NewStudent.mLastName}"/>
+					
 					<p:outputLabel value="Tel. o Cel.:" />
-					<p:inputText/>
+					<p:inputText value="#{NewStudent.tel}"/>
 					
 					<p:outputLabel value="Correo:" />
-					<p:inputText/>	
+					<p:inputText value="#{NewStudent.email}"/>	
 					
 					<p:outputLabel value="Fecha pago:" />
-					<p:calendar showOn="button" >		
+					<p:calendar value="#{NewStudent.paymentDate}" showOn="button" >		
 					</p:calendar>
 					
 					<p:outputLabel value="Precio" />
-					<p:spinner  prefix="$" min="0"/>
+					<p:spinner  value="#{NewStudent.total}" prefix="$" min="0"/>
 					
 					<p:outputLabel value="Pago o Monto" />
-					<p:spinner  prefix="$" min="0" />
+					<p:spinner  value="#{NewStudent.amount}" prefix="$" min="0" />
 
 					<p:outputLabel value="No. de Pago" />
-					<p:spinner min="0" />
+					<p:spinner value="#{NewStudent.num_payment}" min="0" />
 
 					<p:outputLabel value="Forma de pago" />
-					<p:selectOneMenu>
-						<f:selectItem itemValue="0" itemLabel="--Seleccione opcion--" />
-						<f:selectItem itemValue="1" itemLabel="Tarjeta" />
-						<f:selectItem itemValue="2" itemLabel="Efectivo" />
-						<f:selectItem itemValue="2" itemLabel="Deposito" />
+					<p:selectOneMenu value="#{NewStudent.type_payment}">
+						<f:selectItem itemLabel="--Seleccione opcion--" />
+						<f:selectItem itemValue="Tarjeta" itemLabel="Tarjeta" />
+						<f:selectItem itemValue="Efectivo" itemLabel="Efectivo" />
+						<f:selectItem itemValue="Deposito" itemLabel="Deposito" />
 					</p:selectOneMenu>
 				</h:panelGrid>
 				
@@ -90,7 +97,7 @@
 		</p:panel>
 		<p:toolbar>
 			<f:facet name="left">
-				<p:commandButton value="Siguente" />
+				<p:commandButton value="Siguente" action="#{NewStudent.inStudent}" />
 			</f:facet>
 			<f:facet name="right">
 				<p:commandButton value="Atras" action="back" />

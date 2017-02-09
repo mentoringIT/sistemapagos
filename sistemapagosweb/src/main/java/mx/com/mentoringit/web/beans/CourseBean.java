@@ -16,6 +16,7 @@ import mx.com.mentoringit.web.services.ICourseService;
 @ManagedBean
 @SessionScoped
 public class CourseBean {
+	private ICourseService courseService;
 
 	private Integer idCourse;
 	private Integer idStudent;
@@ -39,7 +40,7 @@ public class CourseBean {
 	private List<StudentDTO> listaA;
 	private List<StudentDTO> listaAllS;
 	private List<ProductDTO> listaD;
-	private ICourseService courseService;
+	
 
 	public CourseBean() {
 	}
@@ -88,7 +89,7 @@ public class CourseBean {
 	}
 
 	// inserta el pago en la base
-	public String insertPayment() {
+	public void insertPayment() {
 		PaymentDTO payment = new PaymentDTO();
 
 		payment.setStudent_id(this.idStudent);
@@ -106,8 +107,6 @@ public class CourseBean {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-
-		return "next";
 
 	}
 

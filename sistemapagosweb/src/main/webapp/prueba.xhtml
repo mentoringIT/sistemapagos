@@ -9,30 +9,39 @@
 <body>
 
 	<h:form>
-		<p:outputLabel value="curso: "/>
-		<p:outputLabel value="#{CourseList.idCourse}"/>
+		<p:outputLabel value="Curso: "/>
+		<p:outputLabel value="#{NewStudent.idCourse}"/>
 		<br />
-		<p:outputLabel value="id producto: "/>
-		<p:outputLabel value="#{CourseList.idProduct}"/>
+		<p:outputLabel value="Estudiante: "/>
+		<p:outputLabel value="#{NewStudent.idStudent}"/>
 		<br />
-		<p:outputLabel value="alumno: "/>
-		<p:outputLabel value="#{CourseList.idStudent}"/>
+		<p:outputLabel value="fecha inicio: "/>
+		<p:outputLabel value="#{NewStudent.idProduct}"/>
 		<br />
-		<p:outputLabel value="total curso: "/>
-		<p:outputLabel value="#{CourseList.total}"/>
+		<p:outputLabel value="Nombre: "/>
+		<p:outputLabel value="#{NewStudent.completeName}"/>
 		<br />
-		<p:outputLabel value="monto: "/>
-		<p:outputLabel value="#{CourseList.amount}"/>
+		<p:outputLabel value="Telefono: "/>
+		<p:outputLabel value="#{NewStudent.tel}"/>
 		<br />
-		<p:outputLabel value="numero pago: "/>
-		<p:outputLabel value="#{CourseList.num_payment}"/>
+		<p:outputLabel value="Correo: "/>
+		<p:outputLabel value="#{NewStudent.email}"/>
 		<br />
-		<p:outputLabel value="forma pago: "/>
-		<p:outputLabel value="#{CourseList.type_payment}"/>
-		<br />
-		<p:outputLabel value="fecha pago: "/>
-		<p:outputLabel value="#{CourseList.date_payment2}"/>
-		
+		<p:outputLabel value="Fecha pago: "/>
+		<p:outputLabel value="#{NewStudent.formatDatePayment}"/>
+		<br />		
+		<p:outputLabel value="Total curso: "/>
+		<p:outputLabel value="#{NewStudent.total}"/>
+		<br />		
+		<p:outputLabel value="Monto: "/>
+		<p:outputLabel value="#{NewStudent.amount}"/>
+		<br />		
+		<p:outputLabel value="No Pago: "/>
+		<p:outputLabel value="#{NewStudent.num_payment}"/>
+		<br />		
+		<p:outputLabel value="Forma de pago: "/>
+		<p:outputLabel value="#{NewStudent.type_payment}"/>
+		<br />		
 	</h:form>
 
 </body>

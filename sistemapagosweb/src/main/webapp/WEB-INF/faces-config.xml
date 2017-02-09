@@ -33,6 +33,16 @@
 			<value>#{courseService}</value>
 		</managed-property>
 	</managed-bean>
+	
+	<managed-bean>
+		<managed-bean-name>NewStudent</managed-bean-name>
+		<managed-bean-class>mx.com.mentoringit.web.beans.NewStudentBean</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+		<managed-property>
+			<property-name>newStudentService</property-name>
+			<value>#{newStudentService}</value>
+		</managed-property>
+	</managed-bean>
 
 	<navigation-rule>
 		<from-view-id>/index.xhtml</from-view-id>
