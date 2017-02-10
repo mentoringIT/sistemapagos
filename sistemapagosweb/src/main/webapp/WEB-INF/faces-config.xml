@@ -13,7 +13,7 @@
 			<value>#{userService}</value>
 		</managed-property>
 	</managed-bean>
-	
+
 	<managed-bean>
 		<managed-bean-name>StudentList</managed-bean-name>
 		<managed-bean-class>mx.com.mentoringit.web.beans.StudentBean</managed-bean-class>
@@ -23,7 +23,7 @@
 			<value>#{studentService}</value>
 		</managed-property>
 	</managed-bean>
-	
+
 	<managed-bean>
 		<managed-bean-name>CourseList</managed-bean-name>
 		<managed-bean-class>mx.com.mentoringit.web.beans.CourseBean</managed-bean-class>
@@ -33,7 +33,7 @@
 			<value>#{courseService}</value>
 		</managed-property>
 	</managed-bean>
-	
+
 	<managed-bean>
 		<managed-bean-name>NewStudent</managed-bean-name>
 		<managed-bean-class>mx.com.mentoringit.web.beans.NewStudentBean</managed-bean-class>
@@ -43,6 +43,17 @@
 			<value>#{newStudentService}</value>
 		</managed-property>
 	</managed-bean>
+	
+	<managed-bean>
+		<managed-bean-name>paymentLast</managed-bean-name>
+		<managed-bean-class>mx.com.mentoringit.web.beans.PspBean</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+		<managed-property>
+			<property-name>pspService</property-name>
+			<value>#{pspService}</value>
+		</managed-property>
+	</managed-bean>
+
 
 	<navigation-rule>
 		<from-view-id>/index.xhtml</from-view-id>
@@ -55,7 +66,7 @@
 			<to-view-id>/index.xhtml</to-view-id>
 		</navigation-case>
 	</navigation-rule>
-	
+
 	<navigation-rule>
 		<from-view-id>menuPrincipal.xhtml</from-view-id>
 		<navigation-case>
@@ -63,7 +74,7 @@
 			<to-view-id>menuAlumnos.xhtml</to-view-id>
 		</navigation-case>
 	</navigation-rule>
-	
+
 	<navigation-rule>
 		<from-view-id>menuAlumnos.xhtml</from-view-id>
 		<navigation-case>
@@ -79,7 +90,7 @@
 			<to-view-id>menuPrincipal.xhtml</to-view-id>
 		</navigation-case>
 	</navigation-rule>
-	
+
 	<navigation-rule>
 		<from-view-id>realizarPagoAlumnos.xhtml</from-view-id>
 		<navigation-case>
@@ -95,15 +106,19 @@
 			<to-view-id>menuAlumnos.xhtml</to-view-id>
 		</navigation-case>
 	</navigation-rule>
-	
+
 	<navigation-rule>
 		<from-view-id>buscarPagoAlumnos.xhtml</from-view-id>
+		<navigation-case>
+			<from-outcome>last</from-outcome>
+			<to-view-id>ultimosPagos.xhtml</to-view-id>
+		</navigation-case>
 		<navigation-case>
 			<from-outcome>back</from-outcome>
 			<to-view-id>menuAlumnos.xhtml</to-view-id>
 		</navigation-case>
 	</navigation-rule>
-	
+
 	<navigation-rule>
 		<from-view-id>pagoAlumnoExistente.xhtml</from-view-id>
 		<navigation-case>
@@ -113,9 +128,9 @@
 		<navigation-case>
 			<from-outcome>back</from-outcome>
 			<to-view-id>realizarPagoAlumnos.xhtml</to-view-id>
-		</navigation-case>		
+		</navigation-case>
 	</navigation-rule>
-	
+
 	<navigation-rule>
 		<from-view-id>pagoAlumnoNuevo.xhtml</from-view-id>
 		<navigation-case>
@@ -125,10 +140,17 @@
 		<navigation-case>
 			<from-outcome>back</from-outcome>
 			<to-view-id>realizarPagoAlumnos.xhtml</to-view-id>
-		</navigation-case>		
+		</navigation-case>
 	</navigation-rule>
-	
-	
+
+	<navigation-rule>
+		<from-view-id>ultimosPagos.xhtml</from-view-id>
+		<navigation-case>
+			<from-outcome>back</from-outcome>
+			<to-view-id>buscarPagoAlumnos.xhtml</to-view-id>
+		</navigation-case>
+	</navigation-rule>
+
 	<application>
 		<el-resolver>org.springframework.web.jsf.el.SpringBeanFacesELResolver</el-resolver>
 	</application>

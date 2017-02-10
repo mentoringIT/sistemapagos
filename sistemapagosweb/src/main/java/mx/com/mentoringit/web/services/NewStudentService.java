@@ -6,10 +6,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import mx.com.mentoringit.model.dao.CourseDAO;
+import mx.com.mentoringit.model.dao.PSPDAO;
 import mx.com.mentoringit.model.dao.PaymentDAO;
 import mx.com.mentoringit.model.dao.ProductDAO;
 import mx.com.mentoringit.model.dao.StudentDAO;
 import mx.com.mentoringit.model.dto.CourseDTO;
+import mx.com.mentoringit.model.dto.PSPDTO;
 import mx.com.mentoringit.model.dto.PaymentDTO;
 import mx.com.mentoringit.model.dto.ProductDTO;
 import mx.com.mentoringit.model.dto.StudentDTO;
@@ -21,6 +23,8 @@ public class NewStudentService implements INewStudentService{
 	private StudentDAO studentDAO;
 	private ProductDAO productDAO;
 	private PaymentDAO paymentDAO;
+	
+	
 	
 	//getters anad setters
 	public CourseDAO getCourseDAO() {
@@ -56,9 +60,7 @@ public class NewStudentService implements INewStudentService{
 	@Autowired
 	public void setPaymentDAO(PaymentDAO paymentDAO) {
 		this.paymentDAO = paymentDAO;
-	}
-	
-	
+	}	
 	
 	@Override
 	public List<CourseDTO> allCourse() throws Exception {		

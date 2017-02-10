@@ -8,6 +8,7 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 
 import mx.com.mentoringit.model.dto.CourseDTO;
+import mx.com.mentoringit.model.dto.PSPDTO;
 import mx.com.mentoringit.model.dto.PaymentDTO;
 import mx.com.mentoringit.model.dto.ProductDTO;
 import mx.com.mentoringit.model.dto.StudentDTO;
@@ -41,6 +42,7 @@ public class NewStudentBean {
 	private String formatDate1;
 	private String formatDate2;
 	
+	
 	//obtiene todos los cursos
 	public void selectCourse() {
 		try {
@@ -54,7 +56,6 @@ public class NewStudentBean {
 	//inserta al estudiante en la base
 	public String inStudent(){
 		StudentDTO student = new StudentDTO();
-		List<StudentDTO> l1; 
 		
 		student.setEmail(this.email);
 		student.setName(getCompleteName());
@@ -264,7 +265,7 @@ public class NewStudentBean {
 	public void setIdStudent(Integer idStudent) {
 		this.idStudent = idStudent;
 	}
-
+	
 	public INewStudentService getNewStudentService() {
 		return newStudentService;
 	}

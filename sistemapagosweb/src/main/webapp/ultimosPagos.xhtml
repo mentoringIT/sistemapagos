@@ -1,0 +1,66 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui" xmlns:pm="http://primefaces.org/ui">
+
+<h:head></h:head>
+<body>
+
+	<h:form id="form1" styleClass="center">
+
+		<p:dataTable id="ultimosPagos" var="lp"
+			value="#{paymentLast.listaPsp}" tableStyle="width:auto"
+			paginator="true" rows="10"
+			paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}">
+
+			<p:column headerText="Fecha" style="width:150px"
+				sortBy="#{lp.datePayment}" filterBy="#{lp.datePayment}"
+				filterMatchMode="contains">
+				<p:outputLabel value="#{lp.datePayment}" />
+			</p:column>
+
+			<p:column headerText="Alumno" style="width:300px"
+				sortBy="#{lp.studentName}" filterBy="#{lp.studentName}"
+				filterMatchMode="contains">
+				<p:outputLabel value="#{lp.studentName}" />
+			</p:column>
+
+			<p:column headerText="Correo" style="width:100px"
+				sortBy="#{lp.email}" filterBy="#{lp.email}"
+				filterMatchMode="contains">
+				<p:outputLabel value="#{lp.email}" />
+			</p:column>
+
+			<p:column headerText="Telefono" style="width:100px"
+				sortBy="#{lp.phone}" filterBy="#{lp.phone}"
+				filterMatchMode="contains">
+				<p:outputLabel value="#{lp.phone}" />
+			</p:column>
+
+			<p:column headerText="Curso" style="width:200px"
+				sortBy="#{lp.courseName}" filterBy="#{lp.courseName}"
+				filterMatchMode="contains">
+				<p:outputLabel value="#{lp.courseName}" />
+			</p:column>
+
+			<p:column headerText="detalle" style="width:40px">
+				<h:panelGrid>					
+						<p:commandButton icon="ui-icon-document" type="button" />					
+				</h:panelGrid>
+			</p:column>
+
+		</p:dataTable>
+
+
+
+	</h:form>
+	<p:toolbar>
+		<f:facet name="right">
+			<p:commandButton value="Atras" action="back" />
+		</f:facet>
+	</p:toolbar>
+
+</body>
+</html>
