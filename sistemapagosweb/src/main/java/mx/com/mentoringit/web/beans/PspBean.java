@@ -14,6 +14,7 @@ public class PspBean {
 	private IPspService pspService;
 	
 	private List<PSPDTO> listaPsp;
+	private List<PSPDTO> filterPayments;
 	private PSPDTO detail;
 	
 	public void lastPaymens(){
@@ -44,6 +45,16 @@ public class PspBean {
 
 	public void setDetail(PSPDTO detail) {
 		this.detail = detail;
+	}
+
+
+	public List<PSPDTO> getFilterPayments() {
+		return filterPayments;
+	}
+
+
+	public void setFilterPayments(List<PSPDTO> filterPayments) {
+		this.filterPayments = filterPayments;
 	}
 
 

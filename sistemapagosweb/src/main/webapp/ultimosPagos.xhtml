@@ -9,53 +9,73 @@
 <body>
 
 	<h:form id="form1" styleClass="center">
-
-		<p:dataTable id="ultimosPagos" var="lp"
-			value="#{paymentLast.listaPsp}" tableStyle="width:auto"
-			paginator="true" rows="10"
-			paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}">
-
-			<p:column headerText="Fecha" style="width:150px"
-				sortBy="#{lp.datePayment}" filterBy="#{lp.datePayment}"
-				filterMatchMode="contains">
-				<p:outputLabel value="#{lp.datePayment}" />
-			</p:column>
-
-			<p:column headerText="Alumno" style="width:300px"
-				sortBy="#{lp.studentName}" filterBy="#{lp.studentName}"
-				filterMatchMode="contains">
-				<p:outputLabel value="#{lp.studentName}" />
-			</p:column>
-
-			<p:column headerText="Correo" style="width:100px"
-				sortBy="#{lp.email}" filterBy="#{lp.email}"
-				filterMatchMode="contains">
-				<p:outputLabel value="#{lp.email}" />
-			</p:column>
-
-			<p:column headerText="Telefono" style="width:100px"
-				sortBy="#{lp.phone}" filterBy="#{lp.phone}"
-				filterMatchMode="contains">
-				<p:outputLabel value="#{lp.phone}" />
-			</p:column>
-
-			<p:column headerText="Curso" style="width:200px"
-				sortBy="#{lp.courseName}" filterBy="#{lp.courseName}"
-				filterMatchMode="contains">
-				<p:outputLabel value="#{lp.courseName}" />
-			</p:column>
-
-			<p:column headerText="detalle" style="width:40px">
-				<h:panelGrid>					
-						<p:commandButton icon="ui-icon-document" type="button" />					
-				</h:panelGrid>
-			</p:column>
-
-		</p:dataTable>
-
-
-
+		<p:growl id="msgs" showDetail="true" />
+ 
+    <p:dataTable id="basicDT" var="lp" value="#{paymentLast.listaPsp}" paginator="true" rows="10"
+	paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}"
+	filteredValue="#{paymentLast.filterPayments}">
+			
+        <f:facet name="header">
+            PAGOS
+        </f:facet>
+        <p:column headerText="Fecha" filterBy="#{lp.datePayment}" filterMatchMode="contains" style="width:120px">
+            <h:outputText value="#{lp.datePayment}" />
+        </p:column>
+        <p:column headerText="Nombre" filterBy="#{lp.studentName}" filterMatchMode="contains">
+            <h:outputText value="#{lp.studentName}" />
+        </p:column>
+        <p:column headerText="Correo" filterBy="#{lp.email}" filterMatchMode="contains" style="width:320px">
+            <h:outputText value="#{lp.email}" />
+        </p:column>
+        <p:column headerText="Telefono" filterBy="#{lp.phone}" filterMatchMode="contains" style="width:130px">
+            <h:outputText value="#{lp.phone}" />
+        </p:column>
+        <p:column headerText="Curso" filterBy="#{lp.courseName}" filterMatchMode="contains">
+            <h:outputText value="#{lp.courseName}" />
+        </p:column>
+        <p:column headerText="Detalles" style="width:70px;text-align: center">
+             <p:commandButton update=":form1:detail" oncomplete="PF('detail').show()" icon="ui-icon-document" title="ver detalles">
+                <f:setPropertyActionListener value="#{lp}" target="#{paymentLast.detail}" />
+            </p:commandButton>
+        </p:column>
+    </p:dataTable>		
+		
+		<p:dialog header="Detalles" widgetVar="detail" modal="true" showEffect="fade" hideEffect="fade" >
+        <p:outputPanel id="detail" style="text-align:center;">
+            <p:panelGrid  columns="2" columnClasses="label,value">
+            
+ 				<h:outputText value="Curso:" />
+                <h:outputText value="#{paymentLast.detail.courseName}" />
+                
+                <h:outputText value="Nombre" />
+                <h:outputText value="#{paymentLast.detail.studentName}" />
+                
+                <h:outputText value="Email:" />
+                <h:outputText value="#{paymentLast.detail.email}"/>
+                
+                <h:outputText value="Telefono:" />
+                <h:outputText value="#{paymentLast.detail.phone}" />
+                
+                <h:outputText value="Fecha:" />
+                <h:outputText value="#{paymentLast.detail.datePayment}" />         
+                               
+                <h:outputText value="Total Curso:" />
+                <h:outputText value="$#{paymentLast.detail.totalCourse}" />
+                
+                <h:outputText value="Monto:" />
+                <h:outputText value="$#{paymentLast.detail.amountPayment}" />            
+                
+                <h:outputText value="No Pago:" />
+                <h:outputText value="#{paymentLast.detail.numPayment}" />
+                
+                <h:outputText value="Forma de pago:" />
+                <h:outputText value="#{paymentLast.detail.typePayment}" />
+            </p:panelGrid>
+        </p:outputPanel>
+    </p:dialog>
 	</h:form>
+
+	
 	<p:toolbar>
 		<f:facet name="right">
 			<p:commandButton value="Atras" action="back" />
