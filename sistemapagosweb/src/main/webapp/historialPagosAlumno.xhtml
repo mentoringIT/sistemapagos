@@ -1,0 +1,112 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui" xmlns:pm="http://primefaces.org/ui">
+
+<h:head></h:head>
+<body>
+
+	<h:form id="form1" styleClass="center">
+		<p:growl id="msgs" showDetail="true" />
+		<div>
+			<pm:fieldset>
+				<h:panelGrid id="totals" columns="2" cellpadding="5">
+					<p:outputLabel value="Alumno:"/>
+					<p:outputLabel value="#{StudentList.nameStudent}"/>
+				</h:panelGrid>
+			</pm:fieldset>
+		</div>
+
+		<p:dataTable id="basicDT" var="lp" value="#{StudentList.listaPsp}"
+			paginator="true" rows="10"
+			paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}"
+			filteredValue="#{StudentList.filterPayments}">
+
+			<f:facet name="header">
+            PAGOS
+        </f:facet>
+			<p:column headerText="Fecha" style="width:120px">
+				<h:outputText value="#{lp.datePayment}" />
+			</p:column>
+			<p:column headerText="No Pago" >
+				<h:outputText value="#{lp.numPayment}" />
+			</p:column>
+			<p:column headerText="Curso">
+				<h:outputText value="#{lp.courseName}" />
+			</p:column>
+			<p:column headerText="Monto" >
+				<h:outputText value="#{lp.amountPayment}" />
+			</p:column>
+			<p:column headerText="Forma de pago" >
+				<h:outputText value="#{lp.typePayment}" />
+			</p:column>
+			
+			<p:column headerText="Detalles" style="width:70px;text-align: center">
+				<p:commandButton update=":form1:detail"
+					oncomplete="PF('detail').show()" icon="ui-icon-document"
+					title="ver detalles">
+					<f:setPropertyActionListener value="#{lp}"
+						target="#{StudentList.detail}" />
+				</p:commandButton>
+			</p:column>
+		</p:dataTable>
+
+		<p:dialog header="Detalles" widgetVar="detail" modal="true"
+			showEffect="fade" hideEffect="fade">
+			<p:outputPanel id="detail" style="text-align:center;">
+				<p:panelGrid columns="2" columnClasses="label,value">
+
+					<h:outputText value="Curso:" />
+					<h:outputText value="#{StudentList.detail.courseName}" />
+
+					<h:outputText value="Nombre" />
+					<h:outputText value="#{StudentList.detail.studentName}" />
+
+					<h:outputText value="Email:" />
+					<h:outputText value="#{StudentList.detail.email}" />
+
+					<h:outputText value="Telefono:" />
+					<h:outputText value="#{StudentList.detail.phone}" />
+
+					<h:outputText value="Fecha:" />
+					<h:outputText value="#{StudentList.detail.datePayment}" />
+
+					<h:outputText value="Total Curso:" />
+					<h:outputText value="$#{StudentList.detail.totalCourse}" />
+
+					<h:outputText value="Monto:" />
+					<h:outputText value="$#{StudentList.detail.amountPayment}" />
+
+					<h:outputText value="No Pago:" />
+					<h:outputText value="#{StudentList.detail.numPayment}" />
+
+					<h:outputText value="Forma de pago:" />
+					<h:outputText value="#{StudentList.detail.typePayment}" />
+				</p:panelGrid>
+			</p:outputPanel>
+		</p:dialog>
+	</h:form>
+	<pm:fieldset>
+		<h:panelGrid id="totals" columns="2" cellpadding="5">
+			<p:outputLabel value="Costo curso: " />
+			<p:outputLabel value="#{StudentList.totalCourse}" />
+					
+			<p:outputLabel value="Total pagado: " />
+			<p:outputLabel value="#{StudentList.totalPayment}" />
+					
+			<p:outputLabel value="Restante: " />
+			<p:outputLabel value="#{StudentList.remaining}" />
+		</h:panelGrid>
+	</pm:fieldset>
+
+	<p:toolbar>
+		<f:facet name="right">
+			<p:commandButton value="Atras" action="back" />
+		</f:facet>
+	</p:toolbar>
+
+
+</body>
+</html>

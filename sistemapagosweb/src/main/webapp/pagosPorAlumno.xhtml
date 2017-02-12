@@ -1,0 +1,73 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui" xmlns:pm="http://primefaces.org/ui">
+
+<h:head></h:head>
+<body>
+
+	<h:form id="form1" styleClass="center">
+		<p:panel header="Buscar pagos de alumno">
+			<pm:fieldset>
+				<h:panelGrid columns="2" cellpadding="5">
+
+					<p:outputLabel value="Curso" />
+					<p:selectOneMenu id="course" value="#{StudentList.idCourse}"
+						filter="true" filterMatchMode="contains" height="100">
+
+						<f:selectItem itemLabel="--Seleccione Curso--" />
+						<f:selectItems value="#{StudentList.listaC}" var="c"
+							itemValue="#{c.id}" itemLabel="#{c.name}" />
+						<p:ajax process=":form1:course" update=":form1:consultaFecha" />
+					</p:selectOneMenu>
+
+					<p:outputLabel value="Fecha inicio" />
+					<h:panelGrid id="consultaFecha" columns="2" cellpadding="5">
+						<p:calendar navigator="true" value="#{StudentList.date1}"
+							showOn="button" />
+						<p:calendar navigator="true" value="#{StudentList.date2}"
+							showOn="button" />
+
+						<p:selectOneMenu id="fechas" value="#{StudentList.idProduct}">
+							<f:selectItem itemLabel="--Fechas de inicio--" />
+							<f:selectItems value="#{StudentList.listaD}" var="d"
+								itemLabel="#{d.start_date}" itemValue="#{d.id}" />
+							<p:ajax process=":form1:fechas" />
+						</p:selectOneMenu>
+
+						<h:panelGrid>
+							<p:commandButton id="busqueda" value="buscar"
+								action="#{StudentList.startDates}" icon="ui-icon-search"
+								update=":form1:fechas">
+
+							</p:commandButton>
+						</h:panelGrid>
+					</h:panelGrid>
+
+					<p:outputLabel value="Nombre del alumno" />
+					<p:selectOneMenu id="student" value="#{StudentList.idStudent}"
+						filter="true" filterMatchMode="contains" height="100">
+
+						<f:selectItem itemLabel="--Seleccione Alumno--" />
+						<f:selectItems value="#{StudentList.listaA}" var="s"
+							itemLabel="#{s.name}" itemValue="#{s.id}" />
+					</p:selectOneMenu>
+				</h:panelGrid>
+			</pm:fieldset>
+		</p:panel>
+		<p:toolbar>
+			<f:facet name="left">
+				<p:commandButton value="Consultar" action="#{StudentList.paymentsByStudent}" />
+			</f:facet>
+			<f:facet name="right">
+				<p:commandButton value="Atras" action="back" />
+			</f:facet>
+		</p:toolbar>
+
+	</h:form>
+
+
+</body>
+</html>

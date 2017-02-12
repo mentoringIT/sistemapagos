@@ -46,14 +46,14 @@
 	
 	<managed-bean>
 		<managed-bean-name>paymentLast</managed-bean-name>
-		<managed-bean-class>mx.com.mentoringit.web.beans.PspBean</managed-bean-class>
+		<managed-bean-class>mx.com.mentoringit.web.beans.LastPaymentBean</managed-bean-class>
 		<managed-bean-scope>session</managed-bean-scope>
 		<managed-property>
-			<property-name>pspService</property-name>
-			<value>#{pspService}</value>
+			<property-name>lastPaymentService</property-name>
+			<value>#{lastPaymentService}</value>
 		</managed-property>
 	</managed-bean>
-
+	
 
 	<navigation-rule>
 		<from-view-id>/index.xhtml</from-view-id>
@@ -110,6 +110,10 @@
 	<navigation-rule>
 		<from-view-id>buscarPagoAlumnos.xhtml</from-view-id>
 		<navigation-case>
+			<from-outcome>student</from-outcome>
+			<to-view-id>pagosPorAlumno.xhtml</to-view-id>
+		</navigation-case>
+		<navigation-case>
 			<from-outcome>last</from-outcome>
 			<to-view-id>ultimosPagos.xhtml</to-view-id>
 		</navigation-case>
@@ -122,10 +126,6 @@
 	<navigation-rule>
 		<from-view-id>pagoAlumnoExistente.xhtml</from-view-id>
 		<navigation-case>
-			<from-outcome>next</from-outcome>
-			<to-view-id>prueba.xhtml</to-view-id>
-		</navigation-case>
-		<navigation-case>
 			<from-outcome>back</from-outcome>
 			<to-view-id>realizarPagoAlumnos.xhtml</to-view-id>
 		</navigation-case>
@@ -133,10 +133,6 @@
 
 	<navigation-rule>
 		<from-view-id>pagoAlumnoNuevo.xhtml</from-view-id>
-		<navigation-case>
-			<from-outcome>next</from-outcome>
-			<to-view-id>prueba.xhtml</to-view-id>
-		</navigation-case>
 		<navigation-case>
 			<from-outcome>back</from-outcome>
 			<to-view-id>realizarPagoAlumnos.xhtml</to-view-id>
@@ -148,6 +144,26 @@
 		<navigation-case>
 			<from-outcome>back</from-outcome>
 			<to-view-id>buscarPagoAlumnos.xhtml</to-view-id>
+		</navigation-case>
+	</navigation-rule>
+	
+	<navigation-rule>
+		<from-view-id>pagosPorAlumno.xhtml</from-view-id>
+		<navigation-case>
+			<from-outcome>consult</from-outcome>
+			<to-view-id>historialPagosAlumno.xhtml</to-view-id>
+		</navigation-case>
+		<navigation-case>
+			<from-outcome>back</from-outcome>
+			<to-view-id>buscarPagoAlumnos.xhtml</to-view-id>
+		</navigation-case>
+	</navigation-rule>
+	
+	<navigation-rule>
+		<from-view-id>historialPagosAlumno.xhtml</from-view-id>
+		<navigation-case>
+			<from-outcome>back</from-outcome>
+			<to-view-id>pagosPorAlumno.xhtml</to-view-id>
 		</navigation-case>
 	</navigation-rule>
 

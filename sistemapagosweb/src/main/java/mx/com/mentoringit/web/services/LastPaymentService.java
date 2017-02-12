@@ -9,7 +9,7 @@ import mx.com.mentoringit.model.dao.PSPDAO;
 import mx.com.mentoringit.model.dto.PSPDTO;
 
 @Service
-public class PspService implements IPspService{
+public class LastPaymentService implements ILastPaymentService{
 	private PSPDAO pspDAO;
 
 	public PSPDAO getPspDAO() {

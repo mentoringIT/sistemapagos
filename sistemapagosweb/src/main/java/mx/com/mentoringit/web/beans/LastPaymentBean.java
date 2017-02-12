@@ -6,12 +6,12 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 
 import mx.com.mentoringit.model.dto.PSPDTO;
-import mx.com.mentoringit.web.services.IPspService;
+import mx.com.mentoringit.web.services.ILastPaymentService;
 
 @ManagedBean
 @SessionScoped
-public class PspBean {
-	private IPspService pspService;
+public class LastPaymentBean {
+	private ILastPaymentService lastPaymentService;
 	
 	private List<PSPDTO> listaPsp;
 	private List<PSPDTO> filterPayments;
@@ -19,7 +19,7 @@ public class PspBean {
 	
 	public void lastPaymens(){
 		try {
-			listaPsp = this.pspService.payments();
+			listaPsp = this.lastPaymentService.payments();
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -58,12 +58,18 @@ public class PspBean {
 	}
 
 
-	public IPspService getPspService() {
-		return pspService;
+	public ILastPaymentService getLastPaymentService() {
+		return lastPaymentService;
 	}
 
-	public void setPspService(IPspService pspService) {
-		this.pspService = pspService;
+
+	public void setLastPaymentService(ILastPaymentService lastPaymentService) {
+		this.lastPaymentService = lastPaymentService;
 	}
+
+
+
+
+
 
 }
