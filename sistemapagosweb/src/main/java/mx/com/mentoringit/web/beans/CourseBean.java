@@ -1,25 +1,51 @@
 package mx.com.mentoringit.web.beans;
 
+
+import java.io.File;
+import java.io.IOException;
+import java.io.Serializable;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Properties;
 
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
+import javax.faces.context.FacesContext;
 
+import javax.mail.BodyPart;
+import javax.mail.Message;
+import javax.mail.Session;
+import javax.mail.Transport;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeBodyPart;
+import javax.mail.internet.MimeMessage;
+import javax.mail.internet.MimeMultipart;
+import javax.activation.DataHandler;
+import javax.activation.FileDataSource;
+
+import mx.com.mentoringit.model.dto.Correo;
 import mx.com.mentoringit.model.dto.CourseDTO;
 import mx.com.mentoringit.model.dto.PaymentDTO;
 import mx.com.mentoringit.model.dto.ProductDTO;
+import mx.com.mentoringit.model.dto.ReportData;
 import mx.com.mentoringit.model.dto.StudentDTO;
 import mx.com.mentoringit.web.services.ICourseService;
+import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.JasperExportManager;
+import net.sf.jasperreports.engine.JasperFillManager;
+import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 
 @ManagedBean
 @SessionScoped
-public class CourseBean {
+public class CourseBean implements Serializable{
 	private ICourseService courseService;
 
 	private Integer idCourse;
 	private Integer idStudent;
+
 	private Date date1;
 	private Date date2;
 	private String formatDate1;
@@ -31,6 +57,10 @@ public class CourseBean {
 	private Date date_payment = new Date();
 	private String date_payment2;
 	private Integer idProduct;
+	
+	private String from;
+	private String subject;
+	private String message;
 
 	private Double totalCourse = 0.0;
 	private Double totalPayment = 0.0;
@@ -41,7 +71,6 @@ public class CourseBean {
 	private List<StudentDTO> listaAllS;
 	private List<ProductDTO> listaD;
 	
-
 	public CourseBean() {
 	}
 
@@ -109,7 +138,47 @@ public class CourseBean {
 		}
 
 	}
+	
+	
+	// crea el tiket de pago
+	public String createReport() {
+		List<ReportData> listaR = new ArrayList<ReportData>();
+		ReportData report = new ReportData();
+		
 
+		try {
+			report.setStudentName(this.courseService.selectStudentName(this.idStudent));
+			report.setCourseName(this.courseService.selectCourseName(this.idCourse));
+			report.setNumPayment(this.num_payment.toString());
+			report.setAmountPayment(this.amount.toString());
+			report.setDatePayment(getDate_payment2());
+			report.setTypePayment(this.type_payment);
+			report.setRemaining(this.remaining.toString());
+			report.setTotalCourse(this.total.toString());
+
+			listaR.add(report);
+			
+			File jasper = new File(FacesContext.getCurrentInstance().getExternalContext().getRealPath("/payment.jasper"));
+			JasperPrint jasperPrint = JasperFillManager.fillReport(jasper.getPath(),null,new JRBeanCollectionDataSource(listaR));
+					
+			JasperExportManager.exportReportToPdfFile(jasperPrint,"C:\\Users\\ed\\git\\sistemapagos\\sistemapagosweb\\PDF\\pagos.pdf");
+			
+//			FacesContext.getCurrentInstance().responseComplete();
+			
+			System.out.println("Creado!" + listaR.toString());
+			
+			listaR.clear();
+			
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return "send";
+		
+	}
+	
+	
+	// muestra los totales
 	public void totals() {
 		this.totalCourse = 0.0;
 		this.totalPayment = 0.0;
@@ -118,7 +187,7 @@ public class CourseBean {
 
 			List<PaymentDTO> listaP;
 			listaP = this.courseService.selectPayment(idStudent, idProduct);
-			
+
 			if (listaP.size() != 0) {
 				for (int i = 0; i < listaP.size(); i++) {
 					if (i == 0) {
@@ -138,6 +207,71 @@ public class CourseBean {
 			e.printStackTrace();
 		}
 
+	}
+	
+	//controla el envio del correo
+	public boolean controller(Correo c){
+		
+		try {
+			Properties p = new Properties();
+			p.put("mail.smtp.host", "smtp.gmail.com");
+			p.setProperty("mail.smtp.starttls.enable", "true");
+			p.setProperty("mail.smtp.port", "587");
+			p.setProperty("mail.smtp.user", c.getUserEmail());
+			p.setProperty("mail.smtp.auth", "true");
+			
+			Session s = Session.getDefaultInstance(p,null);
+			BodyPart texto = new MimeBodyPart();
+			BodyPart adjunto = new MimeBodyPart();
+			texto.setText(c.getMessage());
+			
+			if(!c.getPathFile().equals("")){
+				adjunto.setDataHandler(new DataHandler(new FileDataSource(c.getPathFile())));
+				adjunto.setFileName(c.getNameFile());
+			}
+			MimeMultipart m = new MimeMultipart();
+			m.addBodyPart(texto);
+			
+			if(!c.getPathFile().equals("")){
+				m.addBodyPart(adjunto);
+			}
+			MimeMessage mensaje = new MimeMessage(s);
+			mensaje.setFrom(new InternetAddress(c.getUserEmail()));
+			mensaje.addRecipient(Message.RecipientType.TO, new InternetAddress(c.getFrom()));
+			mensaje.setSubject(c.getSubject());
+			mensaje.setContent(m);
+			
+			Transport t = s.getTransport("smtp");
+			t.connect(c.getUserEmail(), c.getPassword());
+			t.sendMessage(mensaje, mensaje.getAllRecipients());
+			t.close();
+			
+			return true;
+		} catch (Exception e) {
+	
+			e.printStackTrace();
+			return false;
+		}
+	}
+	
+	//establece los valores para el envio del correo
+	public void sendMail(){
+		Correo c = new Correo();
+		c.setPassword("lbmenluywbcytxeq");
+		c.setUserEmail("edflores830@gmail.com");
+		c.setSubject(this.subject);
+		c.setFrom(this.from.trim());
+		c.setMessage(this.message);
+		c.setNameFile("pagos.pdf");
+		c.setPathFile("C:\\Users\\ed\\git\\sistemapagos\\sistemapagosweb\\PDF\\pagos.pdf");
+		
+		
+		if(controller(c)){
+			System.out.println("Envio exitoso");
+		}else{
+			System.out.println("Envio fallido");
+		}
+		
 	}
 
 	// getters y setters
@@ -301,4 +435,29 @@ public class CourseBean {
 		this.idProduct = idProduct;
 	}
 
+	public String getFrom() {
+		return from;
+	}
+
+	public void setFrom(String from) {
+		this.from = from;
+	}
+
+	public String getSubject() {
+		return subject;
+	}
+
+	public void setSubject(String subject) {
+		this.subject = subject;
+	}
+
+	public String getMessage() {
+		return message;
+	}
+
+	public void setMessage(String message) {
+		this.message = message;
+	}
+
+		
 }

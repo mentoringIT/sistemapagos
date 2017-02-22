@@ -1,0 +1,42 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui" 
+	xmlns:pm="http://primefaces.org/ui">
+
+<h:head></h:head>
+<body>
+
+	<h:form>
+
+		<p:panel header="Envio de correos">
+			<pm:fieldset>
+				<h:panelGrid columns="2" cellpadding="5">
+					<p:outputLabel value="Para:" />
+					<p:inputText value="#{CourseList.from}" />
+					<p:outputLabel value="Asunto" />
+					<p:inputText value="#{CourseList.subject}" />
+
+					<p:outputLabel value="Mensaje" />
+					<p:inputTextarea rows="10" cols="50" value="#{CourseList.message}"
+						queryDelay="750" minQueryLength="4" />
+				</h:panelGrid>
+
+				<p:toolbar>
+					<f:facet name="left">
+						<p:commandButton value="Enviar" action="#{CourseList.sendMail}" />
+					</f:facet>
+
+				</p:toolbar>
+			</pm:fieldset>
+		</p:panel>
+
+
+
+	</h:form>
+
+
+</body>
+</html>

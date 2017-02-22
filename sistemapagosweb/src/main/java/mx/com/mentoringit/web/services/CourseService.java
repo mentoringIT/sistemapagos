@@ -9,11 +9,14 @@ import mx.com.mentoringit.model.dao.CourseDAO;
 import mx.com.mentoringit.model.dao.PaymentDAO;
 import mx.com.mentoringit.model.dao.ProductDAO;
 import mx.com.mentoringit.model.dao.RegistrationDAO;
+
 import mx.com.mentoringit.model.dao.StudentDAO;
 import mx.com.mentoringit.model.dto.CourseDTO;
 import mx.com.mentoringit.model.dto.PaymentDTO;
 import mx.com.mentoringit.model.dto.ProductDTO;
+
 import mx.com.mentoringit.model.dto.StudentDTO;
+
 
 @Service
 public class CourseService implements ICourseService {
@@ -23,8 +26,8 @@ public class CourseService implements ICourseService {
 	private StudentDAO studentDAO;
 	private ProductDAO productDAO;
 	private PaymentDAO paymentDAO;
-	
-	//getter y setter ProductDAO
+		
+	//getter y setter 
 	public ProductDAO getProductDAO() {
 		return productDAO;
 	}
@@ -34,7 +37,7 @@ public class CourseService implements ICourseService {
 		this.productDAO = productDAO;
 	}
 	
-	//getter y setter StudentDAO
+	
 	public StudentDAO getStudentDAO() {
 		return studentDAO;
 	}
@@ -43,7 +46,7 @@ public class CourseService implements ICourseService {
 		this.studentDAO = studentDAO;
 	}
 	
-	//getter y setter RegistrationDAO
+	
 	public RegistrationDAO getRegDAO() {
 		return regDAO;
 	}
@@ -53,7 +56,7 @@ public class CourseService implements ICourseService {
 		this.regDAO = regDAO;
 	}
 	
-	//getter y setter CourseDAO
+	
 	public CourseDAO getCourseDAO() {
 		return courseDAO;
 	}
@@ -71,27 +74,28 @@ public class CourseService implements ICourseService {
 	public void setPaymentDAO(PaymentDAO paymentDAO) {
 		this.paymentDAO = paymentDAO;
 	}
-	
-	
 
+
+	
+	
 	@Override
 	public List<CourseDTO> allCourse() throws Exception {		
-		return courseDAO.select() ;
+		return this.courseDAO.select() ;
 	}
 
 	@Override
 	public List<StudentDTO> studentByCourse(Integer id) throws Exception {
-		return regDAO.select(id);
+		return this.regDAO.select(id);
 	}
 	
 	@Override
 	public List<StudentDTO> allStudent() throws Exception{
-		return studentDAO.select();		
+		return this.studentDAO.select();		
 	}
 	
 	@Override
 	public List<ProductDTO> startDates(int id, String date1, String date2) throws Exception{
-		return productDAO.startDate(id, date1, date2);
+		return this.productDAO.startDate(id, date1, date2);
 	}
 
 	@Override
@@ -102,11 +106,20 @@ public class CourseService implements ICourseService {
 
 	@Override
 	public List<PaymentDTO> selectPayment(Integer idStudent, Integer idProduct) throws Exception {
-		return paymentDAO.selectPayment(idStudent, idProduct);
+		return this.paymentDAO.selectPayment(idStudent, idProduct);
 		
 	}
-	
-
 
 	
+
+	@Override
+	public String selectStudentName(Integer idStudent) throws Exception {
+		return this.studentDAO.selectName(idStudent).getName();
+	}
+
+	@Override
+	public String selectCourseName(Integer idCourse) throws Exception {
+		return this.courseDAO.selectName(idCourse).getName();
+	}
+		
 }
