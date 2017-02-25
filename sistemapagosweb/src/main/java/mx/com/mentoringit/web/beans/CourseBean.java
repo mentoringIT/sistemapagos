@@ -22,6 +22,7 @@ import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMultipart;
+import javax.servlet.http.HttpServletResponse;
 import javax.activation.DataHandler;
 import javax.activation.FileDataSource;
 
@@ -57,6 +58,7 @@ public class CourseBean implements Serializable{
 	private Date date_payment = new Date();
 	private String date_payment2;
 	private Integer idProduct;
+	private File f;
 	
 	private String from;
 	private String subject;
@@ -141,7 +143,7 @@ public class CourseBean implements Serializable{
 	
 	
 	// crea el tiket de pago
-	public String createReport() {
+	public void createReport() {
 		List<ReportData> listaR = new ArrayList<ReportData>();
 		ReportData report = new ReportData();
 		
@@ -160,21 +162,29 @@ public class CourseBean implements Serializable{
 			
 			File jasper = new File(FacesContext.getCurrentInstance().getExternalContext().getRealPath("/payment.jasper"));
 			JasperPrint jasperPrint = JasperFillManager.fillReport(jasper.getPath(),null,new JRBeanCollectionDataSource(listaR));
-					
 			JasperExportManager.exportReportToPdfFile(jasperPrint,"C:\\Users\\ed\\git\\sistemapagos\\sistemapagosweb\\PDF\\pagos.pdf");
+			byte[] b = JasperExportManager.exportReportToPdf(jasperPrint); 
+            HttpServletResponse res = (HttpServletResponse) FacesContext.getCurrentInstance().getExternalContext().getResponse();
+            res.setContentType("application/pdf");
+            this.f = new File(jasperPrint.getLocaleCode()); 
+           res.setHeader("Content-disposition", "inline;filename=arquivo.pdf");
+            
+            res.getOutputStream().write(b);
+            res.getCharacterEncoding();
+            FacesContext.getCurrentInstance().responseComplete();		
+			
+			
 			
 //			FacesContext.getCurrentInstance().responseComplete();
 			
-			System.out.println("Creado!" + listaR.toString());
+			//System.out.println("Creado!" + listaR.toString());
 			
-			listaR.clear();
+			//listaR.clear();
 			
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		return "send";
-		
 	}
 	
 	
@@ -457,6 +467,14 @@ public class CourseBean implements Serializable{
 
 	public void setMessage(String message) {
 		this.message = message;
+	}
+
+	public File getF() {
+		return f;
+	}
+
+	public void setF(File f) {
+		this.f = f;
 	}
 
 		

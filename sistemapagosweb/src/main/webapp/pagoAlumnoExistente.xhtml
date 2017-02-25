@@ -19,7 +19,7 @@
 </h:head>
 <h:body>
 
-	<h:form id="form1" styleClass="center">
+	<h:form id="form1" styleClass="center" target="_blank">
 		<p:panel id="panel" header="Pago alumno existente">
 			<pm:fieldset>
 				<h:panelGrid columns="2" cellpadding="5">
@@ -107,11 +107,14 @@
 		</p:panel>
 		<p:toolbar id="tools">
 			<f:facet name="left">
-				<p:commandButton value="Siguente"
+				<p:commandButton value="Guardar pago"
 					action="#{CourseList.insertPayment}" />
 			</f:facet>
 			<f:facet name="left">
-				<p:commandButton  value="Generar Tiket" action="#{CourseList.createReport}"/>				
+				<h:commandButton  value="Generar Tiket" actionListener="#{CourseList.createReport()}" />				
+			</f:facet>
+			<f:facet name="left">
+				<p:commandButton  value="Enviar" action="enviarCorreo"/>				
 			</f:facet>
 			<f:facet name="right">
 				<p:commandButton value="Atras" action="back" />
