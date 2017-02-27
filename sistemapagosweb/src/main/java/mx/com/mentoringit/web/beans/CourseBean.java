@@ -2,7 +2,6 @@ package mx.com.mentoringit.web.beans;
 
 
 import java.io.File;
-import java.io.IOException;
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -23,6 +22,7 @@ import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMultipart;
 import javax.servlet.http.HttpServletResponse;
+
 import javax.activation.DataHandler;
 import javax.activation.FileDataSource;
 
@@ -58,7 +58,6 @@ public class CourseBean implements Serializable{
 	private Date date_payment = new Date();
 	private String date_payment2;
 	private Integer idProduct;
-	private File f;
 	
 	private String from;
 	private String subject;
@@ -73,9 +72,15 @@ public class CourseBean implements Serializable{
 	private List<StudentDTO> listaAllS;
 	private List<ProductDTO> listaD;
 	
+	
 	public CourseBean() {
 	}
-
+	
+	public void deletePdf(){
+		File fi = new File("C:\\Users\\ed\\git\\sistemapagos\\sistemapagosweb\\PDF\\pagos.pdf");
+		fi.delete();
+	}
+	
 	// obtiene todos los cursos
 	public void selectCourse() {
 		try {
@@ -146,7 +151,7 @@ public class CourseBean implements Serializable{
 	public void createReport() {
 		List<ReportData> listaR = new ArrayList<ReportData>();
 		ReportData report = new ReportData();
-		
+		File file;
 
 		try {
 			report.setStudentName(this.courseService.selectStudentName(this.idStudent));
@@ -162,25 +167,20 @@ public class CourseBean implements Serializable{
 			
 			File jasper = new File(FacesContext.getCurrentInstance().getExternalContext().getRealPath("/payment.jasper"));
 			JasperPrint jasperPrint = JasperFillManager.fillReport(jasper.getPath(),null,new JRBeanCollectionDataSource(listaR));
-			JasperExportManager.exportReportToPdfFile(jasperPrint,"C:\\Users\\ed\\git\\sistemapagos\\sistemapagosweb\\PDF\\pagos.pdf");
-			byte[] b = JasperExportManager.exportReportToPdf(jasperPrint); 
-            HttpServletResponse res = (HttpServletResponse) FacesContext.getCurrentInstance().getExternalContext().getResponse();
-            res.setContentType("application/pdf");
-            this.f = new File(jasperPrint.getLocaleCode()); 
-           res.setHeader("Content-disposition", "inline;filename=arquivo.pdf");
-            
-            res.getOutputStream().write(b);
-            res.getCharacterEncoding();
-            FacesContext.getCurrentInstance().responseComplete();		
+			JasperExportManager.exportReportToPdfFile(jasperPrint,
+					"C:\\Users\\ed\\git\\sistemapagos\\sistemapagosweb\\src\\main\\webapp\\PDF\\pagos.pdf");
+//			byte[] b = JasperExportManager.exportReportToPdf(jasperPrint); 
+//            HttpServletResponse res = (HttpServletResponse) FacesContext.getCurrentInstance().getExternalContext().getResponse();
+//            res.setContentType("application/pdf");
+//            
+//           res.setHeader("Content-disposition", "inline;filename=arquivo.pdf");
+//            
+//            res.getOutputStream().write(b);
+//            res.getCharacterEncoding();
 			
-			
-			
-//			FacesContext.getCurrentInstance().responseComplete();
-			
-			//System.out.println("Creado!" + listaR.toString());
-			
-			//listaR.clear();
-			
+            FacesContext.getCurrentInstance().responseComplete();				
+			listaR.clear();
+			System.out.println("Ppago de " + report.toString());
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -468,14 +468,5 @@ public class CourseBean implements Serializable{
 	public void setMessage(String message) {
 		this.message = message;
 	}
-
-	public File getF() {
-		return f;
-	}
-
-	public void setF(File f) {
-		this.f = f;
-	}
-
-		
+			
 }

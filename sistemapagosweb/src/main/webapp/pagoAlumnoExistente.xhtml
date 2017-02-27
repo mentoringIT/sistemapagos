@@ -19,72 +19,76 @@
 </h:head>
 <h:body>
 
-	<h:form id="form1" styleClass="center" target="_blank">
+	<h:form id="form1" styleClass="center">
 		<p:panel id="panel" header="Pago alumno existente">
 			<pm:fieldset>
 				<h:panelGrid columns="2" cellpadding="5">
 
 					<p:outputLabel value="Curso" />
 					<p:selectOneMenu id="course" value="#{CourseList.idCourse}"
-						filter="true" filterMatchMode="contains" height="100" >
+						filter="true" filterMatchMode="contains" height="100">
 
 						<f:selectItem itemLabel="--Seleccione Curso--" />
 						<f:selectItems value="#{CourseList.listaC}" var="c"
 							itemValue="#{c.id}" itemLabel="#{c.name}" />
 						<p:ajax process=":form1:course" update=":form1:consultaFecha" />
 					</p:selectOneMenu>
-					
-					<p:outputLabel value="Fecha inicio" />
-					<h:panelGrid id="consultaFecha" columns="2" cellpadding="5" >
-						<p:calendar value="#{CourseList.date1}" navigator="true" showOn="button" 
-						disabled="#{CourseList.idCourse eq 0 or CourseList.idCourse eq null}"/>
-						<p:calendar value="#{CourseList.date2}" navigator="true" showOn="button" 
-						disabled="#{CourseList.idCourse eq 0 or CourseList.idCourse eq null}"/>
 
-						<p:selectOneMenu id="fechas" value="#{CourseList.idProduct}" 
-						disabled="#{CourseList.idCourse eq 0 or CourseList.idCourse eq null}">
+					<p:outputLabel value="Fecha inicio" />
+					<h:panelGrid id="consultaFecha" columns="2" cellpadding="5">
+						<p:calendar value="#{CourseList.date1}" navigator="true"
+							showOn="button"
+							disabled="#{CourseList.idCourse eq 0 or CourseList.idCourse eq null}" />
+						<p:calendar value="#{CourseList.date2}" navigator="true"
+							showOn="button"
+							disabled="#{CourseList.idCourse eq 0 or CourseList.idCourse eq null}" />
+
+						<p:selectOneMenu id="fechas" value="#{CourseList.idProduct}"
+							disabled="#{CourseList.idCourse eq 0 or CourseList.idCourse eq null}">
 							<f:selectItem itemLabel="--Fechas de inicio--" />
 							<f:selectItems value="#{CourseList.listaD}" var="d"
 								itemValue="#{d.id}" itemLabel="#{d.start_date}" />
-								<p:ajax process=":form1:fechas" />
+							<p:ajax process=":form1:fechas" />
 						</p:selectOneMenu>
 
 						<h:panelGrid>
-							<p:commandButton id="busqueda" value="buscar" icon="ui-icon-search"
-								action="#{CourseList.startDates}" update=":form1:fechas"
+							<p:commandButton id="busqueda" value="buscar"
+								icon="ui-icon-search" action="#{CourseList.startDates}"
+								update=":form1:fechas"
 								disabled="#{CourseList.idCourse eq 0 or CourseList.idCourse eq null}">
-<!-- 								<p:ajax process=":form1:busqueda" update="" /> -->
+								<!-- 								<p:ajax process=":form1:busqueda" update="" /> -->
 							</p:commandButton>
 						</h:panelGrid>
 					</h:panelGrid>
-					
+
 					<p:outputLabel value="Nombre del alumno" />
 					<p:selectOneMenu id="student" value="#{CourseList.idStudent}"
-						filter="true" filterMatchMode="contains" height="100" >
+						filter="true" filterMatchMode="contains" height="100">
 
-						<f:selectItem itemLabel="--Seleccione Alumno--"/>
+						<f:selectItem itemLabel="--Seleccione Alumno--" />
 						<f:selectItems value="#{CourseList.listaAllS}" var="s"
 							itemValue="#{s.id}" itemLabel="#{s.name}" />
-						<p:ajax listener="#{CourseList.totals}" process=":form1:student" 
-						update=":form1:totals :form1:total1" />	
+						<p:ajax listener="#{CourseList.totals}" process=":form1:student"
+							update=":form1:totals :form1:total1" />
 					</p:selectOneMenu>
-					
+
 					<p:outputLabel value="Fecha pago" />
 					<p:calendar value="#{CourseList.date_payment}" showOn="button" />
-					
+
 					<p:outputLabel value="Total curso" />
-					<p:spinner id="total1" value="#{CourseList.total}" prefix="$" min="0" 
-					disabled="#{CourseList.totalCourse > 0 }" required="true"/>
+					<p:spinner id="total1" value="#{CourseList.total}" prefix="$"
+						min="0" disabled="#{CourseList.totalCourse > 0 }" required="true" />
 
 					<p:outputLabel value="Pago o Monto" />
-					<p:spinner value="#{CourseList.amount}" prefix="$" min="0" required="true"/>
+					<p:spinner value="#{CourseList.amount}" prefix="$" min="0"
+						required="true" />
 
 					<p:outputLabel value="No. de Pago" />
 					<p:spinner value="#{CourseList.num_payment}" min="0" />
 
 					<p:outputLabel value="Forma de pago" />
-					<p:selectOneMenu value="#{CourseList.type_payment}" >
-						<f:selectItem  itemLabel="--Seleccione opcion--" />
+					<p:selectOneMenu value="#{CourseList.type_payment}">
+						<f:selectItem itemLabel="--Seleccione opcion--" />
 						<f:selectItem itemValue="Tarjeta" itemLabel="Tarjeta" />
 						<f:selectItem itemValue="Efectivo" itemLabel="Efectivo" />
 						<f:selectItem itemValue="Deposito" itemLabel="Deposito" />
@@ -95,32 +99,50 @@
 				<h:panelGrid id="totals" columns="2" cellpadding="5">
 					<p:outputLabel value="Costo curso: " />
 					<p:outputLabel value="#{CourseList.totalCourse}" />
-					
+
 					<p:outputLabel value="Total pagado: " />
 					<p:outputLabel value="#{CourseList.totalPayment}" />
-					
+
 					<p:outputLabel value="Restante: " />
 					<p:outputLabel value="#{CourseList.remaining}" />
 				</h:panelGrid>
 			</pm:fieldset>
-
+			<p:toolbar id="tools">
+				<f:facet name="left">
+					<p:commandButton value="Generar Tiket"
+						action="#{CourseList.createReport()}" update="form1" />
+				</f:facet>
+				<f:facet name="left">
+					<p:commandButton id="view" value="Ver pago"
+						onclick="PF('detail').show()" />
+				</f:facet>
+				<f:facet name="right">
+					<p:commandButton value="Atras" action="back" />
+				</f:facet>
+			</p:toolbar>
 		</p:panel>
-		<p:toolbar id="tools">
-			<f:facet name="left">
-				<p:commandButton value="Guardar pago"
-					action="#{CourseList.insertPayment}" />
-			</f:facet>
-			<f:facet name="left">
-				<h:commandButton  value="Generar Tiket" actionListener="#{CourseList.createReport()}" />				
-			</f:facet>
-			<f:facet name="left">
-				<p:commandButton  value="Enviar" action="enviarCorreo"/>				
-			</f:facet>
-			<f:facet name="right">
-				<p:commandButton value="Atras" action="back" />
-			</f:facet>
-		</p:toolbar>
 
+
+
+
+		<p:dialog id="detail" widgetVar="detail" header="Detalles del pago"
+			modal="true" width="60%">
+			<p:media value="/PDF/pagos.pdf" width="100%" height="300px"
+				player="pdf" />
+			<p:toolbar>
+				<f:facet name="left">
+					<p:commandButton value="Enviar" action="enviarCorreo" />
+				</f:facet>
+				<f:facet name="left">
+					<p:commandButton value="Confirmar pago" />
+				</f:facet>
+
+				<f:facet name="right">
+					<p:commandButton value="Modificar"
+						action="#{CourseList.deletePdf()}" />
+				</f:facet>
+			</p:toolbar>
+		</p:dialog>
 	</h:form>
 </h:body>
 </html>
