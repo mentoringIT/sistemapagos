@@ -9,6 +9,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Properties;
 
+import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
@@ -139,8 +140,12 @@ public class CourseBean implements Serializable{
 
 		try {
 			this.courseService.insertPayment(payment);
+			FacesContext.getCurrentInstance().addMessage(null,new FacesMessage(FacesMessage.SEVERITY_INFO,
+					"Info","Tiket generado"));
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
+			FacesContext.getCurrentInstance().addMessage(null,new FacesMessage(FacesMessage.SEVERITY_INFO,
+					"Info","Tiket generado"));
 			e.printStackTrace();
 		}
 
@@ -178,14 +183,20 @@ public class CourseBean implements Serializable{
 //            res.getOutputStream().write(b);
 //            res.getCharacterEncoding();
 			
-            FacesContext.getCurrentInstance().responseComplete();				
-			listaR.clear();
-			System.out.println("Ppago de " + report.toString());
+//            FacesContext.getCurrentInstance().responseComplete();
+            
+            FacesContext.getCurrentInstance().addMessage(null,new FacesMessage(FacesMessage.SEVERITY_INFO,
+					"Info","Tiket generado"));
+            listaR.clear();
+			System.out.println("echo");
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
+			FacesContext.getCurrentInstance().addMessage(null,new FacesMessage(FacesMessage.SEVERITY_INFO,
+					"Info","Tiket generado"));
 			e.printStackTrace();
 		}
 	}
+	
 	
 	
 	// muestra los totales
@@ -273,7 +284,7 @@ public class CourseBean implements Serializable{
 		c.setFrom(this.from.trim());
 		c.setMessage(this.message);
 		c.setNameFile("pagos.pdf");
-		c.setPathFile("C:\\Users\\ed\\git\\sistemapagos\\sistemapagosweb\\PDF\\pagos.pdf");
+		c.setPathFile("C:\\Users\\ed\\git\\sistemapagos\\sistemapagosweb\\src\\main\\webapp\\PDF\\pagos.pdf");
 		
 		
 		if(controller(c)){
