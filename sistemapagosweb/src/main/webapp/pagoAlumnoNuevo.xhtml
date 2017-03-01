@@ -12,12 +12,12 @@
 .center {
 	margin: auto;
 	width: 80%;
-	padding: 15% 0;
+	padding: 0% 0;
 }
 </style>
 </h:head>
 <h:body>
-
+	<p:messages id="messages" showDetail="true" autoUpdate="true" closable="true"  globalOnly="true"/>
 	<h:form id="form1" styleClass="center">
 		<p:panel header="Pago alumno nuevo">
 			<pm:fieldset>
@@ -75,7 +75,7 @@
 					<p:calendar value="#{NewStudent.paymentDate}" showOn="button" >		
 					</p:calendar>
 					
-					<p:outputLabel value="Precio" />
+					<p:outputLabel value="Total curso:" />
 					<p:spinner  value="#{NewStudent.total}" prefix="$" min="0"/>
 					
 					<p:outputLabel value="Pago o Monto" />
@@ -97,14 +97,37 @@
 		</p:panel>
 		<p:toolbar>
 			<f:facet name="left">
-				<p:commandButton value="Siguente" action="#{NewStudent.inStudent}" />
+			<p:commandButton value="Generar Tiket"
+						 actionListener="#{NewStudent.createReport()}" />				
 			</f:facet>
+			<f:facet name="left">
+					<p:commandButton id="view" value="Ver pago"
+						onclick="PF('detail').show()" action="pagoAlumnoNuevo"/>
+				</f:facet>
 			<f:facet name="right">
 				<p:commandButton value="Atras" action="back" />
 			</f:facet>
 		</p:toolbar>
+		
+		<p:dialog id="detail" widgetVar="detail" header="Detalles del pago"
+			modal="true" width="60%">
+			<p:media value="/PDF/pagos.pdf" width="100%" height="300px"
+				player="pdf" />
+			<p:toolbar>
+				<f:facet name="left">
+					<p:commandButton value="Enviar" action="enviarCorreo" />
+				</f:facet>
+				<f:facet name="left">
+					<p:commandButton value="Confirmar pago" action="#{NewStudent.inStudent}" />
+				</f:facet>
 
-
+				<f:facet name="right">
+					<p:commandButton value="Modificar"
+						action="#{NewStudent.deletePdf()}" />
+				</f:facet>
+			</p:toolbar>
+		</p:dialog>
+	
 	</h:form>
 </h:body>
 </html>

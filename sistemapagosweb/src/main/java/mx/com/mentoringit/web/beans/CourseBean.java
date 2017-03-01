@@ -77,6 +77,7 @@ public class CourseBean implements Serializable{
 	public CourseBean() {
 	}
 	
+	//elimina del pdf creado
 	public void deletePdf(){
 		File fi = new File("C:\\Users\\ed\\git\\sistemapagos\\sistemapagosweb\\PDF\\pagos.pdf");
 		fi.delete();
@@ -141,11 +142,11 @@ public class CourseBean implements Serializable{
 		try {
 			this.courseService.insertPayment(payment);
 			FacesContext.getCurrentInstance().addMessage(null,new FacesMessage(FacesMessage.SEVERITY_INFO,
-					"Info","Tiket generado"));
+					"Info","Pago registrado con exito"));
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			FacesContext.getCurrentInstance().addMessage(null,new FacesMessage(FacesMessage.SEVERITY_INFO,
-					"Info","Tiket generado"));
+					"Info","No se ha podido registrar el pago"));
 			e.printStackTrace();
 		}
 
@@ -156,7 +157,7 @@ public class CourseBean implements Serializable{
 	public void createReport() {
 		List<ReportData> listaR = new ArrayList<ReportData>();
 		ReportData report = new ReportData();
-		File file;
+		
 
 		try {
 			report.setStudentName(this.courseService.selectStudentName(this.idStudent));

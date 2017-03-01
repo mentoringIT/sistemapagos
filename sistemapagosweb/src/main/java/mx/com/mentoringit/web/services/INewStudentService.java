@@ -14,5 +14,6 @@ public interface INewStudentService {
 	public List<ProductDTO> startDates(int id, String date1, String date2) throws Exception;
 	public Integer idMax() throws Exception;
 	public void insertPayment(PaymentDTO payment) throws Exception;
-	
+	public String selectStudentName(Integer idStudent) throws Exception; 
+	public String selectCourseName(Integer idCourse) throws Exception;
 }

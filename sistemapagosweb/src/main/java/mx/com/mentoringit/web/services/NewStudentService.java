@@ -86,6 +86,14 @@ public class NewStudentService implements INewStudentService{
 		this.paymentDAO.insertPayment(payment);		
 	}
 	
-	
+	@Override
+	public String selectStudentName(Integer idStudent) throws Exception {
+		return this.studentDAO.selectName(idStudent).getName();
+	}
+
+	@Override
+	public String selectCourseName(Integer idCourse) throws Exception {
+		return this.courseDAO.selectName(idCourse).getName();
+	}
 
 }

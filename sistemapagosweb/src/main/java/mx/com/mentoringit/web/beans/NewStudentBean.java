@@ -1,18 +1,39 @@
 package mx.com.mentoringit.web.beans;
 
 import java.util.List;
+import java.util.Properties;
+import java.io.File;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 
+import javax.activation.DataHandler;
+import javax.activation.FileDataSource;
+import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
+import javax.faces.context.FacesContext;
+import javax.mail.BodyPart;
+import javax.mail.Message;
+import javax.mail.Session;
+import javax.mail.Transport;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeBodyPart;
+import javax.mail.internet.MimeMessage;
+import javax.mail.internet.MimeMultipart;
 
+import mx.com.mentoringit.model.dto.Correo;
 import mx.com.mentoringit.model.dto.CourseDTO;
 import mx.com.mentoringit.model.dto.PSPDTO;
 import mx.com.mentoringit.model.dto.PaymentDTO;
 import mx.com.mentoringit.model.dto.ProductDTO;
+import mx.com.mentoringit.model.dto.ReportData;
 import mx.com.mentoringit.model.dto.StudentDTO;
 import mx.com.mentoringit.web.services.INewStudentService;
+import net.sf.jasperreports.engine.JasperExportManager;
+import net.sf.jasperreports.engine.JasperFillManager;
+import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 
 @ManagedBean
 @SessionScoped
@@ -21,6 +42,10 @@ public class NewStudentBean {
 	private INewStudentService newStudentService;
 	private List<CourseDTO> listaC;
 	private List<ProductDTO> listaD;
+	
+	private String from;
+	private String subject;
+	private String message;
 		
 	private String name;
 	private String pLastName;
@@ -98,17 +123,140 @@ public class NewStudentBean {
 
 			try {
 				this.newStudentService.insertPayment(payment);
+				FacesContext.getCurrentInstance().addMessage(null,new FacesMessage(FacesMessage.SEVERITY_INFO,
+						"Info","Pago registrado con exito"));
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
+				FacesContext.getCurrentInstance().addMessage(null,new FacesMessage(FacesMessage.SEVERITY_WARN,
+						"Warning","No se ha podido registrar el pago"));
 				e.printStackTrace();
 			}
 
 		}
 
+		//crea el tiket de pago
 		
+		public void createReport() {
+		List<ReportData> listaR = new ArrayList<ReportData>();
+		ReportData report = new ReportData();
+		Double remaining = 0.0;
+		
+		remaining = total - amount; 
 
+		try {
+			report.setStudentName(this.getCompleteName());
+			report.setCourseName(this.newStudentService.selectCourseName(this.idCourse));
+			report.setNumPayment(this.num_payment.toString());
+			report.setAmountPayment(this.amount.toString());
+			report.setDatePayment(getFormatDatePayment());
+			report.setTypePayment(this.type_payment);
+			report.setRemaining(remaining.toString());
+			report.setTotalCourse(this.total.toString());
+
+			listaR.add(report);
+			
+			File jasper = new File(FacesContext.getCurrentInstance().getExternalContext().getRealPath("/payment.jasper"));
+			JasperPrint jasperPrint = JasperFillManager.fillReport(jasper.getPath(),null,new JRBeanCollectionDataSource(listaR));
+			JasperExportManager.exportReportToPdfFile(jasperPrint,
+					"C:\\Users\\ed\\git\\sistemapagos\\sistemapagosweb\\src\\main\\webapp\\PDF\\pagos.pdf");
+//			byte[] b = JasperExportManager.exportReportToPdf(jasperPrint); 
+//            HttpServletResponse res = (HttpServletResponse) FacesContext.getCurrentInstance().getExternalContext().getResponse();
+//            res.setContentType("application/pdf");
+//            
+//           res.setHeader("Content-disposition", "inline;filename=arquivo.pdf");
+//            
+//            res.getOutputStream().write(b);
+//            res.getCharacterEncoding();
+			
+//            FacesContext.getCurrentInstance().responseComplete();
+            
+            FacesContext.getCurrentInstance().addMessage(null,new FacesMessage(FacesMessage.SEVERITY_INFO,
+					"Info","Tiket generado"));
+            listaR.clear();
+			System.out.println("echo");
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			FacesContext.getCurrentInstance().addMessage(null,new FacesMessage(FacesMessage.SEVERITY_INFO,
+					"Info","Tiket generado"));
+			e.printStackTrace();
+		}
+	}
+		
+		//controla el envio del correo
+		public boolean controller(Correo c){
+			
+			try {
+				Properties p = new Properties();
+				p.put("mail.smtp.host", "smtp.gmail.com");
+				p.setProperty("mail.smtp.starttls.enable", "true");
+				p.setProperty("mail.smtp.port", "587");
+				p.setProperty("mail.smtp.user", c.getUserEmail());
+				p.setProperty("mail.smtp.auth", "true");
+				
+				Session s = Session.getDefaultInstance(p,null);
+				BodyPart texto = new MimeBodyPart();
+				BodyPart adjunto = new MimeBodyPart();
+				texto.setText(c.getMessage());
+				
+				if(!c.getPathFile().equals("")){
+					adjunto.setDataHandler(new DataHandler(new FileDataSource(c.getPathFile())));
+					adjunto.setFileName(c.getNameFile());
+				}
+				MimeMultipart m = new MimeMultipart();
+				m.addBodyPart(texto);
+				
+				if(!c.getPathFile().equals("")){
+					m.addBodyPart(adjunto);
+				}
+				MimeMessage mensaje = new MimeMessage(s);
+				mensaje.setFrom(new InternetAddress(c.getUserEmail()));
+				mensaje.addRecipient(Message.RecipientType.TO, new InternetAddress(c.getFrom()));
+				mensaje.setSubject(c.getSubject());
+				mensaje.setContent(m);
+				
+				Transport t = s.getTransport("smtp");
+				t.connect(c.getUserEmail(), c.getPassword());
+				t.sendMessage(mensaje, mensaje.getAllRecipients());
+				t.close();
+				
+				return true;
+			} catch (Exception e) {
+		
+				e.printStackTrace();
+				return false;
+			}
+		}
+		
+		//establece los valores para el envio del correo
+		public void sendMail(){
+			Correo c = new Correo();
+			c.setPassword("lbmenluywbcytxeq");
+			c.setUserEmail("edflores830@gmail.com");
+			c.setSubject(this.subject);
+			c.setFrom(this.from.trim());
+			c.setMessage(this.message);
+			c.setNameFile("pagos.pdf");
+			c.setPathFile("C:\\Users\\ed\\git\\sistemapagos\\sistemapagosweb\\src\\main\\webapp\\PDF\\pagos.pdf");
+			
+			
+			if(controller(c)){
+				FacesContext.getCurrentInstance().addMessage(null,new FacesMessage(FacesMessage.SEVERITY_INFO,
+						"Info","Envio exitoso"));
+				System.out.println("Envio exitoso");
+			}else{
+				FacesContext.getCurrentInstance().addMessage(null,new FacesMessage(FacesMessage.SEVERITY_WARN,
+						"Info","Envio fallido"));
+				System.out.println("Envio fallido");
+			}
+			
+		}
 	
-	
+		//elimina del pdf creado
+		public void deletePdf(){
+			File fi = new File("C:\\Users\\ed\\git\\sistemapagos\\sistemapagosweb\\PDF\\pagos.pdf");
+			fi.delete();
+		}
+		
 	//getters and setters
 	public String getName() {
 		return name;
@@ -271,6 +419,30 @@ public class NewStudentBean {
 	}
 	public void setNewStudentService(INewStudentService newStudentService) {
 		this.newStudentService = newStudentService;
+	}
+
+	public String getFrom() {
+		return from;
+	}
+
+	public void setFrom(String from) {
+		this.from = from;
+	}
+
+	public String getSubject() {
+		return subject;
+	}
+
+	public void setSubject(String subject) {
+		this.subject = subject;
+	}
+
+	public String getMessage() {
+		return message;
+	}
+
+	public void setMessage(String message) {
+		this.message = message;
 	}
 
 }
