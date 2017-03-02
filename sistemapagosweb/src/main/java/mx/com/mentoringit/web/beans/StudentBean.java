@@ -2,6 +2,7 @@ package mx.com.mentoringit.web.beans;
 
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -24,6 +25,7 @@ public class StudentBean {
 	private List<StudentDTO> listaA;
 	private List<ProductDTO> listaD;
 	private List<PSPDTO> listaPsp;
+	private List<PSPDTO> temListaPsp = new ArrayList<PSPDTO>();
 	private List<PSPDTO> filterPayments;
 	private PSPDTO detail;
 	
@@ -250,6 +252,14 @@ public class StudentBean {
 
 	public void setNameStudent(String nameStudent) {
 		this.nameStudent = nameStudent;
+	}
+
+	public List<PSPDTO> getTemListaPsp() {
+		return temListaPsp;
+	}
+
+	public void setTemListaPsp(List<PSPDTO> temListaPsp) {
+		this.temListaPsp = temListaPsp;
 	}
 
 	
