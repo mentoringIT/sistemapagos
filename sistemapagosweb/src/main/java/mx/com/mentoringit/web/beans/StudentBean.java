@@ -1,26 +1,33 @@
 package mx.com.mentoringit.web.beans;
 
-
+import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
+import javax.faces.context.FacesContext;
 
 import mx.com.mentoringit.model.dto.CourseDTO;
 import mx.com.mentoringit.model.dto.PSPDTO;
 import mx.com.mentoringit.model.dto.ProductDTO;
+import mx.com.mentoringit.model.dto.ReportData;
 import mx.com.mentoringit.model.dto.StudentDTO;
 import mx.com.mentoringit.web.services.IStudentService;
+import net.sf.jasperreports.engine.JasperExportManager;
+import net.sf.jasperreports.engine.JasperFillManager;
+import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 
 @ManagedBean
 @SessionScoped
 public class StudentBean {
-	
-	private IStudentService studentService;	
-	
+
+	private IStudentService studentService;
+
 	private List<CourseDTO> listaC;
 	private List<StudentDTO> listaA;
 	private List<ProductDTO> listaD;
@@ -28,7 +35,7 @@ public class StudentBean {
 	private List<PSPDTO> temListaPsp = new ArrayList<PSPDTO>();
 	private List<PSPDTO> filterPayments;
 	private PSPDTO detail;
-	
+
 	private Integer idCourse;
 	private Integer idStudent;
 	private Integer idProduct;
@@ -40,10 +47,9 @@ public class StudentBean {
 	private Double totalCourse = 0.0;
 	private Double totalPayment = 0.0;
 	private Double remaining = 0.0;
-	
-	
-	
-	public void courses(){
+
+	// obtiene todos los cursos
+	public void courses() {
 		try {
 			listaC = this.studentService.allCourse();
 		} catch (Exception e) {
@@ -51,8 +57,9 @@ public class StudentBean {
 			e.printStackTrace();
 		}
 	}
-	
-	public void students(){
+
+	// obtiene todos los alumnos
+	public void students() {
 		try {
 			listaA = this.studentService.allStudent();
 		} catch (Exception e) {
@@ -60,8 +67,9 @@ public class StudentBean {
 			e.printStackTrace();
 		}
 	}
-	
-	public void startDates(){
+
+	// obtiene las fechas de inicio de los productos(cursos)
+	public void startDates() {
 		try {
 			listaD = this.studentService.startDates(idCourse, getFormatDate1(), getFormatDate2());
 		} catch (Exception e) {
@@ -69,25 +77,26 @@ public class StudentBean {
 			e.printStackTrace();
 		}
 	}
-	
-	public String paymentsByStudent(){
+
+	// obtiene todos los pagos de un alumno y calcula los totales
+	public String paymentsByStudent() {
 		this.totalCourse = 0.0;
 		this.totalPayment = 0.0;
 		this.remaining = 0.0;
-		
+
 		try {
 			listaPsp = this.studentService.paymentByStudent(idStudent, idProduct);
-			
-			if (listaPsp.size() != 0) {
-			for (int i = 0; i < listaPsp.size(); i++) {
-				if (i == 0) {
 
-					this.totalCourse = listaPsp.get(i).getTotalCourse();
-					this.nameStudent = listaPsp.get(i).getStudentName();
+			if (listaPsp.size() != 0) {
+				for (int i = 0; i < listaPsp.size(); i++) {
+					if (i == 0) {
+
+						this.totalCourse = listaPsp.get(i).getTotalCourse();
+						this.nameStudent = listaPsp.get(i).getStudentName();
+					}
+					this.totalPayment = this.totalPayment + listaPsp.get(i).getAmountPayment();
 				}
-				this.totalPayment = this.totalPayment + listaPsp.get(i).getAmountPayment();
-			}
-			}else{
+			} else {
 				this.nameStudent = this.studentService.selectName(idStudent);
 			}
 
@@ -99,8 +108,54 @@ public class StudentBean {
 		}
 		return "consult";
 	}
-	
-	
+
+	// crea los tikets de pago
+	public void createReport() {
+		List<ReportData> listaR = new ArrayList<ReportData>();
+		ReportData report = new ReportData();
+
+		try {
+
+			for (int i = 0; i < this.temListaPsp.size(); i++) {
+
+				Double remaining2;
+				remaining2 = this.temListaPsp.get(i).getTotalCourse() - this.temListaPsp.get(i).getAmountPayment();
+
+				report.setStudentName(this.temListaPsp.get(i).getStudentName());
+				report.setCourseName(this.temListaPsp.get(i).getCourseName());
+				report.setNumPayment(this.temListaPsp.get(i).getNumPayment().toString());
+				report.setAmountPayment(this.temListaPsp.get(i).getAmountPayment().toString());
+				report.setDatePayment(this.temListaPsp.get(i).getDatePayment().toString());
+				report.setTypePayment(this.temListaPsp.get(i).getTypePayment());
+				report.setRemaining(remaining2.toString());
+				report.setTotalCourse(this.temListaPsp.get(i).getTotalCourse().toString());
+
+				listaR.add(report);
+
+				File jasper = new File(
+						FacesContext.getCurrentInstance().getExternalContext().getRealPath("/payment.jasper"));
+				JasperPrint jasperPrint = JasperFillManager.fillReport(jasper.getPath(), null,
+						new JRBeanCollectionDataSource(listaR));
+				JasperExportManager.exportReportToPdfFile(jasperPrint,
+						"C:\\Users\\ed\\git\\sistemapagos\\sistemapagosweb\\src\\main\\webapp\\PDF\\pago_"+this.temListaPsp.get(i).getNumPayment()+".pdf");
+				listaR.clear();
+								
+			}
+			this.temListaPsp.clear();
+			FacesContext.getCurrentInstance().addMessage(null,
+					new FacesMessage(FacesMessage.SEVERITY_INFO, "Info", "Tiket(s) generado(s)"));
+			
+			System.out.println("echo");
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			FacesContext.getCurrentInstance().addMessage(null,
+					new FacesMessage(FacesMessage.SEVERITY_INFO, "Info", "Tiket generado"));
+			e.printStackTrace();
+		}
+	}
+
+	// metodos getters y setters
+
 	public IStudentService getStudentService() {
 		return studentService;
 	}
@@ -118,12 +173,10 @@ public class StudentBean {
 		this.listaC = listaC;
 	}
 
-
 	public List<StudentDTO> getListaA() {
 		students();
 		return listaA;
 	}
-
 
 	public void setListaA(List<StudentDTO> listaA) {
 		this.listaA = listaA;
@@ -261,8 +314,5 @@ public class StudentBean {
 	public void setTemListaPsp(List<PSPDTO> temListaPsp) {
 		this.temListaPsp = temListaPsp;
 	}
-
-	
-	
 
 }

@@ -60,25 +60,14 @@
 
 		<p:toolbar>
 			<f:facet name="left">
-				<p:commandButton process="checkboxDT" update=":form:multiCarDetail"
-					icon="ui-icon-document" value="Generar tiket"
-					oncomplete="PF('multiCarDialog').show()" />
+				<p:commandButton value="Generar pago(s)" 
+				actionListener="#{StudentList.createReport()}" icon="ui-icon-document"/>
 			</f:facet>
 			<f:facet name="right">
 				<p:commandButton value="Atras" action="back" />
 			</f:facet>
 		</p:toolbar>
 
-		<p:dialog header="Pagos seleccionados" widgetVar="multiCarDialog"
-			modal="true" showEffect="fade" hideEffect="fade" resizable="false"
-			width="200">
-			<p:outputPanel id="multiCarDetail" style="text-align:center;">
-				<ui:repeat value="#{StudentList.temListaPsp}" var="lp">
-					<h:outputText value="#{lp.numPayment} - #{lp.courseName}"
-						style="display:block" />
-				</ui:repeat>
-			</p:outputPanel>
-		</p:dialog>
 	</h:form>
 </body>
 </html>
