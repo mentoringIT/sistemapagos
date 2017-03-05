@@ -192,22 +192,31 @@ public class NewStudentBean {
 				p.setProperty("mail.smtp.port", "587");
 				p.setProperty("mail.smtp.user", c.getUserEmail());
 				p.setProperty("mail.smtp.auth", "true");
-				
-				Session s = Session.getDefaultInstance(p,null);
+								
+				Session s = Session.getDefaultInstance(p, null);
 				BodyPart texto = new MimeBodyPart();
-				BodyPart adjunto = new MimeBodyPart();
+				BodyPart adjunto; 
+				MimeMultipart m = new MimeMultipart();
+				
 				texto.setText(c.getMessage());
 				
-				if(!c.getPathFile().equals("")){
-					adjunto.setDataHandler(new DataHandler(new FileDataSource(c.getPathFile())));
-					adjunto.setFileName(c.getNameFile());
-				}
-				MimeMultipart m = new MimeMultipart();
-				m.addBodyPart(texto);
+				File file = new File("C:\\Users\\ed\\git\\sistemapagos\\sistemapagosweb\\src\\main\\webapp\\PDF");
+				File []files = file.listFiles();
 				
-				if(!c.getPathFile().equals("")){
-					m.addBodyPart(adjunto);
+				for (File f : files) {				
+					adjunto = new MimeBodyPart();			
+					
+					if (f.exists()) {
+						
+						adjunto.setDataHandler(new DataHandler(new FileDataSource(f.getAbsolutePath())));
+						adjunto.setFileName(f.getName());
+						m.addBodyPart(adjunto);
+						
+					}
 				}
+				
+				m.addBodyPart(texto);
+
 				MimeMessage mensaje = new MimeMessage(s);
 				mensaje.setFrom(new InternetAddress(c.getUserEmail()));
 				mensaje.addRecipient(Message.RecipientType.TO, new InternetAddress(c.getFrom()));
@@ -235,10 +244,7 @@ public class NewStudentBean {
 			c.setSubject(this.subject);
 			c.setFrom(this.from.trim());
 			c.setMessage(this.message);
-			c.setNameFile("pagos.pdf");
-			c.setPathFile("C:\\Users\\ed\\git\\sistemapagos\\sistemapagosweb\\src\\main\\webapp\\PDF\\pagos.pdf");
-			
-			
+						
 			if(controller(c)){
 				FacesContext.getCurrentInstance().addMessage(null,new FacesMessage(FacesMessage.SEVERITY_INFO,
 						"Info","Envio exitoso"));

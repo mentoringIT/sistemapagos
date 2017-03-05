@@ -63,6 +63,9 @@
 				<p:commandButton value="Generar pago(s)" 
 				actionListener="#{StudentList.createReport()}" icon="ui-icon-document"/>
 			</f:facet>
+			<f:facet name="left">
+					<p:commandButton value="Enviar" action="enviarCorreo" />
+				</f:facet>
 			<f:facet name="right">
 				<p:commandButton value="Atras" action="back" />
 			</f:facet>

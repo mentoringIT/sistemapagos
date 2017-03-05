@@ -5,12 +5,24 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Properties;
 
+import javax.activation.DataHandler;
+import javax.activation.FileDataSource;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
+import javax.mail.BodyPart;
+import javax.mail.Message;
+import javax.mail.Session;
+import javax.mail.Transport;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeBodyPart;
+import javax.mail.internet.MimeMessage;
+import javax.mail.internet.MimeMultipart;
 
+import mx.com.mentoringit.model.dto.Correo;
 import mx.com.mentoringit.model.dto.CourseDTO;
 import mx.com.mentoringit.model.dto.PSPDTO;
 import mx.com.mentoringit.model.dto.ProductDTO;
@@ -47,6 +59,10 @@ public class StudentBean {
 	private Double totalCourse = 0.0;
 	private Double totalPayment = 0.0;
 	private Double remaining = 0.0;
+
+	private String from;
+	private String subject;
+	private String message;
 
 	// obtiene todos los cursos
 	public void courses() {
@@ -113,13 +129,15 @@ public class StudentBean {
 	public void createReport() {
 		List<ReportData> listaR = new ArrayList<ReportData>();
 		ReportData report = new ReportData();
+		Double totalPayment = 0.0;
 
 		try {
 
 			for (int i = 0; i < this.temListaPsp.size(); i++) {
 
 				Double remaining2;
-				remaining2 = this.temListaPsp.get(i).getTotalCourse() - this.temListaPsp.get(i).getAmountPayment();
+				totalPayment = totalPayment + this.temListaPsp.get(i).getAmountPayment();
+				remaining2 = this.temListaPsp.get(i).getTotalCourse() - totalPayment;
 
 				report.setStudentName(this.temListaPsp.get(i).getStudentName());
 				report.setCourseName(this.temListaPsp.get(i).getCourseName());
@@ -137,20 +155,91 @@ public class StudentBean {
 				JasperPrint jasperPrint = JasperFillManager.fillReport(jasper.getPath(), null,
 						new JRBeanCollectionDataSource(listaR));
 				JasperExportManager.exportReportToPdfFile(jasperPrint,
-						"C:\\Users\\ed\\git\\sistemapagos\\sistemapagosweb\\src\\main\\webapp\\PDF\\pago_"+this.temListaPsp.get(i).getNumPayment()+".pdf");
+						"C:\\Users\\ed\\git\\sistemapagos\\sistemapagosweb\\src\\main\\webapp\\PDF\\pago_"
+								+ this.temListaPsp.get(i).getNumPayment() + ".pdf");
 				listaR.clear();
-								
+
 			}
-			this.temListaPsp.clear();
 			FacesContext.getCurrentInstance().addMessage(null,
 					new FacesMessage(FacesMessage.SEVERITY_INFO, "Info", "Tiket(s) generado(s)"));
-			
+
 			System.out.println("echo");
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			FacesContext.getCurrentInstance().addMessage(null,
 					new FacesMessage(FacesMessage.SEVERITY_INFO, "Info", "Tiket generado"));
 			e.printStackTrace();
+		}
+	}
+
+	// establece los valores para el envio del correo
+	public void sendMail() {
+		Correo c = new Correo();
+		c.setPassword("lbmenluywbcytxeq");
+		c.setUserEmail("edflores830@gmail.com");
+		c.setSubject(this.subject);
+		c.setFrom(this.from.trim());
+		c.setMessage(this.message);
+
+		if (controller(c)) {
+			System.out.println("Envio exitoso");
+		} else {
+			System.out.println("Envio fallido");
+		}
+
+	}
+
+	// controla el envio del correo
+	public boolean controller(Correo c) {
+
+		try {
+			Properties p = new Properties();
+			p.put("mail.smtp.host", "smtp.gmail.com");
+			p.setProperty("mail.smtp.starttls.enable", "true");
+			p.setProperty("mail.smtp.port", "587");
+			p.setProperty("mail.smtp.user", c.getUserEmail());
+			p.setProperty("mail.smtp.auth", "true");
+
+			Session s = Session.getDefaultInstance(p, null);
+			BodyPart texto = new MimeBodyPart();
+			BodyPart adjunto; 
+			MimeMultipart m = new MimeMultipart();
+			
+			texto.setText(c.getMessage());
+			
+			File file = new File("C:\\Users\\ed\\git\\sistemapagos\\sistemapagosweb\\src\\main\\webapp\\PDF");
+			File []files = file.listFiles();
+			
+			for (File f : files) {				
+				adjunto = new MimeBodyPart();			
+				
+				if (f.exists()) {
+					
+					adjunto.setDataHandler(new DataHandler(new FileDataSource(f.getAbsolutePath())));
+					adjunto.setFileName(f.getName());
+					m.addBodyPart(adjunto);
+					
+				}
+			}
+			
+			m.addBodyPart(texto);
+
+			MimeMessage mensaje = new MimeMessage(s);
+			mensaje.setFrom(new InternetAddress(c.getUserEmail()));
+			mensaje.addRecipient(Message.RecipientType.TO, new InternetAddress(c.getFrom()));
+			mensaje.setSubject(c.getSubject());
+			mensaje.setContent(m);
+
+			Transport t = s.getTransport("smtp");
+			t.connect(c.getUserEmail(), c.getPassword());
+			t.sendMessage(mensaje, mensaje.getAllRecipients());
+			t.close();
+			
+			return true;
+		} catch (Exception e) {
+
+			e.printStackTrace();
+			return false;
 		}
 	}
 
@@ -313,6 +402,30 @@ public class StudentBean {
 
 	public void setTemListaPsp(List<PSPDTO> temListaPsp) {
 		this.temListaPsp = temListaPsp;
+	}
+
+	public String getFrom() {
+		return from;
+	}
+
+	public void setFrom(String from) {
+		this.from = from;
+	}
+
+	public String getSubject() {
+		return subject;
+	}
+
+	public void setSubject(String subject) {
+		this.subject = subject;
+	}
+
+	public String getMessage() {
+		return message;
+	}
+
+	public void setMessage(String message) {
+		this.message = message;
 	}
 
 }
