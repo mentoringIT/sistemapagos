@@ -1,7 +1,9 @@
 package mx.com.mentoringit.web.beans;
 
+import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
+import javax.faces.context.FacesContext;
 
 import mx.com.mentoringit.model.dto.UserDTO;
 import mx.com.mentoringit.web.services.IUserService;
@@ -31,6 +33,8 @@ public class UserBean implements IUserBean{
 		} catch (Exception e) {
 			e.printStackTrace();
 			result = "fail";
+			FacesContext.getCurrentInstance().addMessage(null,new FacesMessage(FacesMessage.SEVERITY_ERROR,
+					"","Ususario y/o contraseña son incorectos"));
 		}
 		return result;
 	}
