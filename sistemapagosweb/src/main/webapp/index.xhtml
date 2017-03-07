@@ -17,29 +17,30 @@
 </style>
 </h:head>
 <h:body>
-	<p:messages id="messages" showDetail="true" autoUpdate="true" closable="true"  globalOnly="true"/>
-<!-- 	<p:dialog id="diag" widgetVar="diag"></p:dialog> -->
 	
 	<h:form id="form" styleClass="center" style="width:400px;">
 		<p:panel id="panel" header="Sistema de pagos"
 			style="margin-bottom:10px;">
 			<h:panelGrid columns="2" cellpadding="5">
-			
+
 				<h:outputLabel for="username" value="Usuario:" />
 				<p:inputText value="#{LoginUser.username}" id="username"
-					required="true" label="username" tabindex="1"  requiredMessage="El campo usuario es obligatorio"/>
-					
+					required="true" label="username" tabindex="1"
+					requiredMessage="#{LoginUser.messageUser()}" />
+
 				<h:outputLabel for="password" value="Clave:" />
 				<p:password value="#{LoginUser.password}" id="password"
-					required="true" label="password" tabindex="2" requiredMessage="El campo clave es obligatorio"/>
+					required="true" label="password" tabindex="2"
+					requiredMessage="#{LoginUser.messageKey()}" />
 
-					
+
 				<f:facet name="footer">
 					<p:commandButton id="loginButton" value="Entrar"
-						action="#{LoginUser.userLogin}"  onclick="PF().show()"/>
+						action="#{LoginUser.userLogin}" onclick="PF().show()" />
 				</f:facet>
 			</h:panelGrid>
-			<p:messages id="messages" style="width:300px; font-size:10px;" />
+			<p:messages id="messages" style="width:300px; font-size:10px;"
+				showDetail="true" />
 		</p:panel>
 	</h:form>
 

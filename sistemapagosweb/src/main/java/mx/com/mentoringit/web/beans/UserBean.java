@@ -17,6 +17,9 @@ public class UserBean implements IUserBean{
 	private String username;
 	private String password;
 	
+	
+	
+
 	public UserBean() {
 	}
 	
@@ -34,11 +37,22 @@ public class UserBean implements IUserBean{
 			e.printStackTrace();
 			result = "fail";
 			FacesContext.getCurrentInstance().addMessage(null,new FacesMessage(FacesMessage.SEVERITY_ERROR,
-					"","Ususario y/o contraseña son incorectos"));
+					"","Ususario y/o contraseña incorectos"));
 		}
 		return result;
 	}
-
+	
+	public void messageUser() {		
+		FacesContext.getCurrentInstance().addMessage(null,new FacesMessage(FacesMessage.SEVERITY_ERROR,
+				"","El campo usuario es obligatorio"));
+	}
+	
+	public void messageKey() {		
+		FacesContext.getCurrentInstance().addMessage(null,new FacesMessage(FacesMessage.SEVERITY_ERROR,
+				"","El campo clave es obligatorio"));
+	}
+	
+	
 	public IUserService getUserService() {
 		return userService;
 	}
