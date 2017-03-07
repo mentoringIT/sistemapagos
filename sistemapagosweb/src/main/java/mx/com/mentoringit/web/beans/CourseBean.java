@@ -73,10 +73,19 @@ public class CourseBean implements Serializable{
 	private List<StudentDTO> listaAllS;
 	private List<ProductDTO> listaD;
 	
+	private int cont = 0;
 	
 	public CourseBean() {
 	}
 	
+	public void messageError(){
+		cont++;
+		if(cont == 1){
+		FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR,"",
+				"Los campos marcados en rojo son obligatorios"));
+		}
+	}
+		
 	//elimina del pdf creado
 	public void deletePdf(){
 		File fi = new File("C:\\Users\\ed\\git\\sistemapagos\\sistemapagosweb\\PDF\\pagos.pdf");
@@ -145,7 +154,7 @@ public class CourseBean implements Serializable{
 					"Info","Pago registrado con exito"));
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
-			FacesContext.getCurrentInstance().addMessage(null,new FacesMessage(FacesMessage.SEVERITY_INFO,
+			FacesContext.getCurrentInstance().addMessage(null,new FacesMessage(FacesMessage.SEVERITY_ERROR,
 					"Info","No se ha podido registrar el pago"));
 			e.printStackTrace();
 		}
@@ -192,9 +201,10 @@ public class CourseBean implements Serializable{
 			System.out.println("echo");
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
-			FacesContext.getCurrentInstance().addMessage(null,new FacesMessage(FacesMessage.SEVERITY_INFO,
-					"Info","Tiket generado"));
+			FacesContext.getCurrentInstance().addMessage(null,new FacesMessage(FacesMessage.SEVERITY_ERROR,
+					"Info","El tiket no pudo ser generado"));
 			e.printStackTrace();
+			System.out.println("fallo");
 		}
 	}
 	
@@ -485,5 +495,6 @@ public class CourseBean implements Serializable{
 	public void setMessage(String message) {
 		this.message = message;
 	}
+
 			
 }

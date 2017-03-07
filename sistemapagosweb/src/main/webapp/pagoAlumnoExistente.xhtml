@@ -18,16 +18,18 @@
 
 </h:head>
 <h:body>
-	<p:messages id="messages" showDetail="true" autoUpdate="true" closable="true"  globalOnly="true"/>
+	
 	<h:form id="form1" styleClass="center">
 	
 		<p:panel id="panel" header="Pago alumno existente">
+		<p:messages id="messages" style="width:300px; font-size:10px;" showDetail="true"/>
 			<pm:fieldset>
 				<h:panelGrid columns="2" cellpadding="5">
 
 					<p:outputLabel value="Curso" />
 					<p:selectOneMenu id="course" value="#{CourseList.idCourse}"
-						filter="true" filterMatchMode="contains" height="100">
+						filter="true" filterMatchMode="contains" height="100" required="true"
+						requiredMessage="#{CourseList.messageError()}">
 
 						<f:selectItem itemLabel="--Seleccione Curso--" />
 						<f:selectItems value="#{CourseList.listaC}" var="c"
@@ -64,7 +66,9 @@
 
 					<p:outputLabel value="Nombre del alumno" />
 					<p:selectOneMenu id="student" value="#{CourseList.idStudent}"
-						filter="true" filterMatchMode="contains" height="100">
+						filter="true" filterMatchMode="contains" height="100" required="true"
+						requiredMessage="#{CourseList.messageError()}">
+						<p:message for="student" display="icon" />
 
 						<f:selectItem itemLabel="--Seleccione Alumno--" />
 						<f:selectItems value="#{CourseList.listaAllS}" var="s"
@@ -74,7 +78,7 @@
 					</p:selectOneMenu>
 
 					<p:outputLabel value="Fecha pago" />
-					<p:calendar value="#{CourseList.date_payment}" showOn="button" />
+					<p:calendar value="#{CourseList.date_payment}" showOn="button" required="true"/>
 
 					<p:outputLabel value="Total curso" />
 					<p:spinner id="total1" value="#{CourseList.total}" prefix="$"
@@ -85,16 +89,19 @@
 						required="true" />
 
 					<p:outputLabel value="No. de Pago" />
-					<p:spinner value="#{CourseList.num_payment}" min="0" />
+					<p:spinner value="#{CourseList.num_payment}" min="1" 
+					required="true" />
 
 					<p:outputLabel value="Forma de pago" />
-					<p:selectOneMenu value="#{CourseList.type_payment}">
-						<f:selectItem itemLabel="--Seleccione opcion--" />
+					<p:selectOneMenu value="#{CourseList.type_payment}" required="true"
+					requiredMessage="El campo 'Forma de pago' es obligatorio">
+						<f:selectItem itemLabel="--Seleccione opcion--" noSelectionOption="true" />
 						<f:selectItem itemValue="Tarjeta" itemLabel="Tarjeta" />
 						<f:selectItem itemValue="Efectivo" itemLabel="Efectivo" />
 						<f:selectItem itemValue="Deposito" itemLabel="Deposito" />
 					</p:selectOneMenu>
 				</h:panelGrid>
+				
 			</pm:fieldset>
 			<pm:fieldset>
 				<h:panelGrid id="totals" columns="2" cellpadding="5">
@@ -111,7 +118,7 @@
 			<p:toolbar id="tools">
 				<f:facet name="left">
 					<p:commandButton value="Generar Tiket"
-						 actionListener="#{CourseList.createReport()}" />
+						 actionListener="#{CourseList.createReport()}" onclick="PF().show"/>
 				</f:facet>
 				<f:facet name="left">
 					<p:commandButton id="view" value="Ver pago"
