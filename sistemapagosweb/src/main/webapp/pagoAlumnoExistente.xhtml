@@ -11,98 +11,116 @@
 /* 	CSS para centrar el formulario de login */
 .center {
 	margin: auto;
-	width: 80%;
+	width: 90%;
 	padding: 0% 0;
 }
 </style>
 
 </h:head>
 <h:body>
-	
+	<p:messages id="messages" globalOnly="true" showDetail="true" closable="true"/>
 	<h:form id="form1" styleClass="center">
 	
 		<p:panel id="panel" header="Pago alumno existente">
-		<p:messages id="messages" style="width:300px; font-size:10px;" showDetail="true"/>
-			<pm:fieldset>
-				<h:panelGrid columns="2" cellpadding="5">
+		
+			
+				<h:panelGrid columns="3" cellpadding="5">
 
 					<p:outputLabel value="Curso" />
 					<p:selectOneMenu id="course" value="#{CourseList.idCourse}"
-						filter="true" filterMatchMode="contains" height="100" required="true"
-						requiredMessage="#{CourseList.messageError()}">
+						filter="true" filterMatchMode="contains" height="100"  required="true"
+						requiredMessage="campo obligatorio">
 
-						<f:selectItem itemLabel="--Seleccione Curso--" />
+						<f:selectItem itemLabel="--Seleccione Curso--" noSelectionOption="true"/>
 						<f:selectItems value="#{CourseList.listaC}" var="c"
 							itemValue="#{c.id}" itemLabel="#{c.name}" />
-						<p:ajax process=":form1:course" update=":form1:consultaFecha" />
+						<p:ajax process=":form1:course" update=":form1:startsDates" />
 					</p:selectOneMenu>
+					<p:message for="course" display="text" style="width:150px; font-size:14px;"/>
 
-					<p:outputLabel value="Fecha inicio" />
-					<h:panelGrid id="consultaFecha" columns="2" cellpadding="5">
-						<p:calendar value="#{CourseList.date1}" navigator="true"
+					<p:outputLabel value="Fecha de inicio" />
+					<h:panelGrid id="startsDates" columns="2" cellpadding="5">
+						<p:calendar id="date1" value="#{CourseList.date1}" navigator="true"
 							showOn="button"
 							disabled="#{CourseList.idCourse eq 0 or CourseList.idCourse eq null}" />
-						<p:calendar value="#{CourseList.date2}" navigator="true"
+							
+						<p:calendar id="date2" value="#{CourseList.date2}" navigator="true"
 							showOn="button"
 							disabled="#{CourseList.idCourse eq 0 or CourseList.idCourse eq null}" />
-
+					
 						<p:selectOneMenu id="fechas" value="#{CourseList.idProduct}"
 							disabled="#{CourseList.idCourse eq 0 or CourseList.idCourse eq null}">
 							<f:selectItem itemLabel="--Fechas de inicio--" />
 							<f:selectItems value="#{CourseList.listaD}" var="d"
 								itemValue="#{d.id}" itemLabel="#{d.start_date}" />
-							<p:ajax process=":form1:fechas" />
+							<p:ajax process=":form1:fechas" update=":form1:data"/>
 						</p:selectOneMenu>
 
-						<h:panelGrid>
-							<p:commandButton id="busqueda" value="buscar"
-								icon="ui-icon-search" action="#{CourseList.startDates}"
-								update=":form1:fechas"
-								disabled="#{CourseList.idCourse eq 0 or CourseList.idCourse eq null}">
-								<!-- 								<p:ajax process=":form1:busqueda" update="" /> -->
-							</p:commandButton>
-						</h:panelGrid>
+						<p:commandButton id="busqueda" value="buscar" icon="ui-icon-search" actionListener="#{CourseList.startDates}"
+								update=":form1:fechas"	disabled="#{CourseList.idCourse eq 0 or CourseList.idCourse eq null}" >
+						</p:commandButton>		
+			
+					</h:panelGrid>		
 					</h:panelGrid>
-
+						
+					<h:panelGrid id="data" columns="3" cellpadding="5">
+					
 					<p:outputLabel value="Nombre del alumno" />
 					<p:selectOneMenu id="student" value="#{CourseList.idStudent}"
 						filter="true" filterMatchMode="contains" height="100" required="true"
-						requiredMessage="#{CourseList.messageError()}">
-						<p:message for="student" display="icon" />
-
-						<f:selectItem itemLabel="--Seleccione Alumno--" />
+						requiredMessage="campo obligatorio" disabled="#{CourseList.idProduct eq 0 or CourseList.idProduct eq null}">
+						
+						<f:selectItem itemLabel="--Seleccione Alumno--" noSelectionOption="true"/>
 						<f:selectItems value="#{CourseList.listaAllS}" var="s"
 							itemValue="#{s.id}" itemLabel="#{s.name}" />
 						<p:ajax listener="#{CourseList.totals}" process=":form1:student"
-							update=":form1:totals :form1:total1" />
+							update=":form1:totals :form1:total1 :form1:numPayment" />
 					</p:selectOneMenu>
+					<p:message for="student" display="text" style="width:150px; font-size:14px;"/>
+					
+					<p:outputLabel value="Fecha de pago" />
+					<p:calendar id="paymentDate" value="#{CourseList.date_payment}" showOn="button" required="true"
+					disabled="#{CourseList.idProduct eq 0 or CourseList.idProduct eq null}"/>
+					<p:message for="paymentDate" display="text" style="width:300px; font-size:14px;"/>
 
-					<p:outputLabel value="Fecha pago" />
-					<p:calendar value="#{CourseList.date_payment}" showOn="button" required="true"/>
 
 					<p:outputLabel value="Total curso" />
 					<p:spinner id="total1" value="#{CourseList.total}" prefix="$"
-						min="0" disabled="#{CourseList.totalCourse > 0 }" required="true" />
+						min="0" disabled="#{CourseList.totalCourse > 0 or CourseList.idProduct eq 0 or CourseList.idProduct eq null}" required="true"
+						validatorMessage="el valor tiene que ser mayor que 0.0">
+						<f:validateDoubleRange minimum="1.0"/>
+					</p:spinner>	
+					<p:message for="total1" display="text" style="width:270px; font-size:14px;"/>
+
 
 					<p:outputLabel value="Pago o Monto" />
-					<p:spinner value="#{CourseList.amount}" prefix="$" min="0"
-						required="true" />
+					<p:spinner id="amount" value="#{CourseList.amount}" prefix="$" min="0" required="true"
+						validatorMessage="el valor tiene que ser mayor que 0.0"
+						disabled="#{CourseList.idProduct eq 0 or CourseList.idProduct eq null}">
+						<f:validateDoubleRange minimum="1.0"/>
+					</p:spinner>
+					<p:message for="amount" display="text" style="width:270px; font-size:14px;"/>
 
 					<p:outputLabel value="No. de Pago" />
-					<p:spinner value="#{CourseList.num_payment}" min="1" 
-					required="true" />
+					<p:spinner id="numPayment" value="#{CourseList.num_payment}" min="1"  required="true"
+						validatorMessage="el valor tiene que ser mayor que 0"
+						disabled="#{CourseList.idProduct eq 0 or CourseList.idProduct eq null}">
+						<f:validateLongRange minimum="1"/>
+					</p:spinner>
+					<p:message for="numPayment" display="text" style="width:270px; font-size:14px;"/>
 
 					<p:outputLabel value="Forma de pago" />
-					<p:selectOneMenu value="#{CourseList.type_payment}" required="true"
-					requiredMessage="El campo 'Forma de pago' es obligatorio">
-						<f:selectItem itemLabel="--Seleccione opcion--" noSelectionOption="true" />
+					<p:selectOneMenu id="typePayment" value="#{CourseList.type_payment}" required="true"
+					requiredMessage="campo obligatorio" disabled="#{CourseList.idProduct eq 0 or CourseList.idProduct eq null}">
+						<f:selectItem itemLabel="--Seleccione opcion--" noSelectionOption="true"/>
 						<f:selectItem itemValue="Tarjeta" itemLabel="Tarjeta" />
 						<f:selectItem itemValue="Efectivo" itemLabel="Efectivo" />
 						<f:selectItem itemValue="Deposito" itemLabel="Deposito" />
 					</p:selectOneMenu>
+					<p:message for="typePayment" display="text" style="width:150px; font-size:14px;"/>
 				</h:panelGrid>
 				
-			</pm:fieldset>
+			
 			<pm:fieldset>
 				<h:panelGrid id="totals" columns="2" cellpadding="5">
 					<p:outputLabel value="Costo curso: " />

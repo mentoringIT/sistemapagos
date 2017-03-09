@@ -48,8 +48,8 @@ public class CourseBean implements Serializable{
 	private Integer idCourse;
 	private Integer idStudent;
 
-	private Date date1;
-	private Date date2;
+	private Date date1 = new Date();
+	private Date date2= new Date();
 	private String formatDate1;
 	private String formatDate2;
 	private Double total = 0.0;
@@ -215,6 +215,7 @@ public class CourseBean implements Serializable{
 		this.totalCourse = 0.0;
 		this.totalPayment = 0.0;
 		this.remaining = 0.0;
+		int cont=0;
 		try {
 
 			List<PaymentDTO> listaP;
@@ -228,11 +229,14 @@ public class CourseBean implements Serializable{
 						this.total = this.totalCourse;
 					}
 					this.totalPayment = this.totalPayment + listaP.get(i).getAmount_payment();
+					cont = i;
+					
 				}
-
+				this.num_payment = cont + 2;
 				this.remaining = this.totalCourse - this.totalPayment;
 			} else {
 				this.total = 0.0;
+				this.num_payment = 1;
 			}
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
