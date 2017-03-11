@@ -74,7 +74,7 @@
 						<f:selectItems value="#{CourseList.listaAllS}" var="s"
 							itemValue="#{s.id}" itemLabel="#{s.name}" />
 						<p:ajax listener="#{CourseList.totals}" process=":form1:student"
-							update=":form1:totals :form1:total1 :form1:numPayment" />
+							update=":form1:totals :form1:total1 numPayment"/>
 					</p:selectOneMenu>
 					<p:message for="student" display="text" style="width:150px; font-size:14px;"/>
 					
@@ -89,17 +89,20 @@
 						min="0" disabled="#{CourseList.totalCourse > 0 or CourseList.idProduct eq 0 or CourseList.idProduct eq null}" required="true"
 						validatorMessage="el valor tiene que ser mayor que 0.0">
 						<f:validateDoubleRange minimum="1.0"/>
+						<p:ajax process=":form1:total1" update=":form1:amount"/>
 					</p:spinner>	
-					<p:message for="total1" display="text" style="width:270px; font-size:14px;"/>
+					<p:message for="total1" display="text" style="width:230px; font-size:14px;"/>
 
 
 					<p:outputLabel value="Pago o Monto" />
 					<p:spinner id="amount" value="#{CourseList.amount}" prefix="$" min="0" required="true"
 						validatorMessage="el valor tiene que ser mayor que 0.0"
+						max="#{CourseList.total}"
 						disabled="#{CourseList.idProduct eq 0 or CourseList.idProduct eq null}">
 						<f:validateDoubleRange minimum="1.0"/>
+						<p:ajax update=" @this"/>
 					</p:spinner>
-					<p:message for="amount" display="text" style="width:270px; font-size:14px;"/>
+					<p:message for="amount" display="text" style="width:230px; font-size:14px;"/>
 
 					<p:outputLabel value="No. de Pago" />
 					<p:spinner id="numPayment" value="#{CourseList.num_payment}" min="1"  required="true"

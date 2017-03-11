@@ -57,13 +57,13 @@ public class NewStudentBean {
 	private String formatDatePayment;
 	private Double total = 0.0;
 	private Double amount = 0.0;
-	private Integer num_payment = 0;
+	private Integer num_payment = 1;
 	private String type_payment;
 	private Integer idCourse;
 	private Integer idProduct;
 	private Integer idStudent;
-	private Date date1;
-	private Date date2;
+	private Date date1 = new Date();
+	private Date date2 = new Date();
 	private String formatDate1;
 	private String formatDate2;
 	

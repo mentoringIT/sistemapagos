@@ -215,6 +215,7 @@ public class CourseBean implements Serializable{
 		this.totalCourse = 0.0;
 		this.totalPayment = 0.0;
 		this.remaining = 0.0;
+		this.num_payment = 1;
 		int cont=0;
 		try {
 
@@ -232,7 +233,7 @@ public class CourseBean implements Serializable{
 					cont = i;
 					
 				}
-				this.num_payment = cont + 2;
+				this.num_payment = cont + 1;
 				this.remaining = this.totalCourse - this.totalPayment;
 			} else {
 				this.total = 0.0;
