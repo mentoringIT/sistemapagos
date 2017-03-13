@@ -17,6 +17,6 @@ public interface ICourseService {
 	public void insertPayment(PaymentDTO payment) throws Exception;
 	public List<PaymentDTO> selectPayment(Integer idStudent, Integer idProduct) throws Exception;
 	
-	public String selectStudentName(Integer idStudent) throws Exception; 
+	public StudentDTO selectStudent(Integer idStudent) throws Exception; 
 	public String selectCourseName(Integer idCourse) throws Exception;
 }

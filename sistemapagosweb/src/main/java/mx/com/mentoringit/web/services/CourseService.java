@@ -113,8 +113,8 @@ public class CourseService implements ICourseService {
 	
 
 	@Override
-	public String selectStudentName(Integer idStudent) throws Exception {
-		return this.studentDAO.selectName(idStudent).getName();
+	public StudentDTO selectStudent(Integer idStudent) throws Exception {
+		return this.studentDAO.selectStudent(idStudent);
 	}
 
 	@Override

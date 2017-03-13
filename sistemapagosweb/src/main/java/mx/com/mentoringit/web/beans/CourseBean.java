@@ -2,6 +2,7 @@ package mx.com.mentoringit.web.beans;
 
 
 import java.io.File;
+import java.io.IOException;
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -12,6 +13,7 @@ import java.util.Properties;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
+import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 
 import javax.mail.BodyPart;
@@ -23,6 +25,9 @@ import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMultipart;
 import javax.servlet.http.HttpServletResponse;
+
+import org.eclipse.jdt.internal.compiler.lookup.BinaryTypeBinding.ExternalAnnotationStatus;
+import org.primefaces.context.RequestContext;
 
 import javax.activation.DataHandler;
 import javax.activation.FileDataSource;
@@ -169,7 +174,7 @@ public class CourseBean implements Serializable{
 		
 
 		try {
-			report.setStudentName(this.courseService.selectStudentName(this.idStudent));
+			report.setStudentName((this.courseService.selectStudent(this.idStudent)).getName());
 			report.setCourseName(this.courseService.selectCourseName(this.idCourse));
 			report.setNumPayment(this.num_payment.toString());
 			report.setAmountPayment(this.amount.toString());
@@ -308,10 +313,29 @@ public class CourseBean implements Serializable{
 		c.setMessage(this.message);
 				
 		if(controller(c)){
+			FacesContext.getCurrentInstance().addMessage(null,new FacesMessage(FacesMessage.SEVERITY_INFO,
+					"Info","Envio exitoso"));
 			System.out.println("Envio exitoso");
+			ExternalContext context = FacesContext.getCurrentInstance().getExternalContext();
+			try {
+				context.redirect(context.getRequestContextPath() + "/menuAlumnos.xhtml");
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}else{
+			FacesContext.getCurrentInstance().addMessage(null,new FacesMessage(FacesMessage.SEVERITY_WARN,
+					"Info","Envio fallido"));
 			System.out.println("Envio fallido");
+			ExternalContext context = FacesContext.getCurrentInstance().getExternalContext();
+			try {
+				context.redirect(context.getRequestContextPath() + "/pagoAlumnoExistente.xhtml");
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
+		
 		
 	}
 
@@ -477,7 +501,13 @@ public class CourseBean implements Serializable{
 	}
 
 	public String getFrom() {
-		return from;
+		try {
+			this.from = (this.courseService.selectStudent(this.idStudent)).getEmail();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	return this.from;
 	}
 
 	public void setFrom(String from) {
@@ -485,7 +515,14 @@ public class CourseBean implements Serializable{
 	}
 
 	public String getSubject() {
-		return subject;
+		try {
+			this.subject = "Recibo de pago No. "+ this.num_payment+" para el curso "+
+							this.courseService.selectCourseName(this.idCourse);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return this.subject;
 	}
 
 	public void setSubject(String subject) {

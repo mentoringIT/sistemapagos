@@ -15,18 +15,18 @@
 			<pm:fieldset>
 				<h:panelGrid columns="2" cellpadding="5">
 					<p:outputLabel value="Para:" />
-					<p:inputText value="#{NewStudent.from}" />
+					<p:inputText value="#{CourseList.from}" style="width:550px"/>
 					<p:outputLabel value="Asunto" />
-					<p:inputText value="#{NewStudent.subject}" />
+					<p:inputText value="#{CourseList.subject}" style="width:550px"/>
 
 					<p:outputLabel value="Mensaje" />
-					<p:inputTextarea rows="10" cols="50" value="#{NewStudent.message}"
-						queryDelay="750" minQueryLength="4" />
+					<p:inputTextarea rows="10" cols="50" value="#{CourseList.message}"
+						queryDelay="750" minQueryLength="4" style="width:550px"/>
 				</h:panelGrid>
 
 				<p:toolbar>
 					<f:facet name="left">
-						<p:commandButton value="Enviar" action="#{NewStudent.sendMail}" />
+						<p:commandButton value="Enviar" action="#{CourseList.sendMail}" />
 					</f:facet>
 
 				</p:toolbar>

@@ -88,7 +88,7 @@ public class NewStudentService implements INewStudentService{
 	
 	@Override
 	public String selectStudentName(Integer idStudent) throws Exception {
-		return this.studentDAO.selectName(idStudent).getName();
+		return this.studentDAO.selectStudent(idStudent).getName();
 	}
 
 	@Override

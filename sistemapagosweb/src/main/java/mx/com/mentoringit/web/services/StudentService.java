@@ -78,7 +78,7 @@ public class StudentService implements IStudentService {
 
 	@Override
 	public String selectName(Integer idStudent) throws Exception {
-		return studentDAO.selectName(idStudent).getName();
+		return studentDAO.selectStudent(idStudent).getName();
 	}
 
 }
