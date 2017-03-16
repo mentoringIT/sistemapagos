@@ -77,8 +77,13 @@ public class StudentService implements IStudentService {
 	}
 
 	@Override
-	public String selectName(Integer idStudent) throws Exception {
-		return studentDAO.selectStudent(idStudent).getName();
+	public StudentDTO selectStudent(Integer idStudent) throws Exception {
+		return studentDAO.selectStudent(idStudent);
+	}
+
+	@Override
+	public String selectCourseName(Integer idCourse) throws Exception {
+		return this.courseDAO.selectName(idCourse).getName();
 	}
 
 }

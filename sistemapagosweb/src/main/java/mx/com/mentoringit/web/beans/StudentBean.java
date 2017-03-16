@@ -1,6 +1,7 @@
 package mx.com.mentoringit.web.beans;
 
 import java.io.File;
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -12,6 +13,7 @@ import javax.activation.FileDataSource;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
+import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.mail.BodyPart;
 import javax.mail.Message;
@@ -51,8 +53,8 @@ public class StudentBean {
 	private Integer idCourse;
 	private Integer idStudent;
 	private Integer idProduct;
-	private Date date1;
-	private Date date2;
+	private Date date1 = new Date();
+	private Date date2 = new Date();
 	private String formatDate1;
 	private String formatDate2;
 	private String nameStudent;
@@ -113,7 +115,7 @@ public class StudentBean {
 					this.totalPayment = this.totalPayment + listaPsp.get(i).getAmountPayment();
 				}
 			} else {
-				this.nameStudent = this.studentService.selectName(idStudent);
+				this.nameStudent = this.studentService.selectStudent(idStudent).getName();
 			}
 
 			this.remaining = this.totalCourse - this.totalPayment;
@@ -163,7 +165,7 @@ public class StudentBean {
 			FacesContext.getCurrentInstance().addMessage(null,
 					new FacesMessage(FacesMessage.SEVERITY_INFO, "Info", "Tiket(s) generado(s)"));
 
-			System.out.println("echo");
+			System.out.println("hecho");
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			FacesContext.getCurrentInstance().addMessage(null,
@@ -183,8 +185,22 @@ public class StudentBean {
 
 		if (controller(c)) {
 			System.out.println("Envio exitoso");
+			ExternalContext context = FacesContext.getCurrentInstance().getExternalContext();
+			try {
+				context.redirect(context.getRequestContextPath() + "/menuAlumnos.xhtml");
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		} else {
 			System.out.println("Envio fallido");
+			ExternalContext context = FacesContext.getCurrentInstance().getExternalContext();
+			try {
+				context.redirect(context.getRequestContextPath() + "/pagosPorAlumno.xhtml");
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 
 	}
@@ -405,6 +421,12 @@ public class StudentBean {
 	}
 
 	public String getFrom() {
+		try {
+			this.from = (this.studentService.selectStudent(this.idStudent)).getEmail();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		return from;
 	}
 
@@ -413,6 +435,13 @@ public class StudentBean {
 	}
 
 	public String getSubject() {
+		try {
+			this.subject = "Recibos de pagos realizados  para el curso "+
+							this.studentService.selectCourseName(this.idCourse);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		return subject;
 	}
 

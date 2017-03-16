@@ -3,6 +3,7 @@ package mx.com.mentoringit.web.beans;
 import java.util.List;
 import java.util.Properties;
 import java.io.File;
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -12,6 +13,7 @@ import javax.activation.FileDataSource;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
+import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.mail.BodyPart;
 import javax.mail.Message;
@@ -249,10 +251,24 @@ public class NewStudentBean {
 				FacesContext.getCurrentInstance().addMessage(null,new FacesMessage(FacesMessage.SEVERITY_INFO,
 						"Info","Envio exitoso"));
 				System.out.println("Envio exitoso");
+				ExternalContext context = FacesContext.getCurrentInstance().getExternalContext();
+				try {
+					context.redirect(context.getRequestContextPath() + "/menuAlumnos.xhtml");
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			}else{
 				FacesContext.getCurrentInstance().addMessage(null,new FacesMessage(FacesMessage.SEVERITY_WARN,
 						"Info","Envio fallido"));
 				System.out.println("Envio fallido");
+				ExternalContext context = FacesContext.getCurrentInstance().getExternalContext();
+				try {
+					context.redirect(context.getRequestContextPath() + "/pagoAlumnoNuevo.xhtml");
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			}
 			
 		}
@@ -428,6 +444,12 @@ public class NewStudentBean {
 	}
 
 	public String getFrom() {
+		try {
+			this.from = (this.newStudentService.selectStudent(this.idStudent)).getEmail();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		return from;
 	}
 
@@ -436,6 +458,13 @@ public class NewStudentBean {
 	}
 
 	public String getSubject() {
+		try {
+			this.subject = "Recibo de pago No. "+ this.num_payment+" para el curso "+
+							this.newStudentService.selectCourseName(this.idCourse);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		return subject;
 	}
 

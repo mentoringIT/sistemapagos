@@ -7,6 +7,8 @@
 
 <h:head></h:head>
 <body>
+	<ui:include src="header.xhtml" />
+	<p:messages id="messages" globalOnly="true" showDetail="true" closable="true"/>
 	<h:form id="form">
 		<div>
 			<pm:fieldset>
@@ -61,10 +63,10 @@
 		<p:toolbar>
 			<f:facet name="left">
 				<p:commandButton value="Generar pago(s)" 
-				actionListener="#{StudentList.createReport()}" icon="ui-icon-document"/>
+				actionListener="#{StudentList.createReport()}" onclick="PF().show" icon="ui-icon-document"/>
 			</f:facet>
 			<f:facet name="left">
-					<p:commandButton value="Enviar" action="enviarCorreo" />
+					<p:commandButton value="Enviar" action="enviarCorreoPPA" />
 				</f:facet>
 			<f:facet name="right">
 				<p:commandButton value="Atras" action="back" />

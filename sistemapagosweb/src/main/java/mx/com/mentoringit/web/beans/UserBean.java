@@ -4,59 +4,70 @@ import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
+import javax.servlet.http.HttpServletRequest;
 
 import mx.com.mentoringit.model.dto.UserDTO;
 import mx.com.mentoringit.web.services.IUserService;
 
-
 @ManagedBean
 @SessionScoped
-public class UserBean implements IUserBean{
+public class UserBean implements IUserBean {
 
 	private IUserService userService;
 	private String username;
 	private String password;
-	
-	
-	
+
+	private final HttpServletRequest httpServletRequest;
+	private final FacesContext facesContext;
 
 	public UserBean() {
+		FacesContext.getCurrentInstance().getExternalContext().invalidateSession();
+		facesContext = FacesContext.getCurrentInstance();
+		httpServletRequest = (HttpServletRequest) facesContext.getExternalContext().getRequest();
 	}
-	
+
 	@Override
 	public String userLogin() {
-		
+		UserDTO userDTO = new UserDTO();
 		String result = "";
+
+		userDTO.setUsername(username);
+		userDTO.setPassword(password);
+
 		try {
-			UserDTO userDTO = new UserDTO();
-			userDTO.setUsername(username);
-			userDTO.setPassword(password);
-			userService.userLogin(userDTO);
-			result ="login";
+			UserDTO user  = userService.userLogin(userDTO);
+			if (user != null) {
+				httpServletRequest.getSession().setAttribute("userSession", user);
+				result = "login";
+			} else {
+				FacesContext.getCurrentInstance().addMessage(null,
+						new FacesMessage(FacesMessage.SEVERITY_ERROR, "", "Ususario y/o contraseña incorectos"));
+				result = "fail";
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
+			FacesContext.getCurrentInstance().addMessage(null,
+					new FacesMessage(FacesMessage.SEVERITY_ERROR, "", "Ususario y/o contraseña incorectos"));
 			result = "fail";
-			FacesContext.getCurrentInstance().addMessage(null,new FacesMessage(FacesMessage.SEVERITY_ERROR,
-					"","Ususario y/o contraseña incorectos"));
+
 		}
 		return result;
 	}
-	
-	public void messageUser() {		
-		FacesContext.getCurrentInstance().addMessage(null,new FacesMessage(FacesMessage.SEVERITY_ERROR,
-				"","El campo usuario es obligatorio"));
+
+	public void messageUser() {
+		FacesContext.getCurrentInstance().addMessage(null,
+				new FacesMessage(FacesMessage.SEVERITY_ERROR, "", "El campo usuario es obligatorio"));
 	}
-	
-	public void messageKey() {		
-		FacesContext.getCurrentInstance().addMessage(null,new FacesMessage(FacesMessage.SEVERITY_ERROR,
-				"","El campo clave es obligatorio"));
+
+	public void messageKey() {
+		FacesContext.getCurrentInstance().addMessage(null,
+				new FacesMessage(FacesMessage.SEVERITY_ERROR, "", "El campo clave es obligatorio"));
 	}
-	
-	
+
 	public IUserService getUserService() {
 		return userService;
 	}
-	
+
 	public void setUserService(IUserService userService) {
 		this.userService = userService;
 	}

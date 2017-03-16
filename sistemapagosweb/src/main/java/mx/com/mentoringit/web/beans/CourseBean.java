@@ -203,7 +203,7 @@ public class CourseBean implements Serializable{
             FacesContext.getCurrentInstance().addMessage(null,new FacesMessage(FacesMessage.SEVERITY_INFO,
 					"Info","Tiket generado"));
             listaR.clear();
-			System.out.println("echo");
+			System.out.println("hecho");
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			FacesContext.getCurrentInstance().addMessage(null,new FacesMessage(FacesMessage.SEVERITY_ERROR,

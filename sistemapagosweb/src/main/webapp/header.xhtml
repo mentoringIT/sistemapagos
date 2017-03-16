@@ -1,0 +1,33 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui" xmlns:pm="http://primefaces.org/ui">
+
+<h:head></h:head>
+<body>
+	<p:fieldset>
+		<table id="main-header" style="width: 100%;">
+			<tr>
+				<td>
+					<table>
+						<tr>
+							<td><p:graphicImage value="Logo/mentoring-logo-2.png"
+									height="96" width="650px" /></td>
+						</tr>
+
+					</table>
+				</td>
+ 				<td align="right"><!--<p:growl id="msgs" showDetail="true" />--><h:outputLabel 
+						value="Bienvenido: " /> <h:outputText
+						value="#{MbSession.userdto.username}" />
+					<h:form>
+						<p:commandButton value="cerrar sesión"
+						action="#{MbSession.cerrarSession()}"/>
+					</h:form></td>
+			</tr>
+		</table>
+	</p:fieldset>
+</body>
+</html>
