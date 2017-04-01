@@ -134,7 +134,7 @@ public class StudentBean {
 		Double totalPayment = 0.0;
 
 		try {
-
+			if(this.temListaPsp.size() != 0 ){
 			for (int i = 0; i < this.temListaPsp.size(); i++) {
 
 				Double remaining2;
@@ -166,10 +166,15 @@ public class StudentBean {
 					new FacesMessage(FacesMessage.SEVERITY_INFO, "Info", "Tiket(s) generado(s)"));
 
 			System.out.println("hecho");
+			}else{
+				FacesContext.getCurrentInstance().addMessage(null,
+						new FacesMessage(FacesMessage.SEVERITY_WARN, "Info", "No se ha seleccionado ningun pago"));
+				
+			}
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			FacesContext.getCurrentInstance().addMessage(null,
-					new FacesMessage(FacesMessage.SEVERITY_INFO, "Info", "Tiket generado"));
+					new FacesMessage(FacesMessage.SEVERITY_ERROR, "Info", "No se han podido generar los tikets"));
 			e.printStackTrace();
 		}
 	}

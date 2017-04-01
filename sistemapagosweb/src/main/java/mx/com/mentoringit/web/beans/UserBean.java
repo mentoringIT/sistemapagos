@@ -16,11 +16,12 @@ public class UserBean implements IUserBean {
 	private IUserService userService;
 	private String username;
 	private String password;
-
+	private UserDTO user;
 	private final HttpServletRequest httpServletRequest;
 	private final FacesContext facesContext;
 
 	public UserBean() {
+		user = null;
 		FacesContext.getCurrentInstance().getExternalContext().invalidateSession();
 		facesContext = FacesContext.getCurrentInstance();
 		httpServletRequest = (HttpServletRequest) facesContext.getExternalContext().getRequest();
@@ -35,7 +36,7 @@ public class UserBean implements IUserBean {
 		userDTO.setPassword(password);
 
 		try {
-			UserDTO user  = userService.userLogin(userDTO);
+			user  = userService.userLogin(userDTO);
 			if (user != null) {
 				httpServletRequest.getSession().setAttribute("userSession", user);
 				result = "login";
@@ -44,10 +45,11 @@ public class UserBean implements IUserBean {
 						new FacesMessage(FacesMessage.SEVERITY_ERROR, "", "Ususario y/o contraseña incorectos"));
 				result = "fail";
 			}
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 			FacesContext.getCurrentInstance().addMessage(null,
-					new FacesMessage(FacesMessage.SEVERITY_ERROR, "", "Ususario y/o contraseña incorectos"));
+					new FacesMessage(FacesMessage.SEVERITY_ERROR, "", "Ususario y/o contraseñas incorectos"));
 			result = "fail";
 
 		}

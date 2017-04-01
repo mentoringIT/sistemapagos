@@ -35,7 +35,7 @@
 						<f:selectItem itemLabel="--Seleccione Curso--" noSelectionOption="true"/>
 						<f:selectItems value="#{CourseList.listaC}" var="c"
 							itemValue="#{c.id}" itemLabel="#{c.name}" />
-						<p:ajax process=":form1:course" update=":form1:startsDates" />
+						<p:ajax process=":form1:course" update=":form1:startsDates :form1:data" />
 					</p:selectOneMenu>
 					<p:message for="course" display="text" style="width:150px; font-size:14px;"/>
 
@@ -50,18 +50,21 @@
 							disabled="#{CourseList.idCourse eq 0 or CourseList.idCourse eq null}" />
 					
 						<p:selectOneMenu id="fechas" value="#{CourseList.idProduct}"
-							disabled="#{CourseList.idCourse eq 0 or CourseList.idCourse eq null}">
+							disabled="#{CourseList.idCourse eq 0 or CourseList.idCourse eq null}"
+							required="#{CourseList.validation}" requiredMessage="campo obligatorio">
 							<f:selectItem itemLabel="--Fechas de inicio--" />
 							<f:selectItems value="#{CourseList.listaD}" var="d"
 								itemValue="#{d.id}" itemLabel="#{d.start_date}" />
 							<p:ajax process=":form1:fechas" update=":form1:data"/>
 						</p:selectOneMenu>
 
-						<p:commandButton id="busqueda" value="buscar" icon="ui-icon-search" actionListener="#{CourseList.startDates}"
-								update=":form1:fechas"	disabled="#{CourseList.idCourse eq 0 or CourseList.idCourse eq null}" >
+						<p:commandButton id="busqueda" value="buscar" icon="ui-icon-search"  actionListener="#{CourseList.startDates}"
+								    update="fechas" disabled="#{CourseList.idCourse eq 0 or CourseList.idCourse eq null}">
+								
 						</p:commandButton>		
 			
-					</h:panelGrid>		
+					</h:panelGrid>
+					<p:message for="fechas" display="text" style="width:150px; font-size:14px;"/>		
 					</h:panelGrid>
 						
 					<h:panelGrid id="data" columns="3" cellpadding="5">
@@ -147,7 +150,7 @@
 						onclick="PF('detail').show()" action="pagoAlumnoExistente"/>
 				</f:facet>
 				<f:facet name="right">
-					<p:commandButton value="Atras" action="back" />
+					<p:commandButton value="Atras" action="back" immediate="true"/>
 				</f:facet>
 			</p:toolbar>
 		</p:panel>

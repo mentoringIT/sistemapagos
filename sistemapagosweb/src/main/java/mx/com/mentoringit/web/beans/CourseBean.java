@@ -1,6 +1,5 @@
 package mx.com.mentoringit.web.beans;
 
-
 import java.io.File;
 import java.io.IOException;
 import java.io.Serializable;
@@ -47,14 +46,15 @@ import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 
 @ManagedBean
 @SessionScoped
-public class CourseBean implements Serializable{
+public class CourseBean implements Serializable {
 	private ICourseService courseService;
 
 	private Integer idCourse;
 	private Integer idStudent;
+	private Integer idProduct;
 
 	private Date date1 = new Date();
-	private Date date2= new Date();
+	private Date date2 = new Date();
 	private String formatDate1;
 	private String formatDate2;
 	private Double total = 0.0;
@@ -63,8 +63,8 @@ public class CourseBean implements Serializable{
 	private String type_payment;
 	private Date date_payment = new Date();
 	private String date_payment2;
-	private Integer idProduct;
-	
+	private Boolean validation = false;
+
 	private String from;
 	private String subject;
 	private String message;
@@ -77,26 +77,16 @@ public class CourseBean implements Serializable{
 	private List<StudentDTO> listaA;
 	private List<StudentDTO> listaAllS;
 	private List<ProductDTO> listaD;
-	
-	private int cont = 0;
-	
+
 	public CourseBean() {
 	}
-	
-	public void messageError(){
-		cont++;
-		if(cont == 1){
-		FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR,"",
-				"Los campos marcados en rojo son obligatorios"));
-		}
-	}
-		
-	//elimina del pdf creado
-	public void deletePdf(){
+
+	// elimina del pdf creado
+	public void deletePdf() {
 		File fi = new File("C:\\Users\\ed\\git\\sistemapagos\\sistemapagosweb\\PDF\\pagos.pdf");
 		fi.delete();
 	}
-	
+
 	// obtiene todos los cursos
 	public void selectCourse() {
 		try {
@@ -134,9 +124,12 @@ public class CourseBean implements Serializable{
 
 		try {
 			listaD = this.courseService.startDates(this.idCourse, getFormatDate1(), getFormatDate2());
+			this.validation = true;
+
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+			this.validation = false;
 		}
 	}
 
@@ -155,66 +148,73 @@ public class CourseBean implements Serializable{
 
 		try {
 			this.courseService.insertPayment(payment);
-			FacesContext.getCurrentInstance().addMessage(null,new FacesMessage(FacesMessage.SEVERITY_INFO,
-					"Info","Pago registrado con exito"));
+			FacesContext.getCurrentInstance().addMessage(null,
+					new FacesMessage(FacesMessage.SEVERITY_INFO, "Info", "Pago registrado con exito"));
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
-			FacesContext.getCurrentInstance().addMessage(null,new FacesMessage(FacesMessage.SEVERITY_ERROR,
-					"Info","No se ha podido registrar el pago"));
+			FacesContext.getCurrentInstance().addMessage(null,
+					new FacesMessage(FacesMessage.SEVERITY_ERROR, "Info", "No se ha podido registrar el pago"));
 			e.printStackTrace();
 		}
 
 	}
-	
-	
+
 	// crea el tiket de pago
 	public void createReport() {
 		List<ReportData> listaR = new ArrayList<ReportData>();
 		ReportData report = new ReportData();
-		
 
 		try {
-			report.setStudentName((this.courseService.selectStudent(this.idStudent)).getName());
-			report.setCourseName(this.courseService.selectCourseName(this.idCourse));
-			report.setNumPayment(this.num_payment.toString());
-			report.setAmountPayment(this.amount.toString());
-			report.setDatePayment(getDate_payment2());
-			report.setTypePayment(this.type_payment);
-			report.setRemaining(this.remaining.toString());
-			report.setTotalCourse(this.total.toString());
+			if (this.idProduct != null) {
+				report.setStudentName((this.courseService.selectStudent(this.idStudent)).getName());
+				report.setCourseName(this.courseService.selectCourseName(this.idCourse));
+				report.setNumPayment(this.num_payment.toString());
+				report.setAmountPayment(this.amount.toString());
+				report.setDatePayment(getDate_payment2());
+				report.setTypePayment(this.type_payment);
+				report.setRemaining(this.remaining.toString());
+				report.setTotalCourse(this.total.toString());
 
-			listaR.add(report);
-			
-			File jasper = new File(FacesContext.getCurrentInstance().getExternalContext().getRealPath("/payment.jasper"));
-			JasperPrint jasperPrint = JasperFillManager.fillReport(jasper.getPath(),null,new JRBeanCollectionDataSource(listaR));
-			JasperExportManager.exportReportToPdfFile(jasperPrint,
-					"C:\\Users\\ed\\git\\sistemapagos\\sistemapagosweb\\src\\main\\webapp\\PDF\\pago.pdf");
-//			byte[] b = JasperExportManager.exportReportToPdf(jasperPrint); 
-//            HttpServletResponse res = (HttpServletResponse) FacesContext.getCurrentInstance().getExternalContext().getResponse();
-//            res.setContentType("application/pdf");
-//            
-//           res.setHeader("Content-disposition", "inline;filename=arquivo.pdf");
-//            
-//            res.getOutputStream().write(b);
-//            res.getCharacterEncoding();
-			
-//            FacesContext.getCurrentInstance().responseComplete();
-            
-            FacesContext.getCurrentInstance().addMessage(null,new FacesMessage(FacesMessage.SEVERITY_INFO,
-					"Info","Tiket generado"));
-            listaR.clear();
-			System.out.println("hecho");
+				listaR.add(report);
+
+				File jasper = new File(
+						FacesContext.getCurrentInstance().getExternalContext().getRealPath("/payment.jasper"));
+				JasperPrint jasperPrint = JasperFillManager.fillReport(jasper.getPath(), null,
+						new JRBeanCollectionDataSource(listaR));
+				JasperExportManager.exportReportToPdfFile(jasperPrint, "sistemapagosweb/PDF/pago.pdf");
+
+				// byte[] b =
+				// JasperExportManager.exportReportToPdf(jasperPrint);
+				// HttpServletResponse res = (HttpServletResponse)
+				// FacesContext.getCurrentInstance().getExternalContext().getResponse();
+				// res.setContentType("application/pdf");
+				//
+				// res.setHeader("Content-disposition",
+				// "inline;filename=arquivo.pdf");
+				//
+				// res.getOutputStream().write(b);
+				// res.getCharacterEncoding();
+
+				// FacesContext.getCurrentInstance().responseComplete();
+
+				FacesContext.getCurrentInstance().addMessage(null,
+						new FacesMessage(FacesMessage.SEVERITY_INFO, "Info", "Tiket generado"));
+				listaR.clear();
+				System.out.println("hecho");
+			} else {
+				FacesContext.getCurrentInstance().addMessage(null,
+						new FacesMessage(FacesMessage.SEVERITY_WARN, "Info", "Se debe seleccionar una fecha de inicio"));
+			}
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
-			FacesContext.getCurrentInstance().addMessage(null,new FacesMessage(FacesMessage.SEVERITY_ERROR,
-					"Info","El tiket no pudo ser generado"));
+			FacesContext.getCurrentInstance().addMessage(null,
+					new FacesMessage(FacesMessage.SEVERITY_ERROR, "Info", "El tiket no pudo ser generado"));
 			e.printStackTrace();
 			System.out.println("fallo");
 		}
+
 	}
-	
-	
-	
+
 	// muestra los totales
 	public void totals() {
 		this.totalCourse = 0.0;
@@ -234,25 +234,25 @@ public class CourseBean implements Serializable{
 					}
 					this.totalPayment = this.totalPayment + listaP.get(i).getAmount_payment();
 					this.num_payment = listaP.get(i).getNum_payment();
-					
+
 				}
-				this.num_payment = this.num_payment + 1; 
+				this.num_payment = this.num_payment + 1;
 				this.remaining = this.totalCourse - this.totalPayment;
 			} else {
 				this.num_payment = 1;
 				this.total = 0.0;
 			}
-			
+
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 
 	}
-	
-	//controla el envio del correo
-	public boolean controller(Correo c){
-		
+
+	// controla el envio del correo
+	public boolean controller(Correo c) {
+
 		try {
 			Properties p = new Properties();
 			p.put("mail.smtp.host", "smtp.gmail.com");
@@ -260,61 +260,61 @@ public class CourseBean implements Serializable{
 			p.setProperty("mail.smtp.port", "587");
 			p.setProperty("mail.smtp.user", c.getUserEmail());
 			p.setProperty("mail.smtp.auth", "true");
-			
+
 			Session s = Session.getDefaultInstance(p, null);
 			BodyPart texto = new MimeBodyPart();
-			BodyPart adjunto; 
+			BodyPart adjunto;
 			MimeMultipart m = new MimeMultipart();
-			
+
 			texto.setText(c.getMessage());
-			
+
 			File file = new File("C:\\Users\\ed\\git\\sistemapagos\\sistemapagosweb\\src\\main\\webapp\\PDF");
-			File []files = file.listFiles();
-			
-			for (File f : files) {				
-				adjunto = new MimeBodyPart();			
-				
+			File[] files = file.listFiles();
+
+			for (File f : files) {
+				adjunto = new MimeBodyPart();
+
 				if (f.exists()) {
-					
+
 					adjunto.setDataHandler(new DataHandler(new FileDataSource(f.getAbsolutePath())));
 					adjunto.setFileName(f.getName());
 					m.addBodyPart(adjunto);
-					
+
 				}
 			}
-			
+
 			m.addBodyPart(texto);
 			MimeMessage mensaje = new MimeMessage(s);
 			mensaje.setFrom(new InternetAddress(c.getUserEmail()));
 			mensaje.addRecipient(Message.RecipientType.TO, new InternetAddress(c.getFrom()));
 			mensaje.setSubject(c.getSubject());
 			mensaje.setContent(m);
-			
+
 			Transport t = s.getTransport("smtp");
 			t.connect(c.getUserEmail(), c.getPassword());
 			t.sendMessage(mensaje, mensaje.getAllRecipients());
 			t.close();
-			
+
 			return true;
 		} catch (Exception e) {
-	
+
 			e.printStackTrace();
 			return false;
 		}
 	}
-	
-	//establece los valores para el envio del correo
-	public void sendMail(){
+
+	// establece los valores para el envio del correo
+	public void sendMail() {
 		Correo c = new Correo();
 		c.setPassword("lbmenluywbcytxeq");
 		c.setUserEmail("edflores830@gmail.com");
 		c.setSubject(this.subject);
 		c.setFrom(this.from.trim());
 		c.setMessage(this.message);
-				
-		if(controller(c)){
-			FacesContext.getCurrentInstance().addMessage(null,new FacesMessage(FacesMessage.SEVERITY_INFO,
-					"Info","Envio exitoso"));
+
+		if (controller(c)) {
+			FacesContext.getCurrentInstance().addMessage(null,
+					new FacesMessage(FacesMessage.SEVERITY_INFO, "Info", "Envio exitoso"));
 			System.out.println("Envio exitoso");
 			ExternalContext context = FacesContext.getCurrentInstance().getExternalContext();
 			try {
@@ -323,9 +323,9 @@ public class CourseBean implements Serializable{
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-		}else{
-			FacesContext.getCurrentInstance().addMessage(null,new FacesMessage(FacesMessage.SEVERITY_WARN,
-					"Info","Envio fallido"));
+		} else {
+			FacesContext.getCurrentInstance().addMessage(null,
+					new FacesMessage(FacesMessage.SEVERITY_WARN, "Info", "Envio fallido"));
 			System.out.println("Envio fallido");
 			ExternalContext context = FacesContext.getCurrentInstance().getExternalContext();
 			try {
@@ -335,8 +335,7 @@ public class CourseBean implements Serializable{
 				e.printStackTrace();
 			}
 		}
-		
-		
+
 	}
 
 	// getters y setters
@@ -401,8 +400,11 @@ public class CourseBean implements Serializable{
 		return idCourse;
 	}
 
-	public void setIdCourse(Integer idCourse) {
-		this.idCourse = idCourse;
+	public void setIdCourse(Integer idCourse) {	
+		this.listaD = null;
+		this.validation = false;
+		this.idProduct = null;
+		this.idCourse = idCourse;		
 	}
 
 	public Integer getIdStudent() {
@@ -507,7 +509,7 @@ public class CourseBean implements Serializable{
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-	return this.from;
+		return this.from;
 	}
 
 	public void setFrom(String from) {
@@ -516,8 +518,8 @@ public class CourseBean implements Serializable{
 
 	public String getSubject() {
 		try {
-			this.subject = "Recibo de pago No. "+ this.num_payment+" para el curso "+
-							this.courseService.selectCourseName(this.idCourse);
+			this.subject = "Recibo de pago No. " + this.num_payment + " para el curso "
+					+ this.courseService.selectCourseName(this.idCourse);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -537,5 +539,12 @@ public class CourseBean implements Serializable{
 		this.message = message;
 	}
 
-			
+	public Boolean getValidation() {
+		return validation;
+	}
+
+	public void setValidation(Boolean validation) {
+		this.validation = validation;
+	}
+
 }

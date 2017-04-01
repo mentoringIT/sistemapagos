@@ -4,6 +4,9 @@
 	xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee 
 	http://xmlns.jcp.org/xml/ns/javaee/web-facesconfig_2_2.xsd"
 	version="2.2">
+
+	<!-- beans para el flujo de alumnos -->
+
 	<managed-bean>
 		<managed-bean-name>LoginUser</managed-bean-name>
 		<managed-bean-class>mx.com.mentoringit.web.beans.UserBean</managed-bean-class>
@@ -43,7 +46,7 @@
 			<value>#{newStudentService}</value>
 		</managed-property>
 	</managed-bean>
-	
+
 	<managed-bean>
 		<managed-bean-name>paymentLast</managed-bean-name>
 		<managed-bean-class>mx.com.mentoringit.web.beans.LastPaymentBean</managed-bean-class>
@@ -53,7 +56,8 @@
 			<value>#{lastPaymentService}</value>
 		</managed-property>
 	</managed-bean>
-	
+
+	<!-- reglas de navegacion para el flujo de alumnos -->
 
 	<navigation-rule>
 		<from-view-id>/index.xhtml</from-view-id>
@@ -72,6 +76,10 @@
 		<navigation-case>
 			<from-outcome>students</from-outcome>
 			<to-view-id>menuAlumnos.xhtml</to-view-id>
+		</navigation-case>
+		<navigation-case>
+			<from-outcome>teachers</from-outcome>
+			<to-view-id>menuMaestros.xhtml</to-view-id>
 		</navigation-case>
 	</navigation-rule>
 
@@ -150,7 +158,7 @@
 			<to-view-id>buscarPagoAlumnos.xhtml</to-view-id>
 		</navigation-case>
 	</navigation-rule>
-	
+
 	<navigation-rule>
 		<from-view-id>pagosPorAlumno.xhtml</from-view-id>
 		<navigation-case>
@@ -162,12 +170,35 @@
 			<to-view-id>buscarPagoAlumnos.xhtml</to-view-id>
 		</navigation-case>
 	</navigation-rule>
-	
+
 	<navigation-rule>
 		<from-view-id>historialPagosAlumno.xhtml</from-view-id>
 		<navigation-case>
 			<from-outcome>back</from-outcome>
 			<to-view-id>pagosPorAlumno.xhtml</to-view-id>
+		</navigation-case>
+	</navigation-rule>
+
+	<!-- reglas de navegacion para el flujo de maestros -->
+
+	<navigation-rule>
+		<from-view-id>menuMaestros.xhtml</from-view-id>
+		<navigation-case>
+			<from-outcome>existing</from-outcome>
+			<to-view-id>menuMaestroExistente.xhtml</to-view-id>
+		</navigation-case>
+		<navigation-case>
+			<from-outcome>back</from-outcome>
+			<to-view-id>menuPrincipal.xhtml</to-view-id>
+		</navigation-case>
+	</navigation-rule>
+
+	<navigation-rule>
+		<from-view-id>menuMaestroExistente.xhtml</from-view-id>
+
+		<navigation-case>
+			<from-outcome>back</from-outcome>
+			<to-view-id>menuMaestros.xhtml</to-view-id>
 		</navigation-case>
 	</navigation-rule>
 

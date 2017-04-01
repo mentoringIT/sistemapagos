@@ -1,0 +1,39 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui" xmlns:pm="http://primefaces.org/ui">
+
+<h:head>
+	<title>Menú pagos alumnos</title>
+	<style>
+/* 	CSS para centrar el formulario de login */
+.center {
+	margin: auto;
+	width: 50%;
+	padding: 8% 0;
+}
+</style>
+</h:head>
+<body>
+	<ui:include src="header.xhtml" />
+	<h:form id="form1" styleClass="center">
+		<p:panel header="Opciones de Maestro Existente">
+			<pm:fieldset>
+				<h:panelGrid columns="2" cellpadding="5">
+					<p:commandButton value="Buscar pago" action="serch" />
+					<p:commandButton value="Realizar pago" action="make" />
+				</h:panelGrid>
+			</pm:fieldset>
+			<p:toolbar>
+				<f:facet name="right">
+					<p:commandButton value="Atras" action="back" />
+				</f:facet>
+			</p:toolbar>	
+		</p:panel>
+
+
+	</h:form>
+</body>
+</html>

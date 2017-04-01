@@ -160,7 +160,7 @@ public class NewStudentBean {
 			File jasper = new File(FacesContext.getCurrentInstance().getExternalContext().getRealPath("/payment.jasper"));
 			JasperPrint jasperPrint = JasperFillManager.fillReport(jasper.getPath(),null,new JRBeanCollectionDataSource(listaR));
 			JasperExportManager.exportReportToPdfFile(jasperPrint,
-					"C:\\Users\\ed\\git\\sistemapagos\\sistemapagosweb\\src\\main\\webapp\\PDF\\pagos.pdf");
+					"C:\\Users\\ed\\git\\sistemapagos\\sistemapagosweb\\src\\main\\webapp\\PDF\\pago.pdf");
 //			byte[] b = JasperExportManager.exportReportToPdf(jasperPrint); 
 //            HttpServletResponse res = (HttpServletResponse) FacesContext.getCurrentInstance().getExternalContext().getResponse();
 //            res.setContentType("application/pdf");
