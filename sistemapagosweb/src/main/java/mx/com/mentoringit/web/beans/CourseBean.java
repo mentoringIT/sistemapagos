@@ -546,5 +546,6 @@ public class CourseBean implements Serializable {
 	public void setValidation(Boolean validation) {
 		this.validation = validation;
 	}
+	
 
 }
