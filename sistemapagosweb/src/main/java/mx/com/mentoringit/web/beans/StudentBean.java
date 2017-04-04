@@ -1,7 +1,9 @@
 package mx.com.mentoringit.web.beans;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
+import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -9,6 +11,7 @@ import java.util.List;
 import java.util.Properties;
 
 import javax.activation.DataHandler;
+import javax.activation.DataSource;
 import javax.activation.FileDataSource;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
@@ -23,6 +26,7 @@ import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMultipart;
+import javax.mail.util.ByteArrayDataSource;
 
 import mx.com.mentoringit.model.dto.Correo;
 import mx.com.mentoringit.model.dto.CourseDTO;
@@ -38,7 +42,7 @@ import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 
 @ManagedBean
 @SessionScoped
-public class StudentBean {
+public class StudentBean implements Serializable{
 
 	private IStudentService studentService;
 
@@ -65,6 +69,10 @@ public class StudentBean {
 	private String from;
 	private String subject;
 	private String message;
+
+	private ByteArrayOutputStream outputStream = null;
+	private BodyPart adjunto;
+	private MimeMultipart m = new MimeMultipart();
 
 	// obtiene todos los cursos
 	public void courses() {
@@ -134,42 +142,50 @@ public class StudentBean {
 		Double totalPayment = 0.0;
 
 		try {
-			if(this.temListaPsp.size() != 0 ){
-			for (int i = 0; i < this.temListaPsp.size(); i++) {
+			if (this.temListaPsp.size() != 0) {
+				for (int i = 0; i < this.temListaPsp.size(); i++) {
 
-				Double remaining2;
-				totalPayment = totalPayment + this.temListaPsp.get(i).getAmountPayment();
-				remaining2 = this.temListaPsp.get(i).getTotalCourse() - totalPayment;
+					Double remaining2;
+					totalPayment = totalPayment + this.temListaPsp.get(i).getAmountPayment();
+					remaining2 = this.temListaPsp.get(i).getTotalCourse() - totalPayment;
 
-				report.setStudentName(this.temListaPsp.get(i).getStudentName());
-				report.setCourseName(this.temListaPsp.get(i).getCourseName());
-				report.setNumPayment(this.temListaPsp.get(i).getNumPayment().toString());
-				report.setAmountPayment(this.temListaPsp.get(i).getAmountPayment().toString());
-				report.setDatePayment(this.temListaPsp.get(i).getDatePayment().toString());
-				report.setTypePayment(this.temListaPsp.get(i).getTypePayment());
-				report.setRemaining(remaining2.toString());
-				report.setTotalCourse(this.temListaPsp.get(i).getTotalCourse().toString());
+					report.setStudentName(this.temListaPsp.get(i).getStudentName());
+					report.setCourseName(this.temListaPsp.get(i).getCourseName());
+					report.setNumPayment(this.temListaPsp.get(i).getNumPayment().toString());
+					report.setAmountPayment(this.temListaPsp.get(i).getAmountPayment().toString());
+					report.setDatePayment(this.temListaPsp.get(i).getDatePayment().toString());
+					report.setTypePayment(this.temListaPsp.get(i).getTypePayment());
+					report.setRemaining(remaining2.toString());
+					report.setTotalCourse(this.temListaPsp.get(i).getTotalCourse().toString());
 
-				listaR.add(report);
+					listaR.add(report);
 
-				File jasper = new File(
-						FacesContext.getCurrentInstance().getExternalContext().getRealPath("/payment.jasper"));
-				JasperPrint jasperPrint = JasperFillManager.fillReport(jasper.getPath(), null,
-						new JRBeanCollectionDataSource(listaR));
-				JasperExportManager.exportReportToPdfFile(jasperPrint,
-						"C:\\Users\\ed\\git\\sistemapagos\\sistemapagosweb\\src\\main\\webapp\\PDF\\pago_"
-								+ this.temListaPsp.get(i).getNumPayment() + ".pdf");
-				listaR.clear();
+					File jasper = new File(
+							FacesContext.getCurrentInstance().getExternalContext().getRealPath("/payment.jasper"));
+					JasperPrint jasperPrint = JasperFillManager.fillReport(jasper.getPath(), null,
+							new JRBeanCollectionDataSource(listaR));
+					outputStream = new ByteArrayOutputStream();
+					JasperExportManager.exportReportToPdfStream(jasperPrint, outputStream);
 
-			}
-			FacesContext.getCurrentInstance().addMessage(null,
-					new FacesMessage(FacesMessage.SEVERITY_INFO, "Info", "Tiket(s) generado(s)"));
+					adjunto = new MimeBodyPart();
 
-			System.out.println("hecho");
-			}else{
+					DataSource ds = new ByteArrayDataSource(outputStream.toByteArray(), "application/pdf");
+					adjunto.setDataHandler(new DataHandler(ds));
+					adjunto.setFileName("Recibo");
+					m.addBodyPart(adjunto);
+
+					listaR.clear();
+
+				}
+
+				FacesContext.getCurrentInstance().addMessage(null,
+						new FacesMessage(FacesMessage.SEVERITY_INFO, "Info", "Tiket(s) generado(s)"));
+
+				System.out.println("hecho");
+			} else {
 				FacesContext.getCurrentInstance().addMessage(null,
 						new FacesMessage(FacesMessage.SEVERITY_WARN, "Info", "No se ha seleccionado ningun pago"));
-				
+
 			}
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
@@ -223,26 +239,24 @@ public class StudentBean {
 
 			Session s = Session.getDefaultInstance(p, null);
 			BodyPart texto = new MimeBodyPart();
-			BodyPart adjunto; 
-			MimeMultipart m = new MimeMultipart();
-			
+			// BodyPart adjunto;
+			// MimeMultipart m = new MimeMultipart();
+
 			texto.setText(c.getMessage());
-			
-			File file = new File("C:\\Users\\ed\\git\\sistemapagos\\sistemapagosweb\\src\\main\\webapp\\PDF");
-			File []files = file.listFiles();
-			
-			for (File f : files) {				
-				adjunto = new MimeBodyPart();			
-				
-				if (f.exists()) {
-					
-					adjunto.setDataHandler(new DataHandler(new FileDataSource(f.getAbsolutePath())));
-					adjunto.setFileName(f.getName());
-					m.addBodyPart(adjunto);
-					
-				}
-			}
-			
+
+			// for (int i=0; i<3;i++) {
+			// adjunto = new MimeBodyPart();
+			//
+			//
+			// DataSource ds = new
+			// ByteArrayDataSource(outputStream.toByteArray(),
+			// "application/pdf");
+			// adjunto.setDataHandler(new DataHandler(ds));
+			// adjunto.setFileName("Recibo");
+			// m.addBodyPart(adjunto);
+
+			// }
+
 			m.addBodyPart(texto);
 
 			MimeMessage mensaje = new MimeMessage(s);
@@ -255,7 +269,7 @@ public class StudentBean {
 			t.connect(c.getUserEmail(), c.getPassword());
 			t.sendMessage(mensaje, mensaje.getAllRecipients());
 			t.close();
-			
+
 			return true;
 		} catch (Exception e) {
 
@@ -441,8 +455,8 @@ public class StudentBean {
 
 	public String getSubject() {
 		try {
-			this.subject = "Recibos de pagos realizados  para el curso "+
-							this.studentService.selectCourseName(this.idCourse);
+			this.subject = "Recibos de pagos realizados  para el curso "
+					+ this.studentService.selectCourseName(this.idCourse);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

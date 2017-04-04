@@ -1,10 +1,10 @@
 package mx.com.mentoringit.web.beans;
 
+import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.OutputStream;
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -27,14 +27,12 @@ import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMultipart;
 import javax.mail.util.ByteArrayDataSource;
-import javax.servlet.http.HttpServletResponse;
 
-import org.eclipse.jdt.internal.compiler.lookup.BinaryTypeBinding.ExternalAnnotationStatus;
-import org.primefaces.context.RequestContext;
+import org.primefaces.model.DefaultStreamedContent;
+import org.primefaces.model.StreamedContent;
 
 import javax.activation.DataHandler;
 import javax.activation.DataSource;
-import javax.activation.FileDataSource;
 
 import mx.com.mentoringit.model.dto.Correo;
 import mx.com.mentoringit.model.dto.CourseDTO;
@@ -43,13 +41,11 @@ import mx.com.mentoringit.model.dto.ProductDTO;
 import mx.com.mentoringit.model.dto.ReportData;
 import mx.com.mentoringit.model.dto.StudentDTO;
 import mx.com.mentoringit.web.services.ICourseService;
-import net.sf.jasperreports.engine.JRException;
-import net.sf.jasperreports.engine.JRExporter;
+
 import net.sf.jasperreports.engine.JasperExportManager;
 import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
-import net.sf.jasperreports.engine.export.JRPdfExporter;
 
 @ManagedBean
 @SessionScoped
@@ -84,15 +80,10 @@ public class CourseBean implements Serializable {
 	private List<StudentDTO> listaA;
 	private List<StudentDTO> listaAllS;
 	private List<ProductDTO> listaD;
-	ByteArrayOutputStream outputStream = null;
+	private ByteArrayOutputStream outputStream = null;
+	private StreamedContent media = null;
 
 	public CourseBean() {
-	}
-
-	// elimina del pdf creado
-	public void deletePdf() {
-		File fi = new File("C:\\Users\\ed\\git\\sistemapagos\\sistemapagosweb\\PDF\\pagos.pdf");
-		fi.delete();
 	}
 
 	// obtiene todos los cursos
@@ -171,8 +162,6 @@ public class CourseBean implements Serializable {
 	public void createReport() {
 		List<ReportData> listaR = new ArrayList<ReportData>();
 		ReportData report = new ReportData();
-		// InputStream is =
-		// getClass().getClassLoader().getResourceAsStream("PDF/pago.pdf");
 
 		try {
 			if (this.idProduct != null) {
@@ -191,12 +180,13 @@ public class CourseBean implements Serializable {
 						FacesContext.getCurrentInstance().getExternalContext().getRealPath("/payment.jasper"));
 				JasperPrint jasperPrint = JasperFillManager.fillReport(jasper.getPath(), null,
 						new JRBeanCollectionDataSource(listaR));
-//				JasperExportManager.exportReportToPdfFile(jasperPrint,
-//						FacesContext.getCurrentInstance().getExternalContext().getRealPath("PDF/pago.pdf"));
-
 				outputStream = new ByteArrayOutputStream();
 				JasperExportManager.exportReportToPdfStream(jasperPrint, outputStream);
 
+				InputStream is = new ByteArrayInputStream(this.outputStream.toByteArray());
+				media = new DefaultStreamedContent(is, "application/pdf", "Recibo");
+				
+				// -------------------------------------------------------
 				// byte[] b =
 				// JasperExportManager.exportReportToPdf(jasperPrint);
 				// HttpServletResponse res = (HttpServletResponse)
@@ -208,13 +198,12 @@ public class CourseBean implements Serializable {
 				//
 				// res.getOutputStream().write(b);
 				// res.getCharacterEncoding();
-
 				// FacesContext.getCurrentInstance().responseComplete();
-
+				// -------------------------------------------------------
 				FacesContext.getCurrentInstance().addMessage(null,
 						new FacesMessage(FacesMessage.SEVERITY_INFO, "Info", "Tiket generado"));
 				listaR.clear();
-				System.out.println("hecho");				
+				System.out.println("hecho");
 
 			} else {
 				FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Info",
@@ -283,22 +272,12 @@ public class CourseBean implements Serializable {
 
 			texto.setText(c.getMessage());
 
-			File file = new File("C:\\Users\\ed\\git\\sistemapagos\\sistemapagosweb\\src\\main\\webapp\\PDF");
-			File[] files = file.listFiles();
+			adjunto = new MimeBodyPart();
 
-//			for (File f : files) {
-				adjunto = new MimeBodyPart();
-//
-//				if (f.exists()) {
-
-
-					DataSource ds= new  ByteArrayDataSource(outputStream.toByteArray(),"application/pdf");
-					adjunto.setDataHandler(new DataHandler(ds));
-					adjunto.setFileName("Recibo");
-					m.addBodyPart(adjunto);
-
-//				}
-//			}
+			DataSource ds = new ByteArrayDataSource(outputStream.toByteArray(), "application/pdf");
+			adjunto.setDataHandler(new DataHandler(ds));
+			adjunto.setFileName("Recibo");
+			m.addBodyPart(adjunto);
 
 			m.addBodyPart(texto);
 			MimeMessage mensaje = new MimeMessage(s);
@@ -562,6 +541,18 @@ public class CourseBean implements Serializable {
 
 	public void setValidation(Boolean validation) {
 		this.validation = validation;
+	}
+
+	public ByteArrayOutputStream getOutputStream() {
+		return outputStream;
+	}
+
+	public StreamedContent getMedia() {
+		return media;
+	}
+
+	public void setMedia(StreamedContent media) {
+		this.media = media;
 	}
 
 }
