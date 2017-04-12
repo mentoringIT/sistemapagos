@@ -1,5 +1,7 @@
 package mx.com.mentoringit.web.beans;
 
+import java.io.Serializable;
+
 import javax.faces.application.FacesMessage;
 import javax.faces.application.NavigationHandler;
 import javax.faces.bean.ManagedBean;
@@ -12,7 +14,7 @@ import mx.com.mentoringit.model.dto.UserDTO;
 
 @ManagedBean(name="MbSession")
 @RequestScoped
-public class Session {
+public class Session implements Serializable{
 	
 	private UserDTO userdto;
 	private final HttpServletRequest httpServletRequest;
@@ -40,6 +42,7 @@ public class Session {
 		try {
 			ExternalContext context = FacesContext.getCurrentInstance().getExternalContext();
 			httpServletRequest.getSession().setAttribute("userSession", null);
+			FacesContext.getCurrentInstance().getExternalContext().invalidateSession();
 			context.redirect(context.getRequestContextPath() + "/index.xhtml");
 		} catch (Exception e) {
 			// TODO: handle exception

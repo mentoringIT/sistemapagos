@@ -145,10 +145,7 @@
 					<p:commandButton value="Generar Tiket"
 						 actionListener="#{CourseList.createReport()}" onclick="PF().show"/>
 				</f:facet>
-				<f:facet name="left">
-					<p:commandButton id="view" value="Ver pago"
-						onclick="PF('detail').show()" action="pagoAlumnoExistente"/>
-				</f:facet>
+
 				<f:facet name="right">
 					<p:commandButton value="Atras" action="back" immediate="true"/>
 				</f:facet>
@@ -160,19 +157,14 @@
 
 		<p:dialog id="detail" widgetVar="detail" header="Detalles del pago"
 			modal="true" width="60%">
-			<p:media value="/PDF/pago.pdf" width="100%" height="300px"
-				player="pdf" />
+			<p:media cache="false" rendered="#{CourseList.media ne null}" width="100%" height="300px" 
+			value="#{CourseList.media}" player="pdf"/>
 			<p:toolbar>
 				<f:facet name="left">
 					<p:commandButton value="Enviar" action="enviarCorreo" />
 				</f:facet>
 				<f:facet name="left">
 					<p:commandButton value="Confirmar pago" action="#{CourseList.insertPayment()}"/>
-				</f:facet>
-
-				<f:facet name="right">
-					<p:commandButton value="Modificar"
-						action="#{CourseList.deletePdf()}" />
 				</f:facet>
 			</p:toolbar>
 		</p:dialog>

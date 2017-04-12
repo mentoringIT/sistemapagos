@@ -30,6 +30,7 @@ import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMultipart;
 import javax.mail.util.ByteArrayDataSource;
 
+import org.primefaces.context.RequestContext;
 import org.primefaces.model.DefaultStreamedContent;
 import org.primefaces.model.StreamedContent;
 
@@ -178,10 +179,12 @@ public class NewStudentBean implements Serializable{
 			InputStream is = new ByteArrayInputStream(this.outputStream.toByteArray());
 			media = new DefaultStreamedContent(is, "application/pdf", "Recibo");
 
-			FacesContext.getCurrentInstance().addMessage(null,
-					new FacesMessage(FacesMessage.SEVERITY_INFO, "Info", "Tiket generado"));
+//			FacesContext.getCurrentInstance().addMessage(null,
+//					new FacesMessage(FacesMessage.SEVERITY_INFO, "Info", "Tiket generado"));
 			listaR.clear();
 			System.out.println("echo");
+			RequestContext rc = RequestContext.getCurrentInstance();
+			rc.execute("PF('detail').show()");
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			FacesContext.getCurrentInstance().addMessage(null,

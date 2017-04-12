@@ -1,35 +1,40 @@
 package mx.com.mentoringit.web.beans;
 
+import java.io.Serializable;
+
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+
+import org.springframework.http.HttpRequest;
 
 import mx.com.mentoringit.model.dto.UserDTO;
 import mx.com.mentoringit.web.services.IUserService;
 
 @ManagedBean
 @SessionScoped
-public class UserBean implements IUserBean {
+public class UserBean implements IUserBean, Serializable {
 
 	private IUserService userService;
 	private String username;
 	private String password;
-	private UserDTO user;
+	
 	private final HttpServletRequest httpServletRequest;
 	private final FacesContext facesContext;
 
 	public UserBean() {
-		user = null;
-		FacesContext.getCurrentInstance().getExternalContext().invalidateSession();
+//		FacesContext.getCurrentInstance().getExternalContext().invalidateSession();
 		facesContext = FacesContext.getCurrentInstance();
 		httpServletRequest = (HttpServletRequest) facesContext.getExternalContext().getRequest();
 	}
 
 	@Override
 	public String userLogin() {
-		UserDTO userDTO = new UserDTO();
+		UserDTO userDTO = new UserDTO(),
+				user = null;
 		String result = "";
 
 		userDTO.setUsername(username);
@@ -38,7 +43,7 @@ public class UserBean implements IUserBean {
 		try {
 			user  = userService.userLogin(userDTO);
 			if (user != null) {
-				httpServletRequest.getSession().setAttribute("userSession", user);
+				httpServletRequest.getSession().setAttribute("userSession", user);		
 				result = "login";
 			} else {
 				FacesContext.getCurrentInstance().addMessage(null,

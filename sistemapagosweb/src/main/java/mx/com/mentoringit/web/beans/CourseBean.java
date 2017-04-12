@@ -28,6 +28,7 @@ import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMultipart;
 import javax.mail.util.ByteArrayDataSource;
 
+import org.primefaces.context.RequestContext;
 import org.primefaces.model.DefaultStreamedContent;
 import org.primefaces.model.StreamedContent;
 
@@ -200,10 +201,12 @@ public class CourseBean implements Serializable {
 				// res.getCharacterEncoding();
 				// FacesContext.getCurrentInstance().responseComplete();
 				// -------------------------------------------------------
-				FacesContext.getCurrentInstance().addMessage(null,
-						new FacesMessage(FacesMessage.SEVERITY_INFO, "Info", "Tiket generado"));
+//				FacesContext.getCurrentInstance().addMessage(null,
+//						new FacesMessage(FacesMessage.SEVERITY_INFO, "Info", "Tiket generado"));
 				listaR.clear();
 				System.out.println("hecho");
+				RequestContext rc = RequestContext.getCurrentInstance();
+				rc.execute("PF('detail').show()");
 
 			} else {
 				FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Info",
