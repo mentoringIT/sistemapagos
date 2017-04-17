@@ -49,7 +49,7 @@ import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 
 @ManagedBean
 @SessionScoped
-public class NewStudentBean implements Serializable{
+public class NewStudentBean implements Serializable {
 
 	private INewStudentService newStudentService;
 	private List<CourseDTO> listaC;
@@ -78,6 +78,7 @@ public class NewStudentBean implements Serializable{
 	private Date date2 = new Date();
 	private String formatDate1;
 	private String formatDate2;
+	private Boolean validation = false;
 
 	private ByteArrayOutputStream outputStream = null;
 	private StreamedContent media = null;
@@ -116,9 +117,11 @@ public class NewStudentBean implements Serializable{
 
 		try {
 			listaD = this.newStudentService.startDates(this.idCourse, getFormatDate1(), getFormatDate2());
+			this.validation = true;
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+			this.validation = false;
 		}
 	}
 
@@ -138,16 +141,17 @@ public class NewStudentBean implements Serializable{
 		try {
 			this.newStudentService.insertPayment(payment);
 			RequestContext rc = RequestContext.getCurrentInstance();
-//			rc.execute("PF('detail').hide()");
 			rc.execute("PF('regExito').show()");
-//			FacesContext.getCurrentInstance().addMessage(null,
-//					new FacesMessage(FacesMessage.SEVERITY_INFO, "Info", "Pago registrado con exito"));
+			// FacesContext.getCurrentInstance().addMessage(null,
+			// new FacesMessage(FacesMessage.SEVERITY_INFO, "Info", "Pago
+			// registrado con exito"));
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			RequestContext rc = RequestContext.getCurrentInstance();
 			rc.execute("PF('regFallido').show()");
-//			FacesContext.getCurrentInstance().addMessage(null,
-//					new FacesMessage(FacesMessage.SEVERITY_WARN, "Warning", "No se ha podido registrar el pago"));
+			// FacesContext.getCurrentInstance().addMessage(null,
+			// new FacesMessage(FacesMessage.SEVERITY_WARN, "Warning", "No se ha
+			// podido registrar el pago"));
 			e.printStackTrace();
 		}
 
@@ -163,38 +167,43 @@ public class NewStudentBean implements Serializable{
 		remaining = total - amount;
 
 		try {
-			report.setStudentName(this.getCompleteName());
-			report.setCourseName(this.newStudentService.selectCourseName(this.idCourse));
-			report.setNumPayment(this.num_payment.toString());
-			report.setAmountPayment(this.amount.toString());
-			report.setDatePayment(getFormatDatePayment());
-			report.setTypePayment(this.type_payment);
-			report.setRemaining(remaining.toString());
-			report.setTotalCourse(this.total.toString());
+			if (this.idProduct != null) {
+				report.setStudentName(this.getCompleteName());
+				report.setCourseName(this.newStudentService.selectCourseName(this.idCourse));
+				report.setNumPayment(this.num_payment.toString());
+				report.setAmountPayment(this.amount.toString());
+				report.setDatePayment(getFormatDatePayment());
+				report.setTypePayment(this.type_payment);
+				report.setRemaining(remaining.toString());
+				report.setTotalCourse(this.total.toString());
 
-			listaR.add(report);
+				listaR.add(report);
 
-			File jasper = new File(
-					FacesContext.getCurrentInstance().getExternalContext().getRealPath("/payment.jasper"));
-			JasperPrint jasperPrint = JasperFillManager.fillReport(jasper.getPath(), null,
-					new JRBeanCollectionDataSource(listaR));
-			outputStream = new ByteArrayOutputStream();
-			JasperExportManager.exportReportToPdfStream(jasperPrint, outputStream);
+				File jasper = new File(
+						FacesContext.getCurrentInstance().getExternalContext().getRealPath("/payment.jasper"));
+				JasperPrint jasperPrint = JasperFillManager.fillReport(jasper.getPath(), null,
+						new JRBeanCollectionDataSource(listaR));
+				outputStream = new ByteArrayOutputStream();
+				JasperExportManager.exportReportToPdfStream(jasperPrint, outputStream);
 
-			InputStream is = new ByteArrayInputStream(this.outputStream.toByteArray());
-			media = new DefaultStreamedContent(is, "application/pdf", "Recibo");
+				InputStream is = new ByteArrayInputStream(this.outputStream.toByteArray());
+				media = new DefaultStreamedContent(is, "application/pdf", "Recibo");
 
-//			FacesContext.getCurrentInstance().addMessage(null,
-//					new FacesMessage(FacesMessage.SEVERITY_INFO, "Info", "Tiket generado"));
-			listaR.clear();
-			System.out.println("echo");
-			RequestContext rc = RequestContext.getCurrentInstance();
-			rc.execute("PF('detail').show()");
+				// FacesContext.getCurrentInstance().addMessage(null,
+				// new FacesMessage(FacesMessage.SEVERITY_INFO, "Info", "Tiket
+				// generado"));
+				listaR.clear();
+//				System.out.println("hecho");
+				RequestContext rc = RequestContext.getCurrentInstance();
+				rc.execute("PF('detail').show()");
+			} else {
+				RequestContext rc = RequestContext.getCurrentInstance();
+				rc.execute("PF('selecionar').show()");
+			}
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
-			FacesContext.getCurrentInstance().addMessage(null,
-					new FacesMessage(FacesMessage.SEVERITY_INFO, "Info", "Tiket generado"));
-			e.printStackTrace();
+			RequestContext rc = RequestContext.getCurrentInstance();
+			rc.execute("PF('genPago').show()");
 		}
 	}
 
@@ -490,6 +499,14 @@ public class NewStudentBean implements Serializable{
 
 	public void setMedia(StreamedContent media) {
 		this.media = media;
+	}
+
+	public Boolean getValidation() {
+		return validation;
+	}
+
+	public void setValidation(Boolean validation) {
+		this.validation = validation;
 	}
 
 }

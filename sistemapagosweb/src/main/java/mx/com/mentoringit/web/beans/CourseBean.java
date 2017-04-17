@@ -148,12 +148,12 @@ public class CourseBean implements Serializable {
 
 		try {
 			this.courseService.insertPayment(payment);
-			FacesContext.getCurrentInstance().addMessage(null,
-					new FacesMessage(FacesMessage.SEVERITY_INFO, "Info", "Pago registrado con exito"));
+			RequestContext rc = RequestContext.getCurrentInstance();
+			rc.execute("PF('regExito').show()");
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
-			FacesContext.getCurrentInstance().addMessage(null,
-					new FacesMessage(FacesMessage.SEVERITY_ERROR, "Info", "No se ha podido registrar el pago"));
+			RequestContext rc = RequestContext.getCurrentInstance();
+			rc.execute("PF('regFallido').show()");
 			e.printStackTrace();
 		}
 
@@ -209,15 +209,15 @@ public class CourseBean implements Serializable {
 				rc.execute("PF('detail').show()");
 
 			} else {
-				FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Info",
-						"Se debe seleccionar una fecha de inicio"));
+				RequestContext rc = RequestContext.getCurrentInstance();
+				rc.execute("PF('selecionar').show()");
 			}
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
-			FacesContext.getCurrentInstance().addMessage(null,
-					new FacesMessage(FacesMessage.SEVERITY_ERROR, "Info", "El tiket no pudo ser generado"));
+			RequestContext rc = RequestContext.getCurrentInstance();
+			rc.execute("PF('genPago').show()");
 			e.printStackTrace();
-			System.out.println("fallo");
+			
 		}
 
 	}
@@ -312,27 +312,11 @@ public class CourseBean implements Serializable {
 		c.setMessage(this.message);
 
 		if (controller(c)) {
-			FacesContext.getCurrentInstance().addMessage(null,
-					new FacesMessage(FacesMessage.SEVERITY_INFO, "Info", "Envio exitoso"));
-			System.out.println("Envio exitoso");
-			ExternalContext context = FacesContext.getCurrentInstance().getExternalContext();
-			try {
-				context.redirect(context.getRequestContextPath() + "/menuAlumnos.xhtml");
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+			RequestContext rc = RequestContext.getCurrentInstance();
+			rc.execute("PF('success').show()");
 		} else {
-			FacesContext.getCurrentInstance().addMessage(null,
-					new FacesMessage(FacesMessage.SEVERITY_WARN, "Info", "Envio fallido"));
-			System.out.println("Envio fallido");
-			ExternalContext context = FacesContext.getCurrentInstance().getExternalContext();
-			try {
-				context.redirect(context.getRequestContextPath() + "/pagoAlumnoExistente.xhtml");
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+			RequestContext rc = RequestContext.getCurrentInstance();
+			rc.execute("PF('fail').show()");
 		}
 
 	}
@@ -400,9 +384,6 @@ public class CourseBean implements Serializable {
 	}
 
 	public void setIdCourse(Integer idCourse) {
-		this.listaD = null;
-		this.validation = false;
-		this.idProduct = null;
 		this.idCourse = idCourse;
 	}
 
