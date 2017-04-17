@@ -137,12 +137,17 @@ public class NewStudentBean implements Serializable{
 
 		try {
 			this.newStudentService.insertPayment(payment);
-			FacesContext.getCurrentInstance().addMessage(null,
-					new FacesMessage(FacesMessage.SEVERITY_INFO, "Info", "Pago registrado con exito"));
+			RequestContext rc = RequestContext.getCurrentInstance();
+//			rc.execute("PF('detail').hide()");
+			rc.execute("PF('regExito').show()");
+//			FacesContext.getCurrentInstance().addMessage(null,
+//					new FacesMessage(FacesMessage.SEVERITY_INFO, "Info", "Pago registrado con exito"));
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
-			FacesContext.getCurrentInstance().addMessage(null,
-					new FacesMessage(FacesMessage.SEVERITY_WARN, "Warning", "No se ha podido registrar el pago"));
+			RequestContext rc = RequestContext.getCurrentInstance();
+			rc.execute("PF('regFallido').show()");
+//			FacesContext.getCurrentInstance().addMessage(null,
+//					new FacesMessage(FacesMessage.SEVERITY_WARN, "Warning", "No se ha podido registrar el pago"));
 			e.printStackTrace();
 		}
 
@@ -248,27 +253,11 @@ public class NewStudentBean implements Serializable{
 		c.setMessage(this.message);
 
 		if (controller(c)) {
-			FacesContext.getCurrentInstance().addMessage(null,
-					new FacesMessage(FacesMessage.SEVERITY_INFO, "Info", "Envio exitoso"));
-			System.out.println("Envio exitoso");
-			ExternalContext context = FacesContext.getCurrentInstance().getExternalContext();
-			try {
-				context.redirect(context.getRequestContextPath() + "/menuAlumnos.xhtml");
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+			RequestContext rc = RequestContext.getCurrentInstance();
+			rc.execute("PF('success').show()");
 		} else {
-			FacesContext.getCurrentInstance().addMessage(null,
-					new FacesMessage(FacesMessage.SEVERITY_WARN, "Info", "Envio fallido"));
-			System.out.println("Envio fallido");
-			ExternalContext context = FacesContext.getCurrentInstance().getExternalContext();
-			try {
-				context.redirect(context.getRequestContextPath() + "/pagoAlumnoNuevo.xhtml");
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+			RequestContext rc = RequestContext.getCurrentInstance();
+			rc.execute("PF('fail').show()");
 		}
 
 	}

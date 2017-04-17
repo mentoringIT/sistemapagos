@@ -17,165 +17,212 @@
 </style>
 </h:head>
 <h:body>
-	<ui:include src="header.xhtml" />
-	<p:messages id="messages" showDetail="true" autoUpdate="true" closable="true"  globalOnly="true"/>
+	<!-- 	<ui:include src="header.xhtml" /> -->
+	<p:messages id="messages" showDetail="true" autoUpdate="true"
+		closable="true" globalOnly="true" />
 	<h:form id="form1" styleClass="center">
 		<p:panel header="Pago alumno nuevo">
-			
-				<h:panelGrid columns="3" cellpadding="5">
-				
-					<p:outputLabel value="Curso" />
-					<p:selectOneMenu id="course" value="#{NewStudent.idCourse}"
-					filter="true" filterMatchMode="contains" height="100" required="true"
-					requiredMessage="campo obligatorio">
-					
-						<f:selectItem itemLabel="--Seleccione Curso--" noSelectionOption="true" />
-						<f:selectItems value="#{NewStudent.listaC}" var="c"
-							itemValue="#{c.id}" itemLabel="#{c.name}" />
-							<p:ajax process=":form1:course" update=":form1:consultaFecha" />
-					</p:selectOneMenu>
-					<p:message for="course" display="text" style="width:150px; font-size:14px;"/>
-					
-					<p:outputLabel value="Fecha de inicio" />
-					<h:panelGrid id="consultaFecha" columns="2" cellpadding="5" >
-					
-						<p:calendar  value="#{NewStudent.date1}" navigator="true" showOn="button" 
-						disabled="#{NewStudent.idCourse eq 0 or NewStudent.idCourse eq null}"/>
-						
-						<p:calendar  value="#{NewStudent.date2}" navigator="true" showOn="button" 
-						disabled="#{NewStudent.idCourse eq 0 or NewStudent.idCourse eq null}"/>
 
-						<p:selectOneMenu id="fechas" value="#{NewStudent.idProduct}"
+			<h:panelGrid columns="3" cellpadding="5">
+
+				<p:outputLabel value="Curso" />
+				<p:selectOneMenu id="course" value="#{NewStudent.idCourse}"
+					filter="true" filterMatchMode="contains" height="100"
+					required="true" requiredMessage="campo obligatorio">
+
+					<f:selectItem itemLabel="--Seleccione Curso--"
+						noSelectionOption="true" />
+					<f:selectItems value="#{NewStudent.listaC}" var="c"
+						itemValue="#{c.id}" itemLabel="#{c.name}" />
+					<p:ajax process=":form1:course" update=":form1:consultaFecha" />
+				</p:selectOneMenu>
+				<p:message for="course" display="text"
+					style="width:150px; font-size:14px;" />
+
+				<p:outputLabel value="Fecha de inicio" />
+				<h:panelGrid id="consultaFecha" columns="2" cellpadding="5">
+
+					<p:calendar value="#{NewStudent.date1}" navigator="true"
+						showOn="button"
+						disabled="#{NewStudent.idCourse eq 0 or NewStudent.idCourse eq null}" />
+
+					<p:calendar value="#{NewStudent.date2}" navigator="true"
+						showOn="button"
+						disabled="#{NewStudent.idCourse eq 0 or NewStudent.idCourse eq null}" />
+
+					<p:selectOneMenu id="fechas" value="#{NewStudent.idProduct}"
 						disabled="#{NewStudent.idCourse eq 0 or NewStudent.idCourse eq null}">
-							<f:selectItem itemLabel="--Fechas de inicio--" />
-							<f:selectItems value="#{NewStudent.listaD}" var="d"
-								itemValue="#{d.id}" itemLabel="#{d.start_date}"/>								
-								<p:ajax process=":form1:fechas" update=":form1:data"/>
-						</p:selectOneMenu>
-
-						
-							<p:commandButton id="busqueda" value="buscar"
-							action="#{NewStudent.startDates}" update=":form1:fechas"
-							disabled="#{NewStudent.idCourse eq 0 or NewStudent.idCourse eq null}">
-							</p:commandButton>
-						
-					</h:panelGrid>							
-					<p:message for="fechas" display="icon" style="width:150px; font-size:14px;"/>
-					</h:panelGrid>
-					
-					<h:panelGrid id="data" columns="3" cellpadding="5">
-					
-					<p:outputLabel value="Nombre(s)" />
-					<p:inputText id="name" value="#{NewStudent.name}" required="true"
-					requiredMessage="campo obligatorio" validatorMessage="ingrese solo letras" 
-					disabled="#{NewStudent.idProduct eq 0 or NewStudent.idProduct eq null}">
-						 <f:validateRegex pattern="[a-zA-Z]+"/>
-					</p:inputText>
-					<p:message for="name" display="text" style="width:150px; font-size:14px;"/>
-					
-					<p:outputLabel value="Apellido paterno" />
-					<p:inputText id="aPaterno" value="#{NewStudent.pLastName}" required="true"
-					requiredMessage="campo obligatorio" validatorMessage="ingrese solo letras"
-					disabled="#{NewStudent.idProduct eq 0 or NewStudent.idProduct eq null}">
-						<f:validateRegex pattern="[a-zA-Z]+"/>
-					</p:inputText>
-					<p:message for="aPaterno" display="text" style="width:150px; font-size:14px;"/>
-					
-					<p:outputLabel value="Apellido materno" />
-					<p:inputText id="aMaterno" value="#{NewStudent.mLastName}" required="true"
-					requiredMessage="campo obligatorio" validatorMessage="ingrese solo letras"
-					disabled="#{NewStudent.idProduct eq 0 or NewStudent.idProduct eq null}">
-						<f:validateRegex pattern="[a-zA-Z]+"/>
-					</p:inputText>
-					<p:message for="aMaterno" display="text" style="width:150px; font-size:14px;"/>
-					
-					<p:outputLabel value="Tel. o Cel.:" />
-					<p:inputText id="phone" value="#{NewStudent.tel}" required="true" 
-					requiredMessage="campo obligatorio" validatorMessage="ingrese solo numeros"
-					disabled="#{NewStudent.idProduct eq 0 or NewStudent.idProduct eq null}">
-						<f:validateRegex pattern="[0-9]+"/>
-					</p:inputText>
-					<p:message for="phone" display="text" style="width:150px; font-size:14px;"/>
-					
-					<p:outputLabel value="Correo:" />
-					<p:inputText id="email" value="#{NewStudent.email}" required="true" 
-					requiredMessage="campo obligatorio" validatorMessage="correo invalido"
-					disabled="#{NewStudent.idProduct eq 0 or NewStudent.idProduct eq null}">
-						<f:validateRegex 
-						pattern="^[_A-Za-z0-9-\+]+(\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\.[A-Za-z0-9]+)*(\.[A-Za-z]{2,})$" />
-					</p:inputText>
-					<p:message for="email" display="text" style="width:150px; font-size:14px;"/>	
-					
-					<p:outputLabel value="Fecha de pago:" />
-					<p:calendar id="datePayment" value="#{NewStudent.paymentDate}" showOn="button" 
-					required="true"
-					disabled="#{NewStudent.idProduct eq 0 or NewStudent.idProduct eq null}"/>	
-					<p:message for="datePayment" display="text" style="width:150px; font-size:14px;"/>	
-										
-					<p:outputLabel value="Total del curso:" />
-					<p:spinner  id="total" value="#{NewStudent.total}" prefix="$" min="0" required="true"
-					validatorMessage="el valor debe ser mayor que 0.0"
-					disabled="#{NewStudent.idProduct eq 0 or NewStudent.idProduct eq null}" >
-						<f:validateDoubleRange minimum="1.0" />	
-						<p:ajax process=":form1:total" update=":form1:amount"/>					
-					</p:spinner>
-					<p:message for="total" display="text" style="width:230px; font-size:14px;"/>
-					
-					<p:outputLabel value="Pago o Monto" />
-					<p:spinner  id="amount" value="#{NewStudent.amount}" prefix="$" min="0" max="#{NewStudent.total}" 
-					required="true"
-					validatorMessage="el valor debe ser mayor que 0.0"
-					disabled="#{NewStudent.idProduct eq 0 or NewStudent.idProduct eq null}">
-						<f:validateDoubleRange minimum="1.0"/>
-					</p:spinner>
-					<p:message for="amount" display="text" style="width:230px; font-size:14px;"/>
-					
-					<p:outputLabel value="No. de Pago" />
-					<p:spinner id="numPayment" value="#{NewStudent.num_payment}" min="1" required="true"
-					validatorMessage="el valor debe ser mayor que 0"
-					disabled="#{NewStudent.idProduct eq 0 or NewStudent.idProduct eq null}">
-						<f:validateLongRange minimum="1"/>
-					</p:spinner>
-					<p:message for="numPayment" display="text" style="width:270px; font-size:14px;"/>
-	
-					<p:outputLabel value="Forma de pago" />
-					<p:selectOneMenu id="typePayment" value="#{NewStudent.type_payment}" required="true"
-					requiredMessage="campo obligatorio"
-					disabled="#{NewStudent.idProduct eq 0 or NewStudent.idProduct eq null}">
-						<f:selectItem itemLabel="--Seleccione opcion--" noSelectionOption="true"/>
-						<f:selectItem itemValue="Tarjeta" itemLabel="Tarjeta" />
-						<f:selectItem itemValue="Efectivo" itemLabel="Efectivo" />
-						<f:selectItem itemValue="Deposito" itemLabel="Deposito" />
+						<f:selectItem itemLabel="--Fechas de inicio--" />
+						<f:selectItems value="#{NewStudent.listaD}" var="d"
+							itemValue="#{d.id}" itemLabel="#{d.start_date}" />
+						<p:ajax process=":form1:fechas" update=":form1:data" />
 					</p:selectOneMenu>
-					<p:message for="typePayment" display="text" style="width:150px; font-size:14px;"/>
+
+
+					<p:commandButton id="busqueda" value="buscar"
+						action="#{NewStudent.startDates}" update=":form1:fechas"
+						disabled="#{NewStudent.idCourse eq 0 or NewStudent.idCourse eq null}">
+					</p:commandButton>
+
 				</h:panelGrid>
-				
+				<p:message for="fechas" display="icon"
+					style="width:150px; font-size:14px;" />
+			</h:panelGrid>
+
+			<h:panelGrid id="data" columns="3" cellpadding="5">
+
+				<p:outputLabel value="Nombre(s)" />
+				<p:inputText id="name" value="#{NewStudent.name}" required="true"
+					requiredMessage="campo obligatorio"
+					validatorMessage="ingrese solo letras"
+					disabled="#{NewStudent.idProduct eq 0 or NewStudent.idProduct eq null}">
+					<f:validateRegex pattern="[a-zA-Z]+" />
+				</p:inputText>
+				<p:message for="name" display="text"
+					style="width:150px; font-size:14px;" />
+
+				<p:outputLabel value="Apellido paterno" />
+				<p:inputText id="aPaterno" value="#{NewStudent.pLastName}"
+					required="true" requiredMessage="campo obligatorio"
+					validatorMessage="ingrese solo letras"
+					disabled="#{NewStudent.idProduct eq 0 or NewStudent.idProduct eq null}">
+					<f:validateRegex pattern="[a-zA-Z]+" />
+				</p:inputText>
+				<p:message for="aPaterno" display="text"
+					style="width:150px; font-size:14px;" />
+
+				<p:outputLabel value="Apellido materno" />
+				<p:inputText id="aMaterno" value="#{NewStudent.mLastName}"
+					required="true" requiredMessage="campo obligatorio"
+					validatorMessage="ingrese solo letras"
+					disabled="#{NewStudent.idProduct eq 0 or NewStudent.idProduct eq null}">
+					<f:validateRegex pattern="[a-zA-Z]+" />
+				</p:inputText>
+				<p:message for="aMaterno" display="text"
+					style="width:150px; font-size:14px;" />
+
+				<p:outputLabel value="Tel. o Cel.:" />
+				<p:inputText id="phone" value="#{NewStudent.tel}" required="true"
+					requiredMessage="campo obligatorio"
+					validatorMessage="ingrese solo numeros"
+					disabled="#{NewStudent.idProduct eq 0 or NewStudent.idProduct eq null}">
+					<f:validateRegex pattern="[0-9]+" />
+				</p:inputText>
+				<p:message for="phone" display="text"
+					style="width:150px; font-size:14px;" />
+
+				<p:outputLabel value="Correo:" />
+				<p:inputText id="email" value="#{NewStudent.email}" required="true"
+					requiredMessage="campo obligatorio"
+					validatorMessage="correo invalido"
+					disabled="#{NewStudent.idProduct eq 0 or NewStudent.idProduct eq null}">
+					<f:validateRegex
+						pattern="^[_A-Za-z0-9-\+]+(\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\.[A-Za-z0-9]+)*(\.[A-Za-z]{2,})$" />
+				</p:inputText>
+				<p:message for="email" display="text"
+					style="width:150px; font-size:14px;" />
+
+				<p:outputLabel value="Fecha de pago:" />
+				<p:calendar id="datePayment" value="#{NewStudent.paymentDate}"
+					showOn="button" required="true"
+					disabled="#{NewStudent.idProduct eq 0 or NewStudent.idProduct eq null}" />
+				<p:message for="datePayment" display="text"
+					style="width:150px; font-size:14px;" />
+
+				<p:outputLabel value="Total del curso:" />
+				<p:spinner id="total" value="#{NewStudent.total}" prefix="$" min="0"
+					required="true" validatorMessage="el valor debe ser mayor que 0.0"
+					disabled="#{NewStudent.idProduct eq 0 or NewStudent.idProduct eq null}">
+					<f:validateDoubleRange minimum="1.0" />
+					<p:ajax process=":form1:total" update=":form1:amount" />
+				</p:spinner>
+				<p:message for="total" display="text"
+					style="width:230px; font-size:14px;" />
+
+				<p:outputLabel value="Pago o Monto" />
+				<p:spinner id="amount" value="#{NewStudent.amount}" prefix="$"
+					min="0" max="#{NewStudent.total}" required="true"
+					validatorMessage="el valor debe ser mayor que 0.0"
+					disabled="#{NewStudent.idProduct eq 0 or NewStudent.idProduct eq null}">
+					<f:validateDoubleRange minimum="1.0" />
+				</p:spinner>
+				<p:message for="amount" display="text"
+					style="width:230px; font-size:14px;" />
+
+				<p:outputLabel value="No. de Pago" />
+				<p:spinner id="numPayment" value="#{NewStudent.num_payment}" min="1"
+					required="true" validatorMessage="el valor debe ser mayor que 0"
+					disabled="#{NewStudent.idProduct eq 0 or NewStudent.idProduct eq null}">
+					<f:validateLongRange minimum="1" />
+				</p:spinner>
+				<p:message for="numPayment" display="text"
+					style="width:270px; font-size:14px;" />
+
+				<p:outputLabel value="Forma de pago" />
+				<p:selectOneMenu id="typePayment" value="#{NewStudent.type_payment}"
+					required="true" requiredMessage="campo obligatorio"
+					disabled="#{NewStudent.idProduct eq 0 or NewStudent.idProduct eq null}">
+					<f:selectItem itemLabel="--Seleccione opcion--"
+						noSelectionOption="true" />
+					<f:selectItem itemValue="Tarjeta" itemLabel="Tarjeta" />
+					<f:selectItem itemValue="Efectivo" itemLabel="Efectivo" />
+					<f:selectItem itemValue="Deposito" itemLabel="Deposito" />
+				</p:selectOneMenu>
+				<p:message for="typePayment" display="text"
+					style="width:150px; font-size:14px;" />
+			</h:panelGrid>
+
 		</p:panel>
 		<p:toolbar>
 			<f:facet name="left">
-			<p:commandButton value="Generar Tiket"
-						 actionListener="#{NewStudent.createReport()}" onclick="PF().show()"/>				
+				<p:commandButton value="Generar Tiket"
+					actionListener="#{NewStudent.createReport()}" onclick="PF().show()" />
 			</f:facet>
 
 			<f:facet name="right">
-				<p:commandButton value="Atras" action="back" immediate="true"/>
+				<p:commandButton value="Atras" action="back" immediate="true" />
 			</f:facet>
 		</p:toolbar>
-		
+
 		<p:dialog id="detail" widgetVar="detail" header="Detalles del pago"
 			modal="true" width="60%">
-			<p:media cache="false" rendered="#{NewStudent.media ne null}" width="100%" height="300px" 
-			value="#{NewStudent.media}" player="pdf"/>
+			<p:media cache="false" rendered="#{NewStudent.media ne null}"
+				width="100%" height="300px" value="#{NewStudent.media}" player="pdf" />
 			<p:toolbar>
 				<f:facet name="left">
-					<p:commandButton value="Enviar" action="enviarCorreoAN" />
+					<p:commandButton value="Confirmar pago"
+						action="#{NewStudent.inStudent}" />
 				</f:facet>
-				<f:facet name="left">
-					<p:commandButton value="Confirmar pago" action="#{NewStudent.inStudent}" />
+				<f:facet name="right">
+					<p:commandButton value="Cancelar" onclick="PF().hide()"/>
 				</f:facet>
 			</p:toolbar>
 		</p:dialog>
-	
+
+		<p:dialog id="regExito" widgetVar="regExito" closable="false"
+			modal="true" header="Mensaje" height="50px" width="350px"
+			draggable="false" resizable="false">
+			<p:fieldset>
+				<p:outputLabel value="Pago registrado con exito" />
+			</p:fieldset>
+			<f:facet name="footer">				
+				<p:commandButton value="Enviar" action="enviarCorreoAN" />
+				<p:commandButton value="Cancelar" onclick="PF().hide()" />
+			</f:facet>
+		</p:dialog>
+
+		<p:dialog id="regFallido" widgetVar="regFallido" closable="false"
+			modal="true" header="Mensaje" height="50px" width="350px"
+			draggable="false" resizable="false">
+			<p:fieldset>
+				<p:outputLabel value="No se ha podido registrar el pago" />
+			</p:fieldset>
+			<f:facet name="footer">				
+				<p:commandButton value="Aceptar" onclick="PF().hide()" />
+			</f:facet>
+		</p:dialog>
+		
+
 	</h:form>
 </h:body>
 </html>

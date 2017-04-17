@@ -8,7 +8,7 @@
 
 <h:head></h:head>
 <body>
-	<ui:include src="header.xhtml" />
+<!-- 	<ui:include src="header.xhtml" /> -->
 	<p:messages id="messages" showDetail="true" autoUpdate="true" closable="true"  globalOnly="true"/>
 	<h:form>
 
@@ -29,10 +29,39 @@
 					<f:facet name="left">
 						<p:commandButton value="Enviar" action="#{NewStudent.sendMail}" />
 					</f:facet>
-
+					<f:facet name="right">
+						<p:commandButton value="Atras" action="back" />
+					</f:facet>
 				</p:toolbar>
 			</pm:fieldset>
 		</p:panel>
+		
+		<p:dialog id="mensajeExitoso" widgetVar="success" closable="false"
+			modal="true" header="Mensaje" height="50px" width="200px"
+			draggable="false" resizable="false">
+			<p:fieldset>
+				<p:outputLabel value="Envio exitoso" />
+			</p:fieldset>
+			
+			<f:facet name="footer">
+				<p:commandButton value="Aceptar" action="menuAlumnos"/>
+			</f:facet>	
+			
+		</p:dialog>
+		
+		<p:dialog id="mensajeFallido" widgetVar="fail" closable="false"
+			modal="true" header="Mensaje" height="50px" width="200px"
+			draggable="false" resizable="false">
+			<p:fieldset>
+				<p:outputLabel value="Envio fallido" />
+			</p:fieldset>
+			
+			<f:facet name="footer">
+				<p:commandButton value="Aceptar" action="pagoAlumnoNuevo"/>
+			</f:facet>	
+			
+		</p:dialog>
+		
 
 
 

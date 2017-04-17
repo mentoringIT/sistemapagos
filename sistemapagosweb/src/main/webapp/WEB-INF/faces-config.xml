@@ -146,8 +146,20 @@
 	<navigation-rule>
 		<from-view-id>pagoAlumnoNuevo.xhtml</from-view-id>
 		<navigation-case>
+			<from-outcome>send</from-outcome>
+			<to-view-id>enviarCorreoAN.xhtml</to-view-id>
+		</navigation-case>
+		<navigation-case>
 			<from-outcome>back</from-outcome>
 			<to-view-id>realizarPagoAlumnos.xhtml</to-view-id>
+		</navigation-case>
+	</navigation-rule>
+	
+	<navigation-rule>
+		<from-view-id>enviarCorreoAN.xhtml</from-view-id>
+		<navigation-case>
+			<from-outcome>back</from-outcome>
+			<to-view-id>pagoAlumnoNuevo.xhtml</to-view-id>
 		</navigation-case>
 	</navigation-rule>
 
@@ -174,8 +186,20 @@
 	<navigation-rule>
 		<from-view-id>historialPagosAlumno.xhtml</from-view-id>
 		<navigation-case>
+			<from-outcome>send</from-outcome>
+			<to-view-id>enviarCorreoPPA.xhtml</to-view-id>
+		</navigation-case>
+		<navigation-case>
 			<from-outcome>back</from-outcome>
 			<to-view-id>pagosPorAlumno.xhtml</to-view-id>
+		</navigation-case>
+	</navigation-rule>
+	
+	<navigation-rule>
+		<from-view-id>enviarCorreoPPA.xhtml</from-view-id>
+		<navigation-case>
+			<from-outcome>back</from-outcome>
+			<to-view-id>historialPagosAlumno.xhtml</to-view-id>
 		</navigation-case>
 	</navigation-rule>
 
@@ -195,7 +219,6 @@
 
 	<navigation-rule>
 		<from-view-id>menuMaestroExistente.xhtml</from-view-id>
-
 		<navigation-case>
 			<from-outcome>back</from-outcome>
 			<to-view-id>menuMaestros.xhtml</to-view-id>

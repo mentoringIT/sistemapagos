@@ -185,21 +185,27 @@ public class StudentBean implements Serializable {
 					listaR.clear();
 
 				}
-				this.temListaPsp.clear();
-				FacesContext.getCurrentInstance().addMessage(null,
-						new FacesMessage(FacesMessage.SEVERITY_INFO, "Info", "Tiket(s) generado(s)"));
+//				this.temListaPsp.clear();
+//				FacesContext.getCurrentInstance().addMessage(null,
+//						new FacesMessage(FacesMessage.SEVERITY_INFO, "Info", "Tiket(s) generado(s)"));
+				RequestContext rc = RequestContext.getCurrentInstance();
+				rc.execute("PF('exito').show()");
 
 				System.out.println("hecho " + m.getBodyPart(0).getFileName() + ":" + m.getCount());
 
 			} else {
-				FacesContext.getCurrentInstance().addMessage(null,
-						new FacesMessage(FacesMessage.SEVERITY_WARN, "Info", "No se ha seleccionado ningun pago"));
+//				FacesContext.getCurrentInstance().addMessage(null,
+//						new FacesMessage(FacesMessage.SEVERITY_WARN, "Info", "No se ha seleccionado ningun pago"));
+				RequestContext rc = RequestContext.getCurrentInstance();
+				rc.execute("PF('vacio').show()");
 
 			}
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
-			FacesContext.getCurrentInstance().addMessage(null,
-					new FacesMessage(FacesMessage.SEVERITY_ERROR, "Info", "No se han podido generar los tikets"));
+//			FacesContext.getCurrentInstance().addMessage(null,
+//					new FacesMessage(FacesMessage.SEVERITY_ERROR, "Info", "No se han podido generar los tikets"));
+			RequestContext rc = RequestContext.getCurrentInstance();
+			rc.execute("PF('fallido').show()");
 			e.printStackTrace();
 		}
 	}
@@ -216,7 +222,6 @@ public class StudentBean implements Serializable {
 		if (controller(c)) {
 			RequestContext rc = RequestContext.getCurrentInstance();
 			rc.execute("PF('success').show()");
-
 		} else {
 			RequestContext rc = RequestContext.getCurrentInstance();
 			rc.execute("PF('fail').show()");

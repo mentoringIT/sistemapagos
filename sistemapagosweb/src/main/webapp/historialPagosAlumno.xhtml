@@ -7,12 +7,13 @@
 
 <h:head></h:head>
 <body>
-	<ui:include src="header.xhtml" />
-	<p:messages id="messages" globalOnly="true" showDetail="true" closable="true"/>
+	<!-- 	<ui:include src="header.xhtml" /> -->
+	<p:messages id="messages" globalOnly="true" showDetail="true"
+		closable="true" />
 	<h:form id="form">
 		<div>
 			<pm:fieldset>
-				<h:panelGrid id="student"  columns="2" cellpadding="5">
+				<h:panelGrid id="student" columns="2" cellpadding="5">
 					<p:outputLabel value="Alumno:" />
 					<p:outputLabel value="#{StudentList.nameStudent}" />
 				</h:panelGrid>
@@ -62,16 +63,51 @@
 
 		<p:toolbar>
 			<f:facet name="left">
-				<p:commandButton value="Generar pago(s)" 
-				actionListener="#{StudentList.createReport()}" onclick="PF().show" icon="ui-icon-document"/>
+				<p:commandButton value="Generar pago(s)"
+					actionListener="#{StudentList.createReport()}"
+					icon="ui-icon-document" />
 			</f:facet>
-			<f:facet name="left">
-					<p:commandButton value="Enviar" action="enviarCorreoPPA" />
-				</f:facet>
 			<f:facet name="right">
 				<p:commandButton value="Atras" action="back" />
 			</f:facet>
 		</p:toolbar>
+
+		<p:dialog id="rExito" widgetVar="exito" closable="false" modal="true"
+			header="Mensaje" height="50px" width="350px" draggable="false"
+			resizable="false">
+			<p:fieldset>
+				<p:outputLabel value="Recibo(s) generado(s) con exito" />
+			</p:fieldset>
+
+			<f:facet name="footer">
+				<p:commandButton value="Enviar" action="send" />
+				<p:commandButton value="Cancelar" onclick="PF().hide()" />
+			</f:facet>
+		</p:dialog>
+
+		<p:dialog id="rVacio" widgetVar="vacio" closable="false" modal="true"
+			header="Mensaje" height="50px" width="350px" draggable="false"
+			resizable="false">
+			<p:fieldset>
+				<p:outputLabel value="No hay recibos selecionados" />
+			</p:fieldset>
+
+			<f:facet name="footer">
+				<p:commandButton value="Aceptar" onclick="PF().hide()" />
+			</f:facet>
+		</p:dialog>
+
+		<p:dialog id="rFallido" widgetVar="fallido" closable="false"
+			modal="true" header="Mensaje" height="50px" width="350px"
+			draggable="false" resizable="false">
+			<p:fieldset>
+				<p:outputLabel value="No se han podido generar los recibos" />
+			</p:fieldset>
+
+			<f:facet name="footer">
+				<p:commandButton value="Aceptar" onclick="PF().hide()" />
+			</f:facet>
+		</p:dialog>
 
 	</h:form>
 </body>
