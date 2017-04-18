@@ -13,6 +13,7 @@ import java.util.List;
 import java.util.Properties;
 
 import javax.faces.application.FacesMessage;
+import javax.faces.application.NavigationHandler;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 import javax.faces.context.ExternalContext;
@@ -68,6 +69,7 @@ public class CourseBean implements Serializable {
 	private Date date_payment = new Date();
 	private String date_payment2;
 	private Boolean validation = false;
+	private Boolean paymentStatus = false;
 
 	private String from;
 	private String subject;
@@ -186,7 +188,7 @@ public class CourseBean implements Serializable {
 
 				InputStream is = new ByteArrayInputStream(this.outputStream.toByteArray());
 				media = new DefaultStreamedContent(is, "application/pdf", "Recibo");
-				
+
 				// -------------------------------------------------------
 				// byte[] b =
 				// JasperExportManager.exportReportToPdf(jasperPrint);
@@ -201,8 +203,9 @@ public class CourseBean implements Serializable {
 				// res.getCharacterEncoding();
 				// FacesContext.getCurrentInstance().responseComplete();
 				// -------------------------------------------------------
-//				FacesContext.getCurrentInstance().addMessage(null,
-//						new FacesMessage(FacesMessage.SEVERITY_INFO, "Info", "Tiket generado"));
+				// FacesContext.getCurrentInstance().addMessage(null,
+				// new FacesMessage(FacesMessage.SEVERITY_INFO, "Info", "Tiket
+				// generado"));
 				listaR.clear();
 				System.out.println("hecho");
 				RequestContext rc = RequestContext.getCurrentInstance();
@@ -217,7 +220,7 @@ public class CourseBean implements Serializable {
 			RequestContext rc = RequestContext.getCurrentInstance();
 			rc.execute("PF('genPago').show()");
 			e.printStackTrace();
-			
+
 		}
 
 	}
@@ -244,18 +247,34 @@ public class CourseBean implements Serializable {
 
 				}
 				this.num_payment = this.num_payment + 1;
-				this.remaining = this.totalCourse - this.totalPayment;
+				this.remaining = this.totalCourse - this.totalPayment;				
+				
 			} else {
 				this.num_payment = 1;
 				this.total = 0.0;
 			}
+			
+			status(this.totalCourse.doubleValue(), this.totalPayment.doubleValue());
 
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-
 	}
+
+	private void status(double n1, double n2) {
+		RequestContext rc = RequestContext.getCurrentInstance();
+		if (n1 == n2 && n2 != 0.0){
+			this.paymentStatus = true;			
+			rc.execute("PF('status').show()");
+			System.out.println("pagado");
+		} else {
+			this.paymentStatus = false;
+			rc.update("form1");
+		}
+	}
+
+	
 
 	// controla el envio del correo
 	public boolean controller(Correo c) {
@@ -319,6 +338,12 @@ public class CourseBean implements Serializable {
 			rc.execute("PF('fail').show()");
 		}
 
+	}
+	
+	public void refresh(){
+		FacesContext fc = FacesContext.getCurrentInstance();
+		NavigationHandler navigHandler = fc.getApplication().getNavigationHandler();
+		navigHandler.handleNavigation(fc, null, "/pagoAlumnoExistente.xhtml?faces-redirect=true");
 	}
 
 	// getters y setters
@@ -537,6 +562,14 @@ public class CourseBean implements Serializable {
 
 	public void setMedia(StreamedContent media) {
 		this.media = media;
+	}
+
+	public Boolean getPaymentStatus() {
+		return paymentStatus;
+	}
+
+	public void setPaymentStatus(Boolean paymentStatus) {
+		this.paymentStatus = paymentStatus;
 	}
 
 }
