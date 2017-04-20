@@ -21,6 +21,7 @@ import javax.faces.context.FacesContext;
 
 import javax.mail.BodyPart;
 import javax.mail.Message;
+import javax.mail.PasswordAuthentication;
 import javax.mail.Session;
 import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
@@ -28,6 +29,7 @@ import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMultipart;
 import javax.mail.util.ByteArrayDataSource;
+import javax.servlet.http.HttpServletRequest;
 
 import org.primefaces.context.RequestContext;
 import org.primefaces.model.DefaultStreamedContent;
@@ -70,6 +72,7 @@ public class CourseBean implements Serializable {
 	private String date_payment2;
 	private Boolean validation = false;
 	private Boolean paymentStatus = false;
+	private Boolean valData = false;
 
 	private String from;
 	private String subject;
@@ -230,6 +233,7 @@ public class CourseBean implements Serializable {
 		this.totalCourse = 0.0;
 		this.totalPayment = 0.0;
 		this.remaining = 0.0;
+		this.amount = 0.0;
 		try {
 
 			List<PaymentDTO> listaP;
@@ -252,6 +256,7 @@ public class CourseBean implements Serializable {
 			} else {
 				this.num_payment = 1;
 				this.total = 0.0;
+				this.amount = 0.0;
 			}
 			
 			status(this.totalCourse.doubleValue(), this.totalPayment.doubleValue());
@@ -267,27 +272,37 @@ public class CourseBean implements Serializable {
 		if (n1 == n2 && n2 != 0.0){
 			this.paymentStatus = true;			
 			rc.execute("PF('status').show()");
-			System.out.println("pagado");
+			
 		} else {
 			this.paymentStatus = false;
 			rc.update("form1");
 		}
 	}
 
-	
+	public void c(){
+		RequestContext rc = RequestContext.getCurrentInstance();
+		rc.execute("PF('status').hide()");
+	}
 
 	// controla el envio del correo
-	public boolean controller(Correo c) {
+	private boolean controller(Correo c) {
 
 		try {
-			Properties p = new Properties();
-			p.put("mail.smtp.host", "smtp.gmail.com");
-			p.setProperty("mail.smtp.starttls.enable", "true");
-			p.setProperty("mail.smtp.port", "587");
-			p.setProperty("mail.smtp.user", c.getUserEmail());
-			p.setProperty("mail.smtp.auth", "true");
-
-			Session s = Session.getDefaultInstance(p, null);
+			
+			Properties props = new Properties();
+			props.setProperty("mail.smtp.host", "smtp.outlook.com"); // Depende del servidor 
+			props.setProperty("mail.smtp.starttls.enable", "true"); // Depende del servidor
+			props.setProperty("mail.smtp.port", "587"); // Puede ser otro puerto
+			props.setProperty("mail.smtp.user", "contacto@mentoringit.com.mx");
+			props.setProperty("mail.smtp.auth", "true"); // Depende del servidor
+			
+	        Session s = Session.getInstance(props,
+	          new javax.mail.Authenticator() {
+	            protected PasswordAuthentication getPasswordAuthentication() {
+	                return new PasswordAuthentication(c.getUserEmail(), c.getPassword());
+	            }
+	          });
+			
 			BodyPart texto = new MimeBodyPart();
 			BodyPart adjunto;
 			MimeMultipart m = new MimeMultipart();
@@ -312,6 +327,7 @@ public class CourseBean implements Serializable {
 			t.connect(c.getUserEmail(), c.getPassword());
 			t.sendMessage(mensaje, mensaje.getAllRecipients());
 			t.close();
+//			Transport.send(mensaje);
 
 			return true;
 		} catch (Exception e) {
@@ -324,8 +340,8 @@ public class CourseBean implements Serializable {
 	// establece los valores para el envio del correo
 	public void sendMail() {
 		Correo c = new Correo();
-		c.setPassword("lbmenluywbcytxeq");
-		c.setUserEmail("edflores830@gmail.com");
+		c.setPassword("Zaq12wsx123");
+		c.setUserEmail("contacto@mentoringit.com.mx");
 		c.setSubject(this.subject);
 		c.setFrom(this.from.trim());
 		c.setMessage(this.message);
@@ -340,11 +356,6 @@ public class CourseBean implements Serializable {
 
 	}
 	
-	public void refresh(){
-		FacesContext fc = FacesContext.getCurrentInstance();
-		NavigationHandler navigHandler = fc.getApplication().getNavigationHandler();
-		navigHandler.handleNavigation(fc, null, "/pagoAlumnoExistente.xhtml?faces-redirect=true");
-	}
 
 	// getters y setters
 
@@ -409,7 +420,19 @@ public class CourseBean implements Serializable {
 	}
 
 	public void setIdCourse(Integer idCourse) {
+		Integer value1 = 0;
+		
+		if(!value1.equals(idCourse)){
+			this.validation = false;
+		}
+		this.total = 0.0;
+		this.amount = 0.0;
+		this.totalCourse = 0.0;
+		this.totalPayment = 0.0;
+		this.remaining = 0.0;
+		
 		this.idCourse = idCourse;
+		this.valData = true;
 	}
 
 	public Integer getIdStudent() {
@@ -505,6 +528,7 @@ public class CourseBean implements Serializable {
 
 	public void setIdProduct(Integer idProduct) {
 		this.idProduct = idProduct;
+		this.valData = false;
 	}
 
 	public String getFrom() {
@@ -570,6 +594,14 @@ public class CourseBean implements Serializable {
 
 	public void setPaymentStatus(Boolean paymentStatus) {
 		this.paymentStatus = paymentStatus;
+	}
+
+	public Boolean getValData() {
+		return valData;
+	}
+
+	public void setValData(Boolean valData) {
+		this.valData = valData;
 	}
 
 }

@@ -208,7 +208,7 @@ public class NewStudentBean implements Serializable {
 	}
 
 	// controla el envio del correo
-	public boolean controller(Correo c) {
+	private boolean controller(Correo c) {
 
 		try {
 			Properties p = new Properties();
