@@ -120,7 +120,7 @@
 					max="#{CourseList.total}"
 					disabled="#{CourseList.idProduct eq 0 or CourseList.idProduct eq null or CourseList.valData eq true}">
 					<f:validateDoubleRange minimum="1.0" />
-					<p:ajax update="@this" />
+					<p:ajax process=":form1:amount" update="@this" />
 				</p:spinner>
 				<p:message for="amount" display="text"
 					style="width:230px; font-size:14px;" />

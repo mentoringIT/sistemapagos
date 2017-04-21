@@ -420,19 +420,18 @@ public class CourseBean implements Serializable {
 	}
 
 	public void setIdCourse(Integer idCourse) {
-		Integer value1 = 0;
-		
-		if(!value1.equals(idCourse)){
+			
+		if(!idCourse.equals(this.idCourse)){
 			this.validation = false;
-		}
-		this.total = 0.0;
-		this.amount = 0.0;
-		this.totalCourse = 0.0;
-		this.totalPayment = 0.0;
-		this.remaining = 0.0;
-		
+			this.total = 0.0;
+			this.amount = 0.0;
+			this.totalCourse = 0.0;
+			this.totalPayment = 0.0;
+			this.remaining = 0.0;
+			this.valData = true;
+			}
 		this.idCourse = idCourse;
-		this.valData = true;
+		
 	}
 
 	public Integer getIdStudent() {
