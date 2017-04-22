@@ -5,7 +5,7 @@ import java.util.Properties;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.IOException;
+
 import java.io.InputStream;
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
@@ -14,14 +14,15 @@ import java.util.Date;
 
 import javax.activation.DataHandler;
 import javax.activation.DataSource;
-import javax.activation.FileDataSource;
-import javax.faces.application.FacesMessage;
+
+
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
-import javax.faces.context.ExternalContext;
+
 import javax.faces.context.FacesContext;
 import javax.mail.BodyPart;
 import javax.mail.Message;
+import javax.mail.PasswordAuthentication;
 import javax.mail.Session;
 import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
@@ -36,7 +37,7 @@ import org.primefaces.model.StreamedContent;
 
 import mx.com.mentoringit.model.dto.Correo;
 import mx.com.mentoringit.model.dto.CourseDTO;
-import mx.com.mentoringit.model.dto.PSPDTO;
+
 import mx.com.mentoringit.model.dto.PaymentDTO;
 import mx.com.mentoringit.model.dto.ProductDTO;
 import mx.com.mentoringit.model.dto.ReportData;
@@ -79,6 +80,7 @@ public class NewStudentBean implements Serializable {
 	private String formatDate1;
 	private String formatDate2;
 	private Boolean validation = false;
+	
 
 	private ByteArrayOutputStream outputStream = null;
 	private StreamedContent media = null;
@@ -117,7 +119,11 @@ public class NewStudentBean implements Serializable {
 
 		try {
 			listaD = this.newStudentService.startDates(this.idCourse, getFormatDate1(), getFormatDate2());
-			this.validation = true;
+			if(this.listaD.size() != 0){
+				this.validation = true;
+			}else{
+				this.validation = false;
+			}
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -142,16 +148,12 @@ public class NewStudentBean implements Serializable {
 			this.newStudentService.insertPayment(payment);
 			RequestContext rc = RequestContext.getCurrentInstance();
 			rc.execute("PF('regExito').show()");
-			// FacesContext.getCurrentInstance().addMessage(null,
-			// new FacesMessage(FacesMessage.SEVERITY_INFO, "Info", "Pago
-			// registrado con exito"));
+			
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			RequestContext rc = RequestContext.getCurrentInstance();
 			rc.execute("PF('regFallido').show()");
-			// FacesContext.getCurrentInstance().addMessage(null,
-			// new FacesMessage(FacesMessage.SEVERITY_WARN, "Warning", "No se ha
-			// podido registrar el pago"));
+			
 			e.printStackTrace();
 		}
 
@@ -188,12 +190,9 @@ public class NewStudentBean implements Serializable {
 
 				InputStream is = new ByteArrayInputStream(this.outputStream.toByteArray());
 				media = new DefaultStreamedContent(is, "application/pdf", "Recibo");
-
-				// FacesContext.getCurrentInstance().addMessage(null,
-				// new FacesMessage(FacesMessage.SEVERITY_INFO, "Info", "Tiket
-				// generado"));
+				
 				listaR.clear();
-//				System.out.println("hecho");
+
 				RequestContext rc = RequestContext.getCurrentInstance();
 				rc.execute("PF('detail').show()");
 			} else {
@@ -211,14 +210,20 @@ public class NewStudentBean implements Serializable {
 	private boolean controller(Correo c) {
 
 		try {
-			Properties p = new Properties();
-			p.put("mail.smtp.host", "smtp.gmail.com");
-			p.setProperty("mail.smtp.starttls.enable", "true");
-			p.setProperty("mail.smtp.port", "587");
-			p.setProperty("mail.smtp.user", c.getUserEmail());
-			p.setProperty("mail.smtp.auth", "true");
+			Properties props = new Properties();
+			props.setProperty("mail.smtp.host", "gator4105.hostgator.com"); // Depende del servidor 
+			props.setProperty("mail.smtp.starttls.enable", "true"); // Depende del servidor
+			props.setProperty("mail.smtp.port", "587"); // Puede ser otro puerto
+			props.setProperty("mail.smtp.user", "contacto@mentoringit.com.mx");
+			props.setProperty("mail.smtp.auth", "true"); // Depende del servidor
+			
+	        Session s = Session.getInstance(props,
+	          new javax.mail.Authenticator() {
+	            protected PasswordAuthentication getPasswordAuthentication() {
+	                return new PasswordAuthentication(c.getUserEmail(), c.getPassword());
+	            }
+	          });
 
-			Session s = Session.getDefaultInstance(p, null);
 			BodyPart texto = new MimeBodyPart();
 			BodyPart adjunto;
 			MimeMultipart m = new MimeMultipart();
@@ -255,8 +260,8 @@ public class NewStudentBean implements Serializable {
 	// establece los valores para el envio del correo
 	public void sendMail() {
 		Correo c = new Correo();
-		c.setPassword("lbmenluywbcytxeq");
-		c.setUserEmail("edflores830@gmail.com");
+		c.setPassword("Zaq12wsx123");
+		c.setUserEmail("contacto@mentoringit.com.mx");
 		c.setSubject(this.subject);
 		c.setFrom(this.from.trim());
 		c.setMessage(this.message);
@@ -385,6 +390,21 @@ public class NewStudentBean implements Serializable {
 	}
 
 	public void setIdCourse(Integer idCourse) {
+		
+		if(!idCourse.equals(this.idCourse)){
+			this.validation = false;
+			this.name = null;
+			this.pLastName = null;
+			this.mLastName = null;
+			this.tel = null;
+			this.email = null;
+			this.total = 0.0;
+			this.amount = 0.0;
+			this.num_payment = 1;
+			this.idStudent = null;
+			this.idProduct = null;
+			this.listaD = null;
+			}
 		this.idCourse = idCourse;
 	}
 

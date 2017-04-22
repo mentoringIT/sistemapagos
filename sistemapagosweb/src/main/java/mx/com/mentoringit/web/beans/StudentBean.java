@@ -13,7 +13,6 @@ import java.util.Properties;
 import javax.activation.DataHandler;
 import javax.activation.DataSource;
 
-import javax.faces.application.FacesMessage;
 
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
@@ -21,6 +20,7 @@ import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
 import javax.mail.BodyPart;
 import javax.mail.Message;
+import javax.mail.PasswordAuthentication;
 import javax.mail.Session;
 import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
@@ -57,7 +57,7 @@ public class StudentBean implements Serializable {
 	private List<PSPDTO> filterPayments;
 	private PSPDTO detail;
 
-	private Integer idCourse;
+	private Integer idCourse = null;
 	private Integer idStudent;
 	private Integer idProduct;
 	private Date date1 = new Date();
@@ -68,9 +68,8 @@ public class StudentBean implements Serializable {
 	private Double totalCourse = 0.0;
 	private Double totalPayment = 0.0;
 	private Double remaining = 0.0;
-	private Boolean flag;
-	private String messageSend = "hola";
-
+	private Boolean validation = false;
+	
 	private String from;
 	private String subject;
 	private String message;
@@ -103,6 +102,12 @@ public class StudentBean implements Serializable {
 	public void startDates() {
 		try {
 			listaD = this.studentService.startDates(idCourse, getFormatDate1(), getFormatDate2());
+			if(this.listaD.size() != 0){
+				this.validation = true;
+			}else{
+				this.validation = false;
+			}
+			
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -116,28 +121,36 @@ public class StudentBean implements Serializable {
 		this.remaining = 0.0;
 
 		try {
+			if(this.idProduct != null){
 			listaPsp = this.studentService.paymentByStudent(idStudent, idProduct);
+			
+				if (listaPsp.size() != 0) {
+					for (int i = 0; i < listaPsp.size(); i++) {
+						if (i == 0) {
 
-			if (listaPsp.size() != 0) {
-				for (int i = 0; i < listaPsp.size(); i++) {
-					if (i == 0) {
-
-						this.totalCourse = listaPsp.get(i).getTotalCourse();
-						this.nameStudent = listaPsp.get(i).getStudentName();
+							this.totalCourse = listaPsp.get(i).getTotalCourse();
+							this.nameStudent = listaPsp.get(i).getStudentName();
+						}
+						this.totalPayment = this.totalPayment + listaPsp.get(i).getAmountPayment();
 					}
-					this.totalPayment = this.totalPayment + listaPsp.get(i).getAmountPayment();
+					this.remaining = this.totalCourse - this.totalPayment;					
+					return "consult";
+				} else {
+					RequestContext.getCurrentInstance().execute("PF('no_payments').show()");
+					return "";
 				}
-			} else {
-				this.nameStudent = this.studentService.selectStudent(idStudent).getName();
+			}else{
+				RequestContext.getCurrentInstance().execute("PF('seleccionar').show()");
+				return "";
 			}
-
-			this.remaining = this.totalCourse - this.totalPayment;
-
+		
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+			return "";	
 		}
-		return "consult";
+		
+		
 	}
 
 	// crea los tikets de pago
@@ -185,25 +198,17 @@ public class StudentBean implements Serializable {
 					listaR.clear();
 
 				}
-//				this.temListaPsp.clear();
-//				FacesContext.getCurrentInstance().addMessage(null,
-//						new FacesMessage(FacesMessage.SEVERITY_INFO, "Info", "Tiket(s) generado(s)"));
+				// this.temListaPsp.clear();
 				RequestContext rc = RequestContext.getCurrentInstance();
 				rc.execute("PF('exito').show()");
 
-				System.out.println("hecho " + m.getBodyPart(0).getFileName() + ":" + m.getCount());
-
 			} else {
-//				FacesContext.getCurrentInstance().addMessage(null,
-//						new FacesMessage(FacesMessage.SEVERITY_WARN, "Info", "No se ha seleccionado ningun pago"));
 				RequestContext rc = RequestContext.getCurrentInstance();
 				rc.execute("PF('vacio').show()");
 
 			}
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
-//			FacesContext.getCurrentInstance().addMessage(null,
-//					new FacesMessage(FacesMessage.SEVERITY_ERROR, "Info", "No se han podido generar los tikets"));
 			RequestContext rc = RequestContext.getCurrentInstance();
 			rc.execute("PF('fallido').show()");
 			e.printStackTrace();
@@ -213,8 +218,8 @@ public class StudentBean implements Serializable {
 	// establece los valores para el envio del correo
 	public void sendMail() {
 		Correo c = new Correo();
-		c.setPassword("lbmenluywbcytxeq");
-		c.setUserEmail("edflores830@gmail.com");
+		c.setPassword("Zaq12wsx123");
+		c.setUserEmail("contacto@mentoringit.com.mx");
 		c.setSubject(this.subject);
 		c.setFrom(this.from.trim());
 		c.setMessage(this.message);
@@ -233,15 +238,21 @@ public class StudentBean implements Serializable {
 	private boolean controller(Correo c) {
 
 		try {
-			Properties p = new Properties();
-			p.put("mail.smtp.host", "smtp.gmail.com");
-			p.setProperty("mail.smtp.starttls.enable", "true");
-			p.setProperty("mail.smtp.port", "587");
-			p.setProperty("mail.smtp.user", c.getUserEmail());
-			p.setProperty("mail.smtp.auth", "true");
+			Properties props = new Properties();
+			props.setProperty("mail.smtp.host", "gator4105.hostgator.com"); // Depende del servidor 
+			props.setProperty("mail.smtp.starttls.enable", "true"); // Depende del servidor
+			props.setProperty("mail.smtp.port", "587"); // Puede ser otro puerto
+			props.setProperty("mail.smtp.user", "contacto@mentoringit.com.mx");
+			props.setProperty("mail.smtp.auth", "true"); // Depende del servidor
+			
+	        Session s = Session.getInstance(props,
+	          new javax.mail.Authenticator() {
+	            protected PasswordAuthentication getPasswordAuthentication() {
+	                return new PasswordAuthentication(c.getUserEmail(), c.getPassword());
+	            }
+	          });
 
-			Session s = Session.getDefaultInstance(p, null);
-			BodyPart texto = new MimeBodyPart();
+	        BodyPart texto = new MimeBodyPart();
 			// BodyPart adjunto;
 			// MimeMultipart m = new MimeMultipart();
 
@@ -272,7 +283,7 @@ public class StudentBean implements Serializable {
 			t.connect(c.getUserEmail(), c.getPassword());
 			t.sendMessage(mensaje, mensaje.getAllRecipients());
 			t.close();
-			
+
 			return true;
 		} catch (Exception e) {
 
@@ -322,6 +333,14 @@ public class StudentBean implements Serializable {
 	}
 
 	public void setIdCourse(Integer idCourse) {
+
+		if (!idCourse.equals(this.idCourse)) {
+			this.validation = false;
+			this.idStudent = null;
+			this.idProduct = null;
+			this.listaD = null;
+		}
+
 		this.idCourse = idCourse;
 	}
 
@@ -479,12 +498,12 @@ public class StudentBean implements Serializable {
 		this.message = message;
 	}
 
-	public String getMessageSend() {
-		return messageSend;
+	public Boolean getValidation() {
+		return validation;
 	}
 
-	public void setMessageSend(String messageSend) {
-		this.messageSend = messageSend;
+	public void setValidation(Boolean validation) {
+		this.validation = validation;
 	}
 
 }

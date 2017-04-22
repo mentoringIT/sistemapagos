@@ -7,7 +7,7 @@
 
 <h:head></h:head>
 <body>
-	<!-- 	<ui:include src="header.xhtml" /> -->
+		<ui:include src="header.xhtml" />
 	<p:messages id="messages" globalOnly="true" showDetail="true"
 		closable="true" />
 	<h:form id="form">
@@ -65,10 +65,10 @@
 			<f:facet name="left">
 				<p:commandButton value="Generar pago(s)"
 					actionListener="#{StudentList.createReport()}"
-					icon="ui-icon-document" />
+					icon="ui-icon-document" tabindex="1"/>
 			</f:facet>
 			<f:facet name="right">
-				<p:commandButton value="Atras" action="back" />
+				<p:commandButton value="Atras" action="back" tabindex="2"/>
 			</f:facet>
 		</p:toolbar>
 

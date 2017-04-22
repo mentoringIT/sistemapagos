@@ -18,7 +18,7 @@
 
 </h:head>
 <h:body>
-	<!-- 	<ui:include src="header.xhtml" /> -->
+		<ui:include src="header.xhtml" />
 	<p:messages id="messages" globalOnly="true" showDetail="true"
 		closable="true" />
 	<h:form id="form1" styleClass="center">
@@ -31,14 +31,14 @@
 				<p:outputLabel value="Curso" />
 				<p:selectOneMenu id="course" value="#{CourseList.idCourse}"
 					filter="true" filterMatchMode="contains" height="100"
-					required="true" requiredMessage="campo obligatorio">
+					required="true" requiredMessage="campo obligatorio" tabindex="1">
 
 					<f:selectItem itemLabel="--Seleccione Curso--"
 						noSelectionOption="true" />
 					<f:selectItems value="#{CourseList.listaC}" var="c"
 						itemValue="#{c.id}" itemLabel="#{c.name}" />	
 					<p:ajax process=":form1:course"
-						update=":form1:startsDates :form1:data :form1:totals" />	
+						update=":form1:startsDates :form1:data :form1:totals :form1" />	
 				</p:selectOneMenu>
 				<p:message for="course" display="text"
 					style="width:150px; font-size:14px;" />
@@ -47,16 +47,16 @@
 				<h:panelGrid id="startsDates" columns="2" cellpadding="5">
 					<p:calendar id="date1" value="#{CourseList.date1}" navigator="true"
 						showOn="button"
-						disabled="#{CourseList.idCourse eq 0 or CourseList.idCourse eq null}" />
+						disabled="#{CourseList.idCourse eq 0 or CourseList.idCourse eq null}" tabindex="2"/>
 
 					<p:calendar id="date2" value="#{CourseList.date2}" navigator="true"
 						showOn="button"
-						disabled="#{CourseList.idCourse eq 0 or CourseList.idCourse eq null}" />
+						disabled="#{CourseList.idCourse eq 0 or CourseList.idCourse eq null}" tabindex="3"/>
 
 					<p:selectOneMenu id="fechas" value="#{CourseList.idProduct}"
 						disabled="#{CourseList.idCourse eq 0 or CourseList.idCourse eq null}"
 						required="#{CourseList.validation}"
-						requiredMessage="campo obligatorio">
+						requiredMessage="campo obligatorio" tabindex="4">
 						<f:selectItem itemLabel="--Fechas de inicio--" />
 						<f:selectItems value="#{CourseList.listaD}" var="d"
 							itemValue="#{d.id}" itemLabel="#{d.start_date}" />
@@ -65,7 +65,7 @@
 
 					<p:commandButton id="busqueda" value="buscar" icon="ui-icon-search"
 						actionListener="#{CourseList.startDates}" update="fechas" 
-						disabled="#{CourseList.idCourse eq 0 or CourseList.idCourse eq null}">
+						disabled="#{CourseList.idCourse eq 0 or CourseList.idCourse eq null}" tabindex="5">
 					
 					</p:commandButton>
 
@@ -80,7 +80,7 @@
 				<p:selectOneMenu id="student" value="#{CourseList.idStudent}"
 					filter="true" filterMatchMode="contains" height="100"
 					required="true" requiredMessage="campo obligatorio"
-					disabled="#{CourseList.idProduct eq 0 or CourseList.idProduct eq null or CourseList.valData eq true}">
+					disabled="#{CourseList.idProduct eq 0 or CourseList.idProduct eq null}" tabindex="6">
 
 					<f:selectItem itemLabel="--Seleccione Alumno--"
 						noSelectionOption="true" />
@@ -95,17 +95,17 @@
 				<p:outputLabel value="Fecha de pago" />
 				<p:calendar id="paymentDate" value="#{CourseList.date_payment}"
 					showOn="button" required="true"
-					disabled="#{CourseList.idProduct eq 0 or CourseList.idProduct eq null or CourseList.valData eq true}" />
+					disabled="#{CourseList.idProduct eq 0 or CourseList.idProduct eq null}" tabindex="7"/>
 				<p:message for="paymentDate" display="text"
 					style="width:300px; font-size:14px;" />
 
-
+				
 				<p:outputLabel value="Total del curso" />
 				<p:spinner id="total1" value="#{CourseList.total}" prefix="$"
 					min="0"
-					disabled="#{CourseList.totalCourse > 0 or CourseList.idProduct eq 0 or CourseList.idProduct eq null or CourseList.valData eq true}"
+					disabled="#{CourseList.totalCourse > 0 or CourseList.idProduct eq 0 or CourseList.idProduct eq null}"
 					required="true"
-					validatorMessage="el valor tiene que ser mayor que 0.0">
+					validatorMessage="el valor tiene que ser mayor que 0.0" tabindex="8">
 					<f:validateDoubleRange minimum="1.0" />
 					<p:ajax process=":form1:total1" update=":form1:amount" />
 				</p:spinner>
@@ -118,9 +118,9 @@
 					min="0" required="true"
 					validatorMessage="el valor tiene que ser mayor que 0.0"
 					max="#{CourseList.total}"
-					disabled="#{CourseList.idProduct eq 0 or CourseList.idProduct eq null or CourseList.valData eq true}">
+					disabled="#{CourseList.idProduct eq 0 or CourseList.idProduct eq null}" tabindex="9">
 					<f:validateDoubleRange minimum="1.0" />
-					<p:ajax process=":form1:amount" update="@this" />
+					<p:ajax update="@this" />
 				</p:spinner>
 				<p:message for="amount" display="text"
 					style="width:230px; font-size:14px;" />
@@ -129,9 +129,9 @@
 				<p:spinner id="numPayment" value="#{CourseList.num_payment}" min="1"
 					required="true"
 					validatorMessage="el valor tiene que ser mayor que 0"
-					disabled="#{CourseList.idProduct eq 0 or CourseList.idProduct eq null or CourseList.valData eq true}">
+					disabled="#{CourseList.idProduct eq 0 or CourseList.idProduct eq null}" tabindex="10">
 					<f:validateLongRange minimum="1" />
-					<p:ajax process=":form1:numPayment" update="@all" />
+					<p:ajax update="@this" />
 				</p:spinner>
 				<p:message for="numPayment" display="text"
 					style="width:270px; font-size:14px;" />
@@ -139,7 +139,7 @@
 				<p:outputLabel value="Forma de pago" />
 				<p:selectOneMenu id="typePayment" value="#{CourseList.type_payment}"
 					required="true" requiredMessage="campo obligatorio"
-					disabled="#{CourseList.idProduct eq 0 or CourseList.idProduct eq null or CourseList.valData eq true}">
+					disabled="#{CourseList.idProduct eq 0 or CourseList.idProduct eq null}" tabindex="11">
 					<f:selectItem itemLabel="--Seleccione opcion--"
 						noSelectionOption="true" />
 					<f:selectItem itemValue="Tarjeta" itemLabel="Tarjeta" />
@@ -148,6 +148,7 @@
 				</p:selectOneMenu>
 				<p:message for="typePayment" display="text"
 					style="width:150px; font-size:14px;" />
+					
 			</h:panelGrid>
 
 
@@ -168,12 +169,12 @@
 				<f:facet name="left">
 					<p:commandButton id="gPago" value="Generar pago"
 						actionListener="#{CourseList.createReport()}"
-						onclick="PF().show()"
-						disabled="#{CourseList.paymentStatus == true}" />
+						update="form1"
+						disabled="#{CourseList.paymentStatus == true}" tabindex="12"/>
 				</f:facet>
 
 				<f:facet name="right">
-					<p:commandButton value="Atras" action="back" immediate="true" />
+					<p:commandButton value="Atras" action="back" immediate="true" tabindex="13"/>
 				</f:facet>
 			</p:toolbar>
 		</p:panel>
@@ -217,7 +218,7 @@
 		</p:dialog>
 
 		<p:dialog id="selecionar" widgetVar="selecionar" closable="false"
-			modal="true" header="Mensaje" height="50px" width="350px"
+			modal="true" header="Mensaje" height="60px" width="350px"
 			draggable="false" resizable="false">
 			<p:fieldset>
 				<p:outputLabel value="Debe selecionar una fecha de inicio" />

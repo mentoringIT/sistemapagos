@@ -7,7 +7,7 @@
 
 <h:head></h:head>
 <body>
-<!-- 	<ui:include src="header.xhtml" /> -->
+	<ui:include src="header.xhtml" />
 	<h:form id="form1" styleClass="center">	
 		<p:panel header="Buscar pagos de alumno">
 			<pm:fieldset>
@@ -16,23 +16,24 @@
 					<p:outputLabel value="Curso" />
 					<p:selectOneMenu id="course" value="#{StudentList.idCourse}"
 						filter="true" filterMatchMode="contains" height="100" required="true"
-						requiredMessage="campo obligatorio">
+						requiredMessage="campo obligatorio" tabindex="1">
 						<f:selectItem itemLabel="--Seleccione Curso--" />
 						<f:selectItems value="#{StudentList.listaC}" var="c"
 							itemValue="#{c.id}" itemLabel="#{c.name}" />
-						<p:ajax process=":form1:course" update=":form1:consultaFecha" />
+						<p:ajax process=":form1:course" update=":form1:consultaFecha :form1:student" />
 					</p:selectOneMenu>
-					<p:message for="course" display="text" style="width:150px; font-size:14px;"/>
+					<p:message id="curso" for="course" display="text" style="width:150px; font-size:14px;"/>
 
 					<p:outputLabel value="Fecha inicio" />
 					<h:panelGrid id="consultaFecha" columns="2" cellpadding="5">
 						<p:calendar navigator="true" value="#{StudentList.date1}"
-							showOn="button" disabled="#{StudentList.idCourse eq 0 or StudentList.idCourse eq null}"/>
+							showOn="button" disabled="#{StudentList.idCourse eq 0 or StudentList.idCourse eq null}" tabindex="2"/>
 						<p:calendar navigator="true" value="#{StudentList.date2}"
-							showOn="button" disabled="#{StudentList.idCourse eq 0 or StudentList.idCourse eq null}"/>
+							showOn="button" disabled="#{StudentList.idCourse eq 0 or StudentList.idCourse eq null}" tabindex="3"/>
 
-						<p:selectOneMenu id="fechas" value="#{StudentList.idProduct}"
-						disabled="#{StudentList.idCourse eq 0 or StudentList.idCourse eq null}">
+						<p:selectOneMenu id="fechas" value="#{StudentList.idProduct}" required="#{StudentList.validation}"
+						requiredMessage="campo obligatorio"
+						disabled="#{StudentList.idCourse eq 0 or StudentList.idCourse eq null}" tabindex="4">
 							<f:selectItem itemLabel="--Fechas de inicio--" />
 							<f:selectItems value="#{StudentList.listaD}" var="d"
 								itemLabel="#{d.start_date}" itemValue="#{d.id}" />
@@ -42,34 +43,58 @@
 							<p:commandButton id="busqueda" value="buscar"
 								action="#{StudentList.startDates}" icon="ui-icon-search"
 								update=":form1:fechas"  
-								disabled="#{StudentList.idCourse eq 0 or StudentList.idCourse eq null}"/>
+								disabled="#{StudentList.idCourse eq 0 or StudentList.idCourse eq null}" tabindex="5"/>
 							
 						
 					</h:panelGrid>
-					<p:message for="fechas" display="text" style="width:150px; font-size:14px;"/>
+					<p:message id="date" for="fechas" display="text" style="width:150px; font-size:14px;"/>
 
 					<p:outputLabel value="Nombre del alumno" />
 					<p:selectOneMenu id="student" value="#{StudentList.idStudent}"
 						filter="true" filterMatchMode="contains" height="100"
 						required="true" requiredMessage="campo obligatorio"
-						disabled="#{StudentList.idProduct eq 0 or StudentList.idProduct eq null}">
+						disabled="#{StudentList.idProduct eq 0 or StudentList.idProduct eq null}" tabindex="6">
 
 						<f:selectItem itemLabel="--Seleccione Alumno--" noSelectionOption="true"/>
 						<f:selectItems value="#{StudentList.listaA}" var="s"
 							itemLabel="#{s.name}" itemValue="#{s.id}" />
 					</p:selectOneMenu>
-					<p:message for="student" display="text" style="width:150px; font-size:14px;"/>
+					<p:message id="st" for="student" display="text" style="width:150px; font-size:14px;"/>
 				</h:panelGrid>
 			</pm:fieldset>
 		</p:panel>
 		<p:toolbar>
 			<f:facet name="left">
-				<p:commandButton value="Consultar" action="#{StudentList.paymentsByStudent}" onclick="PF().show()"/>
+				<p:commandButton id="consult" value="Consultar"
+						action="#{StudentList.paymentsByStudent()}"
+						update="form1" tabindex="7"/>
 			</f:facet>
 			<f:facet name="right">
-				<p:commandButton value="Atras" action="back" immediate="true"/>
+				<p:commandButton value="Atras" action="back" immediate="true" tabindex="8"/>
 			</f:facet>
 		</p:toolbar>
+		
+		<p:dialog id="seleccionar" widgetVar="seleccionar" closable="false"
+			modal="true" header="Mensaje" height="60px" width="350px"
+			draggable="false" resizable="false">
+			<p:fieldset>
+				<p:outputLabel value="Debe selecionar una fecha de inicio" />
+			</p:fieldset>
+			<f:facet name="footer">				
+				<p:commandButton value="Aceptar" onclick="PF().hide()" />
+			</f:facet>
+		</p:dialog>
+		
+		<p:dialog id="no_payments" widgetVar="no_payments" closable="false"
+			modal="true" header="Mensaje" height="60px" width="350px"
+			draggable="false" resizable="false">
+			<p:fieldset>
+				<p:outputLabel value="El alumno no tiene pagos realizados" />
+			</p:fieldset>
+			<f:facet name="footer">				
+				<p:commandButton value="Aceptar" onclick="PF().hide()" />
+			</f:facet>
+		</p:dialog>
 
 	</h:form>
 

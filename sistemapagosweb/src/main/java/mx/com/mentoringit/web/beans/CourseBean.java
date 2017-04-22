@@ -129,7 +129,11 @@ public class CourseBean implements Serializable {
 
 		try {
 			listaD = this.courseService.startDates(this.idCourse, getFormatDate1(), getFormatDate2());
-			this.validation = true;
+			if(this.listaD.size() != 0){
+				this.validation = true;
+			}else{
+				this.validation = false;
+			}
 
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
@@ -192,23 +196,6 @@ public class CourseBean implements Serializable {
 				InputStream is = new ByteArrayInputStream(this.outputStream.toByteArray());
 				media = new DefaultStreamedContent(is, "application/pdf", "Recibo");
 
-				// -------------------------------------------------------
-				// byte[] b =
-				// JasperExportManager.exportReportToPdf(jasperPrint);
-				// HttpServletResponse res = (HttpServletResponse)
-				// FacesContext.getCurrentInstance().getExternalContext().getResponse();
-				// res.setContentType("application/pdf");
-				//
-				// res.setHeader("Content-disposition",
-				// "inline;filename=arquivo.pdf");
-				//
-				// res.getOutputStream().write(b);
-				// res.getCharacterEncoding();
-				// FacesContext.getCurrentInstance().responseComplete();
-				// -------------------------------------------------------
-				// FacesContext.getCurrentInstance().addMessage(null,
-				// new FacesMessage(FacesMessage.SEVERITY_INFO, "Info", "Tiket
-				// generado"));
 				listaR.clear();
 				System.out.println("hecho");
 				RequestContext rc = RequestContext.getCurrentInstance();
@@ -279,10 +266,6 @@ public class CourseBean implements Serializable {
 		}
 	}
 
-	public void c(){
-		RequestContext rc = RequestContext.getCurrentInstance();
-		rc.execute("PF('status').hide()");
-	}
 
 	// controla el envio del correo
 	private boolean controller(Correo c) {
@@ -292,7 +275,7 @@ public class CourseBean implements Serializable {
 			Properties props = new Properties();
 			props.setProperty("mail.smtp.host", "gator4105.hostgator.com"); // Depende del servidor 
 			props.setProperty("mail.smtp.starttls.enable", "true"); // Depende del servidor
-			props.setProperty("mail.smtp.port", "25"); // Puede ser otro puerto
+			props.setProperty("mail.smtp.port", "587"); // Puede ser otro puerto
 			props.setProperty("mail.smtp.user", "contacto@mentoringit.com.mx");
 			props.setProperty("mail.smtp.auth", "true"); // Depende del servidor
 			
@@ -327,7 +310,6 @@ public class CourseBean implements Serializable {
 			t.connect(c.getUserEmail(), c.getPassword());
 			t.sendMessage(mensaje, mensaje.getAllRecipients());
 			t.close();
-//			Transport.send(mensaje);
 
 			return true;
 		} catch (Exception e) {
@@ -425,10 +407,10 @@ public class CourseBean implements Serializable {
 			this.validation = false;
 			this.total = 0.0;
 			this.amount = 0.0;
-			this.totalCourse = 0.0;
-			this.totalPayment = 0.0;
-			this.remaining = 0.0;
-			this.valData = true;
+			this.num_payment = 1;
+			this.idStudent = null;
+			this.idProduct = null;
+			this.listaD = null;
 			}
 		this.idCourse = idCourse;
 		

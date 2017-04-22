@@ -17,7 +17,7 @@
 </style>
 </h:head>
 <h:body>
-	<!-- 	<ui:include src="header.xhtml" /> -->
+		<ui:include src="header.xhtml" />
 	<p:messages id="messages" showDetail="true" autoUpdate="true"
 		closable="true" globalOnly="true" />
 	<h:form id="form1" styleClass="center">
@@ -28,13 +28,13 @@
 				<p:outputLabel value="Curso" />
 				<p:selectOneMenu id="course" value="#{NewStudent.idCourse}"
 					filter="true" filterMatchMode="contains" height="100"
-					required="true" requiredMessage="campo obligatorio">
+					required="true" requiredMessage="campo obligatorio" tabindex="1">
 
 					<f:selectItem itemLabel="--Seleccione Curso--"
 						noSelectionOption="true" />
 					<f:selectItems value="#{NewStudent.listaC}" var="c"
 						itemValue="#{c.id}" itemLabel="#{c.name}" />
-					<p:ajax process=":form1:course" update=":form1:consultaFecha" />
+					<p:ajax process=":form1:course" update=":form1:consultaFecha :form1:data :form1" />
 				</p:selectOneMenu>
 				<p:message for="course" display="text"
 					style="width:150px; font-size:14px;" />
@@ -44,15 +44,15 @@
 
 					<p:calendar value="#{NewStudent.date1}" navigator="true"
 						showOn="button"
-						disabled="#{NewStudent.idCourse eq 0 or NewStudent.idCourse eq null}" />
+						disabled="#{NewStudent.idCourse eq 0 or NewStudent.idCourse eq null}" tabindex="2"/>
 
 					<p:calendar value="#{NewStudent.date2}" navigator="true"
 						showOn="button"
-						disabled="#{NewStudent.idCourse eq 0 or NewStudent.idCourse eq null}" />
+						disabled="#{NewStudent.idCourse eq 0 or NewStudent.idCourse eq null}" tabindex="3"/>
 
 					<p:selectOneMenu id="fechas" value="#{NewStudent.idProduct}"
 						disabled="#{NewStudent.idCourse eq 0 or NewStudent.idCourse eq null}"
-						required="#{NewStudent.validation}" requiredMessage="campo requerido">
+						required="#{NewStudent.validation}" requiredMessage="campo requerido" tabindex="4">
 						<f:selectItem itemLabel="--Fechas de inicio--" />
 						<f:selectItems value="#{NewStudent.listaD}" var="d"
 							itemValue="#{d.id}" itemLabel="#{d.start_date}" />
@@ -60,9 +60,9 @@
 					</p:selectOneMenu>
 
 
-					<p:commandButton id="busqueda" value="buscar"
-						action="#{NewStudent.startDates}" update=":form1:fechas"
-						disabled="#{NewStudent.idCourse eq 0 or NewStudent.idCourse eq null}">
+					<p:commandButton id="busqueda" value="buscar" icon="ui-icon-search"
+						action="#{NewStudent.startDates}" update="fechas"
+						disabled="#{NewStudent.idCourse eq 0 or NewStudent.idCourse eq null}" tabindex="5">
 					</p:commandButton>
 
 				</h:panelGrid>
@@ -75,7 +75,7 @@
 				<p:inputText id="name" value="#{NewStudent.name}" required="true"
 					requiredMessage="campo obligatorio"
 					validatorMessage="ingrese solo letras"
-					disabled="#{NewStudent.idProduct eq 0 or NewStudent.idProduct eq null}">
+					disabled="#{NewStudent.idProduct eq 0 or NewStudent.idProduct eq null}" tabindex="6">
 					<f:validateRegex pattern="[a-zA-Z ]+" />
 				</p:inputText>
 				<p:message for="name" display="text"
@@ -85,7 +85,7 @@
 				<p:inputText id="aPaterno" value="#{NewStudent.pLastName}"
 					required="true" requiredMessage="campo obligatorio"
 					validatorMessage="ingrese solo letras"
-					disabled="#{NewStudent.idProduct eq 0 or NewStudent.idProduct eq null}">
+					disabled="#{NewStudent.idProduct eq 0 or NewStudent.idProduct eq null}" tabindex="7">
 					<f:validateRegex pattern="[a-zA-Z ]+" />
 				</p:inputText>
 				<p:message for="aPaterno" display="text"
@@ -95,7 +95,7 @@
 				<p:inputText id="aMaterno" value="#{NewStudent.mLastName}"
 					required="true" requiredMessage="campo obligatorio"
 					validatorMessage="ingrese solo letras"
-					disabled="#{NewStudent.idProduct eq 0 or NewStudent.idProduct eq null}">
+					disabled="#{NewStudent.idProduct eq 0 or NewStudent.idProduct eq null}" tabindex="8">
 					<f:validateRegex pattern="[a-zA-Z ]+" />
 				</p:inputText>
 				<p:message for="aMaterno" display="text"
@@ -105,7 +105,7 @@
 				<p:inputText id="phone" value="#{NewStudent.tel}" required="true"
 					requiredMessage="campo obligatorio"
 					validatorMessage="ingrese solo numeros"
-					disabled="#{NewStudent.idProduct eq 0 or NewStudent.idProduct eq null}">
+					disabled="#{NewStudent.idProduct eq 0 or NewStudent.idProduct eq null}" tabindex="9">
 					<f:validateRegex pattern="[0-9]+" />
 				</p:inputText>
 				<p:message for="phone" display="text"
@@ -115,7 +115,7 @@
 				<p:inputText id="email" value="#{NewStudent.email}" required="true"
 					requiredMessage="campo obligatorio"
 					validatorMessage="correo invalido"
-					disabled="#{NewStudent.idProduct eq 0 or NewStudent.idProduct eq null}">
+					disabled="#{NewStudent.idProduct eq 0 or NewStudent.idProduct eq null}" tabindex="10">
 					<f:validateRegex
 						pattern="^[_A-Za-z0-9-\+]+(\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\.[A-Za-z0-9]+)*(\.[A-Za-z]{2,})$" />
 				</p:inputText>
@@ -125,14 +125,14 @@
 				<p:outputLabel value="Fecha de pago:" />
 				<p:calendar id="datePayment" value="#{NewStudent.paymentDate}"
 					showOn="button" required="true"
-					disabled="#{NewStudent.idProduct eq 0 or NewStudent.idProduct eq null}" />
+					disabled="#{NewStudent.idProduct eq 0 or NewStudent.idProduct eq null}" tabindex="11"/>
 				<p:message for="datePayment" display="text"
 					style="width:150px; font-size:14px;" />
 
 				<p:outputLabel value="Total del curso:" />
 				<p:spinner id="total" value="#{NewStudent.total}" prefix="$" min="0"
 					required="true" validatorMessage="el valor debe ser mayor que 0.0"
-					disabled="#{NewStudent.idProduct eq 0 or NewStudent.idProduct eq null}">
+					disabled="#{NewStudent.idProduct eq 0 or NewStudent.idProduct eq null}" tabindex="12">
 					<f:validateDoubleRange minimum="1.0" />
 					<p:ajax process=":form1:total" update=":form1:amount" />
 				</p:spinner>
@@ -143,7 +143,7 @@
 				<p:spinner id="amount" value="#{NewStudent.amount}" prefix="$"
 					min="0" max="#{NewStudent.total}" required="true"
 					validatorMessage="el valor debe ser mayor que 0.0"
-					disabled="#{NewStudent.idProduct eq 0 or NewStudent.idProduct eq null}">
+					disabled="#{NewStudent.idProduct eq 0 or NewStudent.idProduct eq null}" tabindex="13">
 					<f:validateDoubleRange minimum="1.0" />
 				</p:spinner>
 				<p:message for="amount" display="text"
@@ -152,7 +152,7 @@
 				<p:outputLabel value="No. de Pago" />
 				<p:spinner id="numPayment" value="#{NewStudent.num_payment}" min="1"
 					required="true" validatorMessage="el valor debe ser mayor que 0"
-					disabled="#{NewStudent.idProduct eq 0 or NewStudent.idProduct eq null}">
+					disabled="#{NewStudent.idProduct eq 0 or NewStudent.idProduct eq null}" tabindex="14">
 					<f:validateLongRange minimum="1" />
 				</p:spinner>
 				<p:message for="numPayment" display="text"
@@ -161,7 +161,7 @@
 				<p:outputLabel value="Forma de pago" />
 				<p:selectOneMenu id="typePayment" value="#{NewStudent.type_payment}"
 					required="true" requiredMessage="campo obligatorio"
-					disabled="#{NewStudent.idProduct eq 0 or NewStudent.idProduct eq null}">
+					disabled="#{NewStudent.idProduct eq 0 or NewStudent.idProduct eq null}" tabindex="15">
 					<f:selectItem itemLabel="--Seleccione opcion--"
 						noSelectionOption="true" />
 					<f:selectItem itemValue="Tarjeta" itemLabel="Tarjeta" />
@@ -176,11 +176,11 @@
 		<p:toolbar>
 			<f:facet name="left">
 				<p:commandButton value="Generar pago"
-					actionListener="#{NewStudent.createReport()}" onclick="PF().show()" />
+					actionListener="#{NewStudent.createReport()}" update="form1" tabindex="16"/>
 			</f:facet>
 
 			<f:facet name="right">
-				<p:commandButton value="Atras" action="back" immediate="true" />
+				<p:commandButton value="Atras" action="back" immediate="true" tabindex="17"/>
 			</f:facet>
 		</p:toolbar>
 
@@ -223,7 +223,7 @@
 		</p:dialog>
 		
 		<p:dialog id="selecionar" widgetVar="selecionar" closable="false"
-			modal="true" header="Mensaje" height="50px" width="350px"
+			modal="true" header="Mensaje" height="60px" width="350px"
 			draggable="false" resizable="false">
 			<p:fieldset>
 				<p:outputLabel value="Debe selecionar una fecha de inicio" />
