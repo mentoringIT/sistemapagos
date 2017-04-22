@@ -290,9 +290,9 @@ public class CourseBean implements Serializable {
 		try {
 			
 			Properties props = new Properties();
-			props.setProperty("mail.smtp.host", "smtp.outlook.com"); // Depende del servidor 
+			props.setProperty("mail.smtp.host", "gator4105.hostgator.com"); // Depende del servidor 
 			props.setProperty("mail.smtp.starttls.enable", "true"); // Depende del servidor
-			props.setProperty("mail.smtp.port", "587"); // Puede ser otro puerto
+			props.setProperty("mail.smtp.port", "25"); // Puede ser otro puerto
 			props.setProperty("mail.smtp.user", "contacto@mentoringit.com.mx");
 			props.setProperty("mail.smtp.auth", "true"); // Depende del servidor
 			
