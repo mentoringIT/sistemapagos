@@ -142,7 +142,7 @@
 			<to-view-id>enviarCorreo.xhtml</to-view-id>
 		</navigation-case>
 	</navigation-rule>
-	
+
 	<navigation-rule>
 		<from-view-id>enviarCorreo.xhtml</from-view-id>
 		<navigation-case>
@@ -162,7 +162,7 @@
 			<to-view-id>realizarPagoAlumnos.xhtml</to-view-id>
 		</navigation-case>
 	</navigation-rule>
-	
+
 	<navigation-rule>
 		<from-view-id>enviarCorreoAN.xhtml</from-view-id>
 		<navigation-case>
@@ -202,7 +202,7 @@
 			<to-view-id>pagosPorAlumno.xhtml</to-view-id>
 		</navigation-case>
 	</navigation-rule>
-	
+
 	<navigation-rule>
 		<from-view-id>enviarCorreoPPA.xhtml</from-view-id>
 		<navigation-case>
@@ -236,5 +236,10 @@
 	<application>
 		<el-resolver>org.springframework.web.jsf.el.SpringBeanFacesELResolver</el-resolver>
 	</application>
+
+	<validator>
+		<validator-id>validateSpin</validator-id>
+		<validator-class>mx.com.mentoringit.web.beans.ValidateSpinner</validator-class>
+	</validator>
 
 </faces-config>

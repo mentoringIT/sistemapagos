@@ -134,7 +134,8 @@
 					required="true" validatorMessage="el valor debe ser mayor que 0.0"
 					disabled="#{NewStudent.idProduct eq 0 or NewStudent.idProduct eq null}" tabindex="12">
 					<f:validateDoubleRange minimum="1.0" />
-					<p:ajax process=":form1:total" update=":form1:amount" />
+					<f:validator validatorId="validateSpin"/>
+					<p:ajax process=":form1:total" update=":form1:amount @this" />
 				</p:spinner>
 				<p:message for="total" display="text"
 					style="width:230px; font-size:14px;" />
@@ -145,6 +146,8 @@
 					validatorMessage="el valor debe ser mayor que 0.0"
 					disabled="#{NewStudent.idProduct eq 0 or NewStudent.idProduct eq null}" tabindex="13">
 					<f:validateDoubleRange minimum="1.0" />
+					<f:validator validatorId="validateSpin"/>
+					<p:ajax update="@this" />
 				</p:spinner>
 				<p:message for="amount" display="text"
 					style="width:230px; font-size:14px;" />
