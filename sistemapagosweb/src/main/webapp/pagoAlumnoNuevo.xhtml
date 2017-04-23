@@ -132,9 +132,9 @@
 				<p:outputLabel value="Total del curso:" />
 				<p:spinner id="total" value="#{NewStudent.total}" prefix="$" min="0"
 					required="true" validatorMessage="el valor debe ser mayor que 0.0"
+					converterMessage="caracter invalido"
 					disabled="#{NewStudent.idProduct eq 0 or NewStudent.idProduct eq null}" tabindex="12">
 					<f:validateDoubleRange minimum="1.0" />
-					<f:validator validatorId="validateSpin"/>
 					<p:ajax process=":form1:total" update=":form1:amount @this" />
 				</p:spinner>
 				<p:message for="total" display="text"
@@ -144,9 +144,9 @@
 				<p:spinner id="amount" value="#{NewStudent.amount}" prefix="$"
 					min="0" max="#{NewStudent.total}" required="true"
 					validatorMessage="el valor debe ser mayor que 0.0"
+					converterMessage="caracter invalido"
 					disabled="#{NewStudent.idProduct eq 0 or NewStudent.idProduct eq null}" tabindex="13">
 					<f:validateDoubleRange minimum="1.0" />
-					<f:validator validatorId="validateSpin"/>
 					<p:ajax update="@this" />
 				</p:spinner>
 				<p:message for="amount" display="text"
@@ -155,11 +155,13 @@
 				<p:outputLabel value="No. de Pago" />
 				<p:spinner id="numPayment" value="#{NewStudent.num_payment}" min="1"
 					required="true" validatorMessage="el valor debe ser mayor que 0"
+					converterMessage="caracter invalido"
 					disabled="#{NewStudent.idProduct eq 0 or NewStudent.idProduct eq null}" tabindex="14">
 					<f:validateLongRange minimum="1" />
+					<p:ajax update="@this" />
 				</p:spinner>
 				<p:message for="numPayment" display="text"
-					style="width:270px; font-size:14px;" />
+					style="width:230px; font-size:14px;" />
 
 				<p:outputLabel value="Forma de pago" />
 				<p:selectOneMenu id="typePayment" value="#{NewStudent.type_payment}"

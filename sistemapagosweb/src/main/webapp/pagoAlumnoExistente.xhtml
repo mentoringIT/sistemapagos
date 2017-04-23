@@ -111,33 +111,34 @@
 					disabled="#{CourseList.totalCourse > 0 or CourseList.idProduct eq 0 or CourseList.idProduct eq null}"
 					required="true"
 					validatorMessage="el valor tiene que ser mayor que 0.0"
+					converterMessage="caracter invalido"
 					tabindex="8">
 					<f:validateDoubleRange minimum="1.0" />
-					<f:validator validatorId="validateSpin"/>
 					<p:ajax process=":form1:total1" update=":form1:amount @this" />
 				</p:spinner>
 				<p:message for="total1" display="text"
-					style="width:230px; font-size:14px;" />
+					style="width:270px; font-size:14px;" />
 
 
 				<p:outputLabel value="Pago o Monto" />
 				<p:spinner id="amount" value="#{CourseList.amount}" prefix="$"
 					min="0" required="true"
 					validatorMessage="el valor tiene que ser mayor que 0.0"
+					converterMessage="caracter invalido"
 					max="#{CourseList.total}"
 					disabled="#{CourseList.idProduct eq 0 or CourseList.idProduct eq null}"
 					tabindex="9">
 					<f:validateDoubleRange minimum="1.0" />
-					<f:validator validatorId="validateSpin" />
 					<p:ajax update="@this" />
 				</p:spinner>
-				<p:messages id="messages" for="amount" style="width:300px; font-size:10px;"
-				 />
+				<p:message for="amount" display="text"
+					style="width:270px; font-size:14px;" />
 
 				<p:outputLabel value="No. de Pago" />
 				<p:spinner id="numPayment" value="#{CourseList.num_payment}" min="1"
 					required="true"
 					validatorMessage="el valor tiene que ser mayor que 0"
+					converterMessage="caracter invalido"
 					disabled="#{CourseList.idProduct eq 0 or CourseList.idProduct eq null}"
 					tabindex="10">
 					<f:validateLongRange minimum="1" />

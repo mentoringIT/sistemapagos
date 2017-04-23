@@ -16,9 +16,10 @@ import javax.faces.application.FacesMessage;
 import javax.faces.application.NavigationHandler;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
+import javax.faces.component.UIComponent;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
-
+import javax.faces.validator.ValidatorException;
 import javax.mail.BodyPart;
 import javax.mail.Message;
 import javax.mail.PasswordAuthentication;
@@ -91,7 +92,7 @@ public class CourseBean implements Serializable {
 
 	public CourseBean() {
 	}
-
+		
 	// obtiene todos los cursos
 	public void selectCourse() {
 		try {
@@ -172,7 +173,14 @@ public class CourseBean implements Serializable {
 	public void createReport() {
 		List<ReportData> listaR = new ArrayList<ReportData>();
 		ReportData report = new ReportData();
-
+		Double resto = 0.0;
+		
+		if(this.remaining.doubleValue() != 0.0){
+			resto = this.remaining - this.amount; 
+		}else{
+			resto = this.total - this.amount;
+		}		
+		
 		try {
 			if (this.idProduct != null) {
 				report.setStudentName((this.courseService.selectStudent(this.idStudent)).getName());
@@ -181,7 +189,7 @@ public class CourseBean implements Serializable {
 				report.setAmountPayment(this.amount.toString());
 				report.setDatePayment(getDate_payment2());
 				report.setTypePayment(this.type_payment);
-				report.setRemaining(this.remaining.toString());
+				report.setRemaining(resto.toString());
 				report.setTotalCourse(this.total.toString());
 
 				listaR.add(report);
@@ -197,7 +205,6 @@ public class CourseBean implements Serializable {
 				media = new DefaultStreamedContent(is, "application/pdf", "Recibo");
 
 				listaR.clear();
-				System.out.println("hecho");
 				RequestContext rc = RequestContext.getCurrentInstance();
 				rc.execute("PF('detail').show()");
 
