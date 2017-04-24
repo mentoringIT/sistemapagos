@@ -18,7 +18,7 @@
 
 </h:head>
 <h:body>
-	<ui:include src="header.xhtml" />
+<!-- 	<ui:include src="header.xhtml" /> -->
 	<p:messages id="messages" globalOnly="true" showDetail="true"
 		closable="true" />
 	<h:form id="form1" styleClass="center">
@@ -198,7 +198,7 @@
 			<p:toolbar>
 				<f:facet name="left">
 					<p:commandButton value="Confirmar pago"
-						action="#{CourseList.insertPayment()}" />
+						action="#{CourseList.insertPayment()}" update="form1:totals"/>
 				</f:facet>
 				<f:facet name="right">
 					<p:commandButton value="Cancelar" onclick="PF().hide()" />

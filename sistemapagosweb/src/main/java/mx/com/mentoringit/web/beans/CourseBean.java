@@ -92,7 +92,7 @@ public class CourseBean implements Serializable {
 
 	public CourseBean() {
 	}
-		
+
 	// obtiene todos los cursos
 	public void selectCourse() {
 		try {
@@ -130,9 +130,9 @@ public class CourseBean implements Serializable {
 
 		try {
 			listaD = this.courseService.startDates(this.idCourse, getFormatDate1(), getFormatDate2());
-			if(this.listaD.size() != 0){
+			if (this.listaD.size() != 0) {
 				this.validation = true;
-			}else{
+			} else {
 				this.validation = false;
 			}
 
@@ -146,20 +146,47 @@ public class CourseBean implements Serializable {
 	// inserta el pago en la base
 	public void insertPayment() {
 		PaymentDTO payment = new PaymentDTO();
+		List<PaymentDTO> listaP;
+		Double totalC = 0.0; 
+		Double totalP = 0.0;
+		Double restante = 0.0;
 
-		payment.setStudent_id(this.idStudent);
-		payment.setCourse_id(this.idCourse);
-		payment.setNum_payment(this.num_payment);
-		payment.setAmount_payment(this.amount);
-		payment.setType_payment(this.type_payment);
-		payment.setDate_payment(this.date_payment);
-		payment.setTotal_course(this.total);
-		payment.setProduct_id(this.idProduct);
-
+		
 		try {
-			this.courseService.insertPayment(payment);
-			RequestContext rc = RequestContext.getCurrentInstance();
-			rc.execute("PF('regExito').show()");
+			listaP = this.courseService.selectPayment(this.idStudent, this.idProduct);
+
+			if (!listaP.isEmpty()) {
+				for (PaymentDTO p : listaP) {
+					totalC = p.getTotal_course();
+					totalP = totalP + p.getAmount_payment();
+				}
+				restante = totalC - totalP;
+				
+				this.totalCourse = totalC;
+				this.totalPayment = totalP;
+				this.remaining = restante;
+			}else{
+				this.totalCourse = this.total;
+				this.totalPayment = this.amount;
+				this.remaining = this.totalCourse - this.totalPayment;
+			}			
+
+			if (listaP.isEmpty() || restante != 0.0) {
+				payment.setStudent_id(this.idStudent);
+				payment.setCourse_id(this.idCourse);
+				payment.setNum_payment(this.num_payment);
+				payment.setAmount_payment(this.amount);
+				payment.setType_payment(this.type_payment);
+				payment.setDate_payment(this.date_payment);
+				payment.setTotal_course(this.total);
+				payment.setProduct_id(this.idProduct);
+
+				this.courseService.insertPayment(payment);
+				RequestContext rc = RequestContext.getCurrentInstance();
+				rc.execute("PF('regExito').show()");
+			} else {
+				RequestContext.getCurrentInstance().execute("PF('status').show()");
+			}
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			RequestContext rc = RequestContext.getCurrentInstance();
@@ -174,13 +201,13 @@ public class CourseBean implements Serializable {
 		List<ReportData> listaR = new ArrayList<ReportData>();
 		ReportData report = new ReportData();
 		Double resto = 0.0;
-		
-		if(this.remaining.doubleValue() != 0.0){
-			resto = this.remaining - this.amount; 
-		}else{
+
+		if (this.remaining.doubleValue() != 0.0) {
+			resto = this.remaining - this.amount;
+		} else {
 			resto = this.total - this.amount;
-		}		
-		
+		}
+
 		try {
 			if (this.idProduct != null) {
 				report.setStudentName((this.courseService.selectStudent(this.idStudent)).getName());
@@ -245,14 +272,14 @@ public class CourseBean implements Serializable {
 
 				}
 				this.num_payment = this.num_payment + 1;
-				this.remaining = this.totalCourse - this.totalPayment;				
-				
+				this.remaining = this.totalCourse - this.totalPayment;
+
 			} else {
 				this.num_payment = 1;
 				this.total = 0.0;
 				this.amount = 0.0;
 			}
-			
+
 			status(this.totalCourse.doubleValue(), this.totalPayment.doubleValue());
 
 		} catch (Exception e) {
@@ -263,36 +290,38 @@ public class CourseBean implements Serializable {
 
 	private void status(double n1, double n2) {
 		RequestContext rc = RequestContext.getCurrentInstance();
-		if (n1 == n2 && n2 != 0.0){
-			this.paymentStatus = true;			
+		if (n1 == n2 && n2 != 0.0) {
+			this.paymentStatus = true;
 			rc.execute("PF('status').show()");
-			
+
 		} else {
 			this.paymentStatus = false;
 			rc.update("form1");
 		}
 	}
 
-
 	// controla el envio del correo
 	private boolean controller(Correo c) {
 
 		try {
-			
+
 			Properties props = new Properties();
-			props.setProperty("mail.smtp.host", "gator4105.hostgator.com"); // Depende del servidor 
-			props.setProperty("mail.smtp.starttls.enable", "true"); // Depende del servidor
+			props.setProperty("mail.smtp.host", "gator4105.hostgator.com"); // Depende
+																			// del
+																			// servidor
+			props.setProperty("mail.smtp.starttls.enable", "true"); // Depende
+																	// del
+																	// servidor
 			props.setProperty("mail.smtp.port", "587"); // Puede ser otro puerto
 			props.setProperty("mail.smtp.user", "contacto@mentoringit.com.mx");
 			props.setProperty("mail.smtp.auth", "true"); // Depende del servidor
-			
-	        Session s = Session.getInstance(props,
-	          new javax.mail.Authenticator() {
-	            protected PasswordAuthentication getPasswordAuthentication() {
-	                return new PasswordAuthentication(c.getUserEmail(), c.getPassword());
-	            }
-	          });
-			
+
+			Session s = Session.getInstance(props, new javax.mail.Authenticator() {
+				protected PasswordAuthentication getPasswordAuthentication() {
+					return new PasswordAuthentication(c.getUserEmail(), c.getPassword());
+				}
+			});
+
 			BodyPart texto = new MimeBodyPart();
 			BodyPart adjunto;
 			MimeMultipart m = new MimeMultipart();
@@ -344,7 +373,6 @@ public class CourseBean implements Serializable {
 		}
 
 	}
-	
 
 	// getters y setters
 
@@ -409,8 +437,8 @@ public class CourseBean implements Serializable {
 	}
 
 	public void setIdCourse(Integer idCourse) {
-			
-		if(!idCourse.equals(this.idCourse)){
+
+		if (!idCourse.equals(this.idCourse)) {
 			this.validation = false;
 			this.total = 0.0;
 			this.amount = 0.0;
@@ -418,9 +446,9 @@ public class CourseBean implements Serializable {
 			this.idStudent = null;
 			this.idProduct = null;
 			this.listaD = null;
-			}
+		}
 		this.idCourse = idCourse;
-		
+
 	}
 
 	public Integer getIdStudent() {
