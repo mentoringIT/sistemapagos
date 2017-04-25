@@ -19,20 +19,23 @@ import mx.com.mentoringit.web.services.IUserService;
 public class UserBean implements IUserBean, Serializable {
 
 	private IUserService userService;
+	private HttpSession session;
 	private String username;
 	private String password;
 	
-	private final HttpServletRequest httpServletRequest;
-	private final FacesContext facesContext;
+//	private final HttpServletRequest httpServletRequest;
+//	private final FacesContext facesContext;
 
 	public UserBean() {
 //		FacesContext.getCurrentInstance().getExternalContext().invalidateSession();
-		facesContext = FacesContext.getCurrentInstance();
-		httpServletRequest = (HttpServletRequest) facesContext.getExternalContext().getRequest();
+//		facesContext = FacesContext.getCurrentInstance();
+//		httpServletRequest = (HttpServletRequest) facesContext.getExternalContext().getRequest();
+		session = (HttpSession)FacesContext.getCurrentInstance().getExternalContext().getSession(true);
 	}
 
 	@Override
 	public String userLogin() {
+		
 		UserDTO userDTO = new UserDTO(),
 				user = null;
 		String result = "";
@@ -43,7 +46,9 @@ public class UserBean implements IUserBean, Serializable {
 		try {
 			user  = userService.userLogin(userDTO);
 			if (user != null) {
-				httpServletRequest.getSession().setAttribute("userSession", user);		
+//				httpServletRequest.getSession().setAttribute("userSession", user);
+				session.setAttribute("userSession", user);
+				
 				result = "login";
 			} else {
 				FacesContext.getCurrentInstance().addMessage(null,
@@ -54,7 +59,7 @@ public class UserBean implements IUserBean, Serializable {
 		} catch (Exception e) {
 			e.printStackTrace();
 			FacesContext.getCurrentInstance().addMessage(null,
-					new FacesMessage(FacesMessage.SEVERITY_ERROR, "", "Ususario y/o contraseñas incorectos"));
+					new FacesMessage(FacesMessage.SEVERITY_ERROR, "", "Ususario y/o contraseña incorectos"));
 			result = "fail";
 
 		}

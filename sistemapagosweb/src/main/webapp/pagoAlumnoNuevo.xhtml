@@ -249,6 +249,17 @@
 			</f:facet>
 		</p:dialog>
 		
+		<p:dialog id="invalidPayment" widgetVar="invalidPayment" closable="false" modal="true"
+			header="Mensaje" height="70px" width="350px" draggable="false"
+			resizable="false">
+			<p:fieldset>
+				<p:outputLabel value="El pago actual es mayor al total del curso" />
+			</p:fieldset>
+			<f:facet name="footer">
+				<p:commandButton value="Aceptar" onclick="ocultar()"
+					immediate="true" />
+			</f:facet>
+		</p:dialog>
 
 	</h:form>
 </h:body>

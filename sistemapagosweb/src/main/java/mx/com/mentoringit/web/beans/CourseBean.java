@@ -246,7 +246,7 @@ public class CourseBean implements Serializable {
 					JasperExportManager.exportReportToPdfStream(jasperPrint, outputStream);
 
 					InputStream is = new ByteArrayInputStream(this.outputStream.toByteArray());
-					media = new DefaultStreamedContent(is, "application/pdf", "Recibo");
+					media = new DefaultStreamedContent(is, "application/pdf", "Recibo.pdf");
 
 					listaR.clear();
 					RequestContext rc = RequestContext.getCurrentInstance();

@@ -15,7 +15,6 @@ import java.util.Date;
 import javax.activation.DataHandler;
 import javax.activation.DataSource;
 
-
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 
@@ -80,7 +79,6 @@ public class NewStudentBean implements Serializable {
 	private String formatDate1;
 	private String formatDate2;
 	private Boolean validation = false;
-	
 
 	private ByteArrayOutputStream outputStream = null;
 	private StreamedContent media = null;
@@ -119,9 +117,9 @@ public class NewStudentBean implements Serializable {
 
 		try {
 			listaD = this.newStudentService.startDates(this.idCourse, getFormatDate1(), getFormatDate2());
-			if(this.listaD.size() != 0){
+			if (this.listaD.size() != 0) {
 				this.validation = true;
-			}else{
+			} else {
 				this.validation = false;
 			}
 		} catch (Exception e) {
@@ -148,12 +146,12 @@ public class NewStudentBean implements Serializable {
 			this.newStudentService.insertPayment(payment);
 			RequestContext rc = RequestContext.getCurrentInstance();
 			rc.execute("PF('regExito').show()");
-			
+
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			RequestContext rc = RequestContext.getCurrentInstance();
 			rc.execute("PF('regFallido').show()");
-			
+
 			e.printStackTrace();
 		}
 
@@ -166,39 +164,45 @@ public class NewStudentBean implements Serializable {
 		ReportData report = new ReportData();
 		Double remaining = 0.0;
 
-		remaining = total - amount;
-
 		try {
 			if (this.idProduct != null) {
-				report.setStudentName(this.getCompleteName());
-				report.setCourseName(this.newStudentService.selectCourseName(this.idCourse));
-				report.setNumPayment(this.num_payment.toString());
-				report.setAmountPayment(this.amount.toString());
-				report.setDatePayment(getFormatDatePayment());
-				report.setTypePayment(this.type_payment);
-				report.setRemaining(remaining.toString());
-				report.setTotalCourse(this.total.toString());
+				if (this.amount.doubleValue() > this.total.doubleValue()) {
+					RequestContext.getCurrentInstance().execute("PF('invalidPayment').show()");
+				} else {
+					remaining = this.total - this.amount;
 
-				listaR.add(report);
+					report.setStudentName(this.getCompleteName());
+					report.setCourseName(this.newStudentService.selectCourseName(this.idCourse));
+					report.setNumPayment(this.num_payment.toString());
+					report.setAmountPayment(this.amount.toString());
+					report.setDatePayment(getFormatDatePayment());
+					report.setTypePayment(this.type_payment);
+					report.setRemaining(remaining.toString());
+					report.setTotalCourse(this.total.toString());
 
-				File jasper = new File(
-						FacesContext.getCurrentInstance().getExternalContext().getRealPath("/payment.jasper"));
-				JasperPrint jasperPrint = JasperFillManager.fillReport(jasper.getPath(), null,
-						new JRBeanCollectionDataSource(listaR));
-				outputStream = new ByteArrayOutputStream();
-				JasperExportManager.exportReportToPdfStream(jasperPrint, outputStream);
+					listaR.add(report);
 
-				InputStream is = new ByteArrayInputStream(this.outputStream.toByteArray());
-				media = new DefaultStreamedContent(is, "application/pdf", "Recibo");
-				
-				listaR.clear();
+					File jasper = new File(
+							FacesContext.getCurrentInstance().getExternalContext().getRealPath("/payment.jasper"));
+					JasperPrint jasperPrint = JasperFillManager.fillReport(jasper.getPath(), null,
+							new JRBeanCollectionDataSource(listaR));
+					outputStream = new ByteArrayOutputStream();
+					JasperExportManager.exportReportToPdfStream(jasperPrint, outputStream);
 
-				RequestContext rc = RequestContext.getCurrentInstance();
-				rc.execute("PF('detail').show()");
+					InputStream is = new ByteArrayInputStream(this.outputStream.toByteArray());
+					media = new DefaultStreamedContent(is, "application/pdf", "Recibo.pdf");
+
+					listaR.clear();
+
+					RequestContext rc = RequestContext.getCurrentInstance();
+					rc.execute("PF('detail').show()");
+
+				}
 			} else {
 				RequestContext rc = RequestContext.getCurrentInstance();
 				rc.execute("PF('selecionar').show()");
 			}
+
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			RequestContext rc = RequestContext.getCurrentInstance();
@@ -211,18 +215,21 @@ public class NewStudentBean implements Serializable {
 
 		try {
 			Properties props = new Properties();
-			props.setProperty("mail.smtp.host", "gator4105.hostgator.com"); // Depende del servidor 
-			props.setProperty("mail.smtp.starttls.enable", "true"); // Depende del servidor
+			props.setProperty("mail.smtp.host", "gator4105.hostgator.com"); // Depende
+																			// del
+																			// servidor
+			props.setProperty("mail.smtp.starttls.enable", "true"); // Depende
+																	// del
+																	// servidor
 			props.setProperty("mail.smtp.port", "587"); // Puede ser otro puerto
 			props.setProperty("mail.smtp.user", "contacto@mentoringit.com.mx");
 			props.setProperty("mail.smtp.auth", "true"); // Depende del servidor
-			
-	        Session s = Session.getInstance(props,
-	          new javax.mail.Authenticator() {
-	            protected PasswordAuthentication getPasswordAuthentication() {
-	                return new PasswordAuthentication(c.getUserEmail(), c.getPassword());
-	            }
-	          });
+
+			Session s = Session.getInstance(props, new javax.mail.Authenticator() {
+				protected PasswordAuthentication getPasswordAuthentication() {
+					return new PasswordAuthentication(c.getUserEmail(), c.getPassword());
+				}
+			});
 
 			BodyPart texto = new MimeBodyPart();
 			BodyPart adjunto;
@@ -390,8 +397,8 @@ public class NewStudentBean implements Serializable {
 	}
 
 	public void setIdCourse(Integer idCourse) {
-		
-		if(!idCourse.equals(this.idCourse)){
+
+		if (!idCourse.equals(this.idCourse)) {
 			this.validation = false;
 			this.name = null;
 			this.pLastName = null;
@@ -404,7 +411,7 @@ public class NewStudentBean implements Serializable {
 			this.idStudent = null;
 			this.idProduct = null;
 			this.listaD = null;
-			}
+		}
 		this.idCourse = idCourse;
 	}
 

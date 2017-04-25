@@ -192,7 +192,7 @@ public class StudentBean implements Serializable {
 					DataSource ds = new ByteArrayDataSource(outputStream.toByteArray(), "application/pdf");
 					adjunto.setDataHandler(new DataHandler(ds));
 					adjunto.setFileName("Recibo " + this.temListaPsp.get(i).getNumPayment() + "_"
-							+ this.temListaPsp.get(i).getStudentName());
+							+ this.temListaPsp.get(i).getStudentName() + ".pdf");
 					m.addBodyPart(adjunto);
 
 					listaR.clear();
