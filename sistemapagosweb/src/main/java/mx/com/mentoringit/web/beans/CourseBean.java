@@ -146,47 +146,58 @@ public class CourseBean implements Serializable {
 	// inserta el pago en la base
 	public void insertPayment() {
 		PaymentDTO payment = new PaymentDTO();
+		PaymentDTO pay = new PaymentDTO();
 		List<PaymentDTO> listaP;
-		Double totalC = 0.0; 
+
+		Double totalC = 0.0;
 		Double totalP = 0.0;
 		Double restante = 0.0;
 
-		
 		try {
-			listaP = this.courseService.selectPayment(this.idStudent, this.idProduct);
-
-			if (!listaP.isEmpty()) {
-				for (PaymentDTO p : listaP) {
-					totalC = p.getTotal_course();
-					totalP = totalP + p.getAmount_payment();
-				}
-				restante = totalC - totalP;
-				
-				this.totalCourse = totalC;
-				this.totalPayment = totalP;
-				this.remaining = restante;
-			}else{
-				this.totalCourse = this.total;
-				this.totalPayment = this.amount;
-				this.remaining = this.totalCourse - this.totalPayment;
-			}			
-
-			if (listaP.isEmpty() || restante != 0.0) {
-				payment.setStudent_id(this.idStudent);
-				payment.setCourse_id(this.idCourse);
-				payment.setNum_payment(this.num_payment);
-				payment.setAmount_payment(this.amount);
-				payment.setType_payment(this.type_payment);
-				payment.setDate_payment(this.date_payment);
-				payment.setTotal_course(this.total);
-				payment.setProduct_id(this.idProduct);
-
-				this.courseService.insertPayment(payment);
-				RequestContext rc = RequestContext.getCurrentInstance();
-				rc.execute("PF('regExito').show()");
+			if ((this.amount.doubleValue() > this.total.doubleValue())
+					|| ((this.amount.doubleValue() > this.remaining.doubleValue())
+							&& (this.remaining.doubleValue() != 0.0))) {
+				RequestContext.getCurrentInstance().execute("PF('invalidPayment').show()");
 			} else {
-				RequestContext.getCurrentInstance().execute("PF('status').show()");
+				listaP = this.courseService.selectPayment(this.idStudent, this.idProduct);
+
+				if (!listaP.isEmpty()) {
+					for (PaymentDTO p : listaP) {
+						pay = p;
+						totalC = p.getTotal_course();
+						totalP = totalP + p.getAmount_payment();
+					}
+					restante = totalC - (totalP + this.amount);
+				} else {
+					this.totalCourse = this.total;
+					this.totalPayment = this.amount;
+					this.remaining = this.totalCourse - this.totalPayment;
+				}
+
+//				if (!pay.getTotal_course().equals(this.totalPayment)) {
+					payment.setStudent_id(this.idStudent);
+					payment.setCourse_id(this.idCourse);
+					payment.setNum_payment(this.num_payment);
+					payment.setAmount_payment(this.amount);
+					payment.setType_payment(this.type_payment);
+					payment.setDate_payment(this.date_payment);
+					payment.setTotal_course(this.total);
+					payment.setProduct_id(this.idProduct);
+
+					if (pay.getNum_payment() != null) {
+						this.totalCourse = totalC;
+						this.totalPayment = totalP + this.amount;
+						this.remaining = restante;
+					}
+
+					this.courseService.insertPayment(payment);
+					RequestContext rc = RequestContext.getCurrentInstance();
+					rc.execute("PF('regExito').show()");
+//				} else {
+//					RequestContext.getCurrentInstance().execute("PF('status').show()");
+//				}
 			}
+
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			RequestContext rc = RequestContext.getCurrentInstance();
@@ -201,40 +212,48 @@ public class CourseBean implements Serializable {
 		List<ReportData> listaR = new ArrayList<ReportData>();
 		ReportData report = new ReportData();
 		Double resto = 0.0;
+		boolean flag = false;
 
 		if (this.remaining.doubleValue() != 0.0) {
 			resto = this.remaining - this.amount;
 		} else {
 			resto = this.total - this.amount;
 		}
+		
+		if(this.total.equals(this.totalPayment)){			
+				flag = true;			
+		}
 
 		try {
 			if (this.idProduct != null) {
-				report.setStudentName((this.courseService.selectStudent(this.idStudent)).getName());
-				report.setCourseName(this.courseService.selectCourseName(this.idCourse));
-				report.setNumPayment(this.num_payment.toString());
-				report.setAmountPayment(this.amount.toString());
-				report.setDatePayment(getDate_payment2());
-				report.setTypePayment(this.type_payment);
-				report.setRemaining(resto.toString());
-				report.setTotalCourse(this.total.toString());
+				if (!flag) {
+					report.setStudentName((this.courseService.selectStudent(this.idStudent)).getName());
+					report.setCourseName(this.courseService.selectCourseName(this.idCourse));
+					report.setNumPayment(this.num_payment.toString());
+					report.setAmountPayment(this.amount.toString());
+					report.setDatePayment(getDate_payment2());
+					report.setTypePayment(this.type_payment);
+					report.setRemaining(resto.toString());
+					report.setTotalCourse(this.total.toString());
 
-				listaR.add(report);
+					listaR.add(report);
 
-				File jasper = new File(
-						FacesContext.getCurrentInstance().getExternalContext().getRealPath("/payment.jasper"));
-				JasperPrint jasperPrint = JasperFillManager.fillReport(jasper.getPath(), null,
-						new JRBeanCollectionDataSource(listaR));
-				outputStream = new ByteArrayOutputStream();
-				JasperExportManager.exportReportToPdfStream(jasperPrint, outputStream);
+					File jasper = new File(
+							FacesContext.getCurrentInstance().getExternalContext().getRealPath("/payment.jasper"));
+					JasperPrint jasperPrint = JasperFillManager.fillReport(jasper.getPath(), null,
+							new JRBeanCollectionDataSource(listaR));
+					outputStream = new ByteArrayOutputStream();
+					JasperExportManager.exportReportToPdfStream(jasperPrint, outputStream);
 
-				InputStream is = new ByteArrayInputStream(this.outputStream.toByteArray());
-				media = new DefaultStreamedContent(is, "application/pdf", "Recibo");
+					InputStream is = new ByteArrayInputStream(this.outputStream.toByteArray());
+					media = new DefaultStreamedContent(is, "application/pdf", "Recibo");
 
-				listaR.clear();
-				RequestContext rc = RequestContext.getCurrentInstance();
-				rc.execute("PF('detail').show()");
-
+					listaR.clear();
+					RequestContext rc = RequestContext.getCurrentInstance();
+					rc.execute("PF('detail').show()");
+				} else {
+					RequestContext.getCurrentInstance().execute("PF('status').show()");
+				}
 			} else {
 				RequestContext rc = RequestContext.getCurrentInstance();
 				rc.execute("PF('selecionar').show()");

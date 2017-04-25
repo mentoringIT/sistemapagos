@@ -121,7 +121,7 @@
 
 
 				<p:outputLabel value="Pago o Monto" />
-				<p:spinner id="amount" value="#{CourseList.amount}" prefix="$"
+				<p:spinner id="amount" value="#{CourseList.amount}" prefix="$" 
 					min="0" required="true"
 					validatorMessage="el valor tiene que ser mayor que 0.0"
 					converterMessage="caracter invalido"
@@ -250,6 +250,19 @@
 				<p:commandButton value="Aceptar" onclick="PF().hide()" />
 			</f:facet>
 		</p:dialog>
+		
+		<p:dialog id="invalidPayment" widgetVar="invalidPayment" closable="false" modal="true"
+			header="Mensaje" height="80px" width="350px" draggable="false"
+			resizable="false">
+			<p:fieldset>
+				<p:outputLabel value="El pago actual es mayor al total del curso
+										o a la cantidad restante" />
+			</p:fieldset>
+			<f:facet name="footer">
+				<p:commandButton value="Aceptar" onclick="ocultar()"
+					immediate="true" />
+			</f:facet>
+		</p:dialog>
 
 		<p:dialog id="status" widgetVar="status" closable="false" modal="true"
 			header="Mensaje" height="50px" width="350px" draggable="false"
@@ -262,6 +275,8 @@
 					immediate="true" />
 			</f:facet>
 		</p:dialog>
+		
+		
 
 		<script>
 			function ocultar(){
