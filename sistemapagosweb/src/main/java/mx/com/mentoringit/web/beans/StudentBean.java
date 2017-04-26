@@ -277,7 +277,7 @@ public class StudentBean implements Serializable {
 			mensaje.setFrom(new InternetAddress(c.getUserEmail()));
 			mensaje.addRecipient(Message.RecipientType.TO, new InternetAddress(c.getFrom()));
 			mensaje.setSubject(c.getSubject());
-			mensaje.setContent(m);
+			mensaje.setContent(m,"text/html; charset=utf-8");
 
 			Transport t = s.getTransport("smtp");
 			t.connect(c.getUserEmail(), c.getPassword());
