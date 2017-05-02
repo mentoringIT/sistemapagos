@@ -96,7 +96,7 @@ public class StudentBean implements Serializable {
 			listaC = this.studentService.allCourse();
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			log.error(e);
 		}
 	}
 
@@ -106,7 +106,7 @@ public class StudentBean implements Serializable {
 			listaA = this.studentService.allStudent();
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			log.error(e);
 		}
 	}
 
@@ -122,7 +122,7 @@ public class StudentBean implements Serializable {
 			
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			log.error(e);
 		}
 	}
 
@@ -158,7 +158,7 @@ public class StudentBean implements Serializable {
 		
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			log.error(e);
 			return "";	
 		}
 		
@@ -223,7 +223,7 @@ public class StudentBean implements Serializable {
 			// TODO Auto-generated catch block
 			RequestContext rc = RequestContext.getCurrentInstance();
 			rc.execute("PF('fallido').show()");
-			e.printStackTrace();
+			log.error(e);
 		}
 	}
 
@@ -478,7 +478,7 @@ public class StudentBean implements Serializable {
 			this.from = (this.studentService.selectStudent(this.idStudent)).getEmail();
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			log.error(e);
 		}
 		return from;
 	}
@@ -493,7 +493,7 @@ public class StudentBean implements Serializable {
 					+ this.studentService.selectCourseName(this.idCourse);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			log.error(e);
 		}
 		return subject;
 	}

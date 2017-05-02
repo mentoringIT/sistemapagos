@@ -16,7 +16,6 @@ import javax.activation.DataSource;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
-import javax.faces.view.Location;
 import javax.mail.BodyPart;
 import javax.mail.Message;
 import javax.mail.PasswordAuthentication;
@@ -27,6 +26,7 @@ import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMultipart;
 import javax.mail.util.ByteArrayDataSource;
+import javax.servlet.ServletContext;
 
 import org.apache.log4j.Logger;
 import org.apache.log4j.PropertyConfigurator;
@@ -85,12 +85,10 @@ public class CourseBean implements Serializable {
 	private List<ProductDTO> listaD;
 	private ByteArrayOutputStream outputStream = null;
 	private StreamedContent media = null;
+	private String realPath;
 
 	public CourseBean() {
-		File f = new File(".");
 		try {
-			System.out.println(f.getCanonicalPath());
-			System.out.println(f.getAbsolutePath());
 			InputStream in = getClass().getClassLoader().getResourceAsStream("log4j.properties");
 			PropertyConfigurator.configure(in);
 		} catch (Exception e) {
@@ -104,7 +102,7 @@ public class CourseBean implements Serializable {
 			listaC = this.courseService.allCourse();
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			log.error(e);
 			
 		}
 	}
@@ -116,7 +114,7 @@ public class CourseBean implements Serializable {
 			listaA = this.courseService.studentByCourse(idCourse);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			log.error(e);
 		}
 	}
 
@@ -127,7 +125,7 @@ public class CourseBean implements Serializable {
 			listaAllS = this.courseService.allStudent();
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			log.error(e);
 		}
 	}
 
@@ -144,7 +142,7 @@ public class CourseBean implements Serializable {
 
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			log.error(e);
 			this.validation = false;
 		}
 	}
@@ -208,7 +206,7 @@ public class CourseBean implements Serializable {
 			// TODO Auto-generated catch block
 			RequestContext rc = RequestContext.getCurrentInstance();
 			rc.execute("PF('regFallido').show()");
-			e.printStackTrace();
+			log.error(e);
 		}
 
 	}
@@ -268,7 +266,7 @@ public class CourseBean implements Serializable {
 			// TODO Auto-generated catch block
 			RequestContext rc = RequestContext.getCurrentInstance();
 			rc.execute("PF('genPago').show()");
-			e.printStackTrace();
+			log.error(e);
 
 		}
 
@@ -309,7 +307,7 @@ public class CourseBean implements Serializable {
 
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			log.error(e);
 		}
 	}
 
@@ -578,7 +576,7 @@ public class CourseBean implements Serializable {
 			this.from = (this.courseService.selectStudent(this.idStudent)).getEmail();
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			log.error(e);
 		}
 		return this.from;
 	}
@@ -593,7 +591,7 @@ public class CourseBean implements Serializable {
 					+ this.courseService.selectCourseName(this.idCourse);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			log.error(e);
 		}
 		return this.subject;
 	}
@@ -644,6 +642,10 @@ public class CourseBean implements Serializable {
 
 	public void setValData(Boolean valData) {
 		this.valData = valData;
+	}
+
+	public String getRealPath() {
+		return realPath;
 	}
 
 }

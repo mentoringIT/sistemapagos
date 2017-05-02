@@ -69,7 +69,7 @@ public class UserBean implements IUserBean, Serializable {
 			}
 			
 		} catch (Exception e) {
-			e.printStackTrace();
+			log.error(e);
 			FacesContext.getCurrentInstance().addMessage(null,
 					new FacesMessage(FacesMessage.SEVERITY_ERROR, "", "Ususario y/o contraseña incorectos"));
 			result = "fail";

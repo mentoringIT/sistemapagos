@@ -32,13 +32,13 @@ public class LastPaymentBean {
 			e.printStackTrace();
 		}
 	}
-	
+	//obtiene los pagos realizados
 	public void lastPaymens(){
 		try {
 			listaPsp = this.lastPaymentService.payments();
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			log.error(e);
 		}
 	}
 
