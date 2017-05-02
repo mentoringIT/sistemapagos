@@ -30,6 +30,8 @@ import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMultipart;
 import javax.mail.util.ByteArrayDataSource;
 
+import org.apache.log4j.Logger;
+import org.apache.log4j.PropertyConfigurator;
 import org.primefaces.context.RequestContext;
 import org.primefaces.model.DefaultStreamedContent;
 import org.primefaces.model.StreamedContent;
@@ -50,6 +52,7 @@ import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 @ManagedBean
 @SessionScoped
 public class NewStudentBean implements Serializable {
+	private final static Logger log = Logger.getLogger(NewStudentBean.class);
 
 	private INewStudentService newStudentService;
 	private List<CourseDTO> listaC;
@@ -82,6 +85,15 @@ public class NewStudentBean implements Serializable {
 
 	private ByteArrayOutputStream outputStream = null;
 	private StreamedContent media = null;
+	
+	public NewStudentBean(){
+		try {
+			InputStream in = getClass().getClassLoader().getResourceAsStream("log4j.properties");
+			PropertyConfigurator.configure(in);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
 
 	// obtiene todos los cursos
 	public void selectCourse() {
@@ -259,7 +271,8 @@ public class NewStudentBean implements Serializable {
 			return true;
 		} catch (Exception e) {
 
-			e.printStackTrace();
+//			e.printStackTrace();
+			log.error(e);
 			return false;
 		}
 	}

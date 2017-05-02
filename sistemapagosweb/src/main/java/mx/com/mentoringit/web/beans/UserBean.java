@@ -1,5 +1,7 @@
 package mx.com.mentoringit.web.beans;
 
+import java.io.File;
+import java.io.InputStream;
 import java.io.Serializable;
 
 import javax.faces.application.FacesMessage;
@@ -9,6 +11,8 @@ import javax.faces.context.FacesContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import org.apache.log4j.Logger;
+import org.apache.log4j.PropertyConfigurator;
 import org.springframework.http.HttpRequest;
 
 import mx.com.mentoringit.model.dto.UserDTO;
@@ -17,6 +21,7 @@ import mx.com.mentoringit.web.services.IUserService;
 @ManagedBean
 @SessionScoped
 public class UserBean implements IUserBean, Serializable {
+	private final static Logger log = Logger.getLogger(UserBean.class);
 
 	private IUserService userService;
 	private HttpSession session;
@@ -31,6 +36,13 @@ public class UserBean implements IUserBean, Serializable {
 //		facesContext = FacesContext.getCurrentInstance();
 //		httpServletRequest = (HttpServletRequest) facesContext.getExternalContext().getRequest();
 		session = (HttpSession)FacesContext.getCurrentInstance().getExternalContext().getSession(true);
+		
+		try {
+			InputStream in = getClass().getClassLoader().getResourceAsStream("log4j.properties");
+			PropertyConfigurator.configure(in);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 	@Override

@@ -1,9 +1,14 @@
 package mx.com.mentoringit.web.beans;
 
+import java.io.File;
+import java.io.InputStream;
 import java.util.List;
 
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
+
+import org.apache.log4j.Logger;
+import org.apache.log4j.PropertyConfigurator;
 
 import mx.com.mentoringit.model.dto.PSPDTO;
 import mx.com.mentoringit.web.services.ILastPaymentService;
@@ -11,11 +16,22 @@ import mx.com.mentoringit.web.services.ILastPaymentService;
 @ManagedBean
 @SessionScoped
 public class LastPaymentBean {
+	private final static Logger log = Logger.getLogger(LastPaymentBean.class);
+	
 	private ILastPaymentService lastPaymentService;
 	
 	private List<PSPDTO> listaPsp;
 	private List<PSPDTO> filterPayments;
 	private PSPDTO detail;
+	
+	public LastPaymentBean(){
+		try {
+			InputStream in = getClass().getClassLoader().getResourceAsStream("log4j.properties");
+			PropertyConfigurator.configure(in);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
 	
 	public void lastPaymens(){
 		try {

@@ -3,7 +3,6 @@ package mx.com.mentoringit.web.beans;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.IOException;
 import java.io.InputStream;
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
@@ -12,14 +11,12 @@ import java.util.Date;
 import java.util.List;
 import java.util.Properties;
 
-import javax.faces.application.FacesMessage;
-import javax.faces.application.NavigationHandler;
+import javax.activation.DataHandler;
+import javax.activation.DataSource;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
-import javax.faces.component.UIComponent;
-import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
-import javax.faces.validator.ValidatorException;
+import javax.faces.view.Location;
 import javax.mail.BodyPart;
 import javax.mail.Message;
 import javax.mail.PasswordAuthentication;
@@ -30,14 +27,12 @@ import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMultipart;
 import javax.mail.util.ByteArrayDataSource;
-import javax.servlet.http.HttpServletRequest;
 
+import org.apache.log4j.Logger;
+import org.apache.log4j.PropertyConfigurator;
 import org.primefaces.context.RequestContext;
 import org.primefaces.model.DefaultStreamedContent;
 import org.primefaces.model.StreamedContent;
-
-import javax.activation.DataHandler;
-import javax.activation.DataSource;
 
 import mx.com.mentoringit.model.dto.Correo;
 import mx.com.mentoringit.model.dto.CourseDTO;
@@ -46,7 +41,6 @@ import mx.com.mentoringit.model.dto.ProductDTO;
 import mx.com.mentoringit.model.dto.ReportData;
 import mx.com.mentoringit.model.dto.StudentDTO;
 import mx.com.mentoringit.web.services.ICourseService;
-
 import net.sf.jasperreports.engine.JasperExportManager;
 import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;
@@ -55,6 +49,8 @@ import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 @ManagedBean
 @SessionScoped
 public class CourseBean implements Serializable {
+	private final static Logger log = Logger.getLogger(CourseBean.class);
+	
 	private ICourseService courseService;
 
 	private Integer idCourse;
@@ -91,6 +87,15 @@ public class CourseBean implements Serializable {
 	private StreamedContent media = null;
 
 	public CourseBean() {
+		File f = new File(".");
+		try {
+			System.out.println(f.getCanonicalPath());
+			System.out.println(f.getAbsolutePath());
+			InputStream in = getClass().getClassLoader().getResourceAsStream("log4j.properties");
+			PropertyConfigurator.configure(in);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 	// obtiene todos los cursos
@@ -100,6 +105,7 @@ public class CourseBean implements Serializable {
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+			
 		}
 	}
 
@@ -369,7 +375,8 @@ public class CourseBean implements Serializable {
 			return true;
 		} catch (Exception e) {
 
-			e.printStackTrace();
+//			e.printStackTrace();
+			log.error(e);
 			return false;
 		}
 	}

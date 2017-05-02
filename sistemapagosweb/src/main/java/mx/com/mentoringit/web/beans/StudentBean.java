@@ -2,7 +2,7 @@ package mx.com.mentoringit.web.beans;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
-
+import java.io.InputStream;
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -29,6 +29,8 @@ import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMultipart;
 import javax.mail.util.ByteArrayDataSource;
 
+import org.apache.log4j.Logger;
+import org.apache.log4j.PropertyConfigurator;
 import org.primefaces.context.RequestContext;
 
 import mx.com.mentoringit.model.dto.Correo;
@@ -46,6 +48,7 @@ import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 @ManagedBean
 @SessionScoped
 public class StudentBean implements Serializable {
+	private final static Logger log = Logger.getLogger(StudentBean.class);
 
 	private IStudentService studentService;
 
@@ -77,7 +80,16 @@ public class StudentBean implements Serializable {
 	private ByteArrayOutputStream outputStream = null;
 	private BodyPart adjunto;
 	private MimeMultipart m;
-
+	
+	public StudentBean(){
+		try {
+			InputStream in = getClass().getClassLoader().getResourceAsStream("log4j.properties");
+			PropertyConfigurator.configure(in);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
 	// obtiene todos los cursos
 	public void courses() {
 		try {
@@ -286,8 +298,8 @@ public class StudentBean implements Serializable {
 
 			return true;
 		} catch (Exception e) {
-
-			e.printStackTrace();
+//			e.printStackTrace();
+			log.error(e);
 			return false;
 		}
 	}
