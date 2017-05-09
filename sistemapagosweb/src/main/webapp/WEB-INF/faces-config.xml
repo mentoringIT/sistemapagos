@@ -17,15 +17,15 @@
 		</managed-property>
 	</managed-bean>
 
-	<managed-bean>
-		<managed-bean-name>StudentList</managed-bean-name>
-		<managed-bean-class>mx.com.mentoringit.web.beans.StudentBean</managed-bean-class>
-		<managed-bean-scope>session</managed-bean-scope>
-		<managed-property>
-			<property-name>studentService</property-name>
-			<value>#{studentService}</value>
-		</managed-property>
-	</managed-bean>
+<!-- 	<managed-bean> -->
+<!-- 		<managed-bean-name>StudentList</managed-bean-name> -->
+<!-- 		<managed-bean-class>mx.com.mentoringit.web.beans.StudentBean</managed-bean-class> -->
+<!-- 		<managed-bean-scope>session</managed-bean-scope> -->
+<!-- 		<managed-property> -->
+<!-- 			<property-name>studentService</property-name> -->
+<!-- 			<value>#{studentService}</value> -->
+<!-- 		</managed-property> -->
+<!-- 	</managed-bean> -->
 
 	<managed-bean>
 		<managed-bean-name>CourseList</managed-bean-name>
@@ -47,15 +47,15 @@
 		</managed-property>
 	</managed-bean>
 
-	<managed-bean>
-		<managed-bean-name>paymentLast</managed-bean-name>
-		<managed-bean-class>mx.com.mentoringit.web.beans.LastPaymentBean</managed-bean-class>
-		<managed-bean-scope>session</managed-bean-scope>
-		<managed-property>
-			<property-name>lastPaymentService</property-name>
-			<value>#{lastPaymentService}</value>
-		</managed-property>
-	</managed-bean>
+<!-- 	<managed-bean> -->
+<!-- 		<managed-bean-name>paymentLast</managed-bean-name> -->
+<!-- 		<managed-bean-class>mx.com.mentoringit.web.beans.LastPaymentBean</managed-bean-class> -->
+<!-- 		<managed-bean-scope>session</managed-bean-scope> -->
+<!-- 		<managed-property> -->
+<!-- 			<property-name>lastPaymentService</property-name> -->
+<!-- 			<value>#{lastPaymentService}</value> -->
+<!-- 		</managed-property> -->
+<!-- 	</managed-bean> -->
 
 	<!-- reglas de navegacion para el flujo de alumnos -->
 

@@ -15,6 +15,8 @@ import javax.activation.DataSource;
 
 
 import javax.faces.bean.ManagedBean;
+import javax.faces.bean.ManagedProperty;
+import javax.faces.bean.RequestScoped;
 import javax.faces.bean.SessionScoped;
 
 import javax.faces.context.FacesContext;
@@ -39,21 +41,23 @@ import mx.com.mentoringit.model.dto.PSPDTO;
 import mx.com.mentoringit.model.dto.ProductDTO;
 import mx.com.mentoringit.model.dto.ReportData;
 import mx.com.mentoringit.model.dto.StudentDTO;
+import mx.com.mentoringit.web.controllers.StudentController;
 import mx.com.mentoringit.web.services.IStudentService;
 import net.sf.jasperreports.engine.JasperExportManager;
 import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 
-@ManagedBean
-@SessionScoped
+@ManagedBean(name = "MbStudentList")
+@RequestScoped
 public class StudentBean implements Serializable {
 	private final static Logger log = Logger.getLogger(StudentBean.class);
-
-	private IStudentService studentService;
-
+	
+	@ManagedProperty(value = "#{MbStudentController}")
+	private StudentController controller;
+	
 	private List<CourseDTO> listaC;
-	private List<StudentDTO> listaA;
+	private List<StudentDTO> listaA;	
 	private List<ProductDTO> listaD;
 	private List<PSPDTO> listaPsp;
 	private List<PSPDTO> temListaPsp = new ArrayList<PSPDTO>();
@@ -90,80 +94,80 @@ public class StudentBean implements Serializable {
 		}
 	}
 	
-	// obtiene todos los cursos
-	public void courses() {
-		try {
-			listaC = this.studentService.allCourse();
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			log.error(e);
-		}
-	}
+//	// obtiene todos los cursos
+//	public void courses() {
+//		try {
+//			listaC = this.studentService.allCourse();
+//		} catch (Exception e) {
+//			// TODO Auto-generated catch block
+//			log.error(e);
+//		}
+//	}
+//
+//	// obtiene todos los alumnos
+//	public void students() {
+//		try {
+//			listaA = this.studentService.allStudent();
+//		} catch (Exception e) {
+//			// TODO Auto-generated catch block
+//			log.error(e);
+//		}
+//	}
 
-	// obtiene todos los alumnos
-	public void students() {
-		try {
-			listaA = this.studentService.allStudent();
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			log.error(e);
-		}
-	}
+	// obtiene las fechas de inicio de los productos(cursos) PENDIENTE
+//	public void startDates() {
+//		try {
+//			listaD = this.studentService.startDates(idCourse, getFormatDate1(), getFormatDate2());
+//			if(this.listaD.size() != 0){
+//				this.validation = true;
+//			}else{
+//				this.validation = false;
+//			}
+//			
+//		} catch (Exception e) {
+//			// TODO Auto-generated catch block
+//			log.error(e);
+//		}
+//	}
 
-	// obtiene las fechas de inicio de los productos(cursos)
-	public void startDates() {
-		try {
-			listaD = this.studentService.startDates(idCourse, getFormatDate1(), getFormatDate2());
-			if(this.listaD.size() != 0){
-				this.validation = true;
-			}else{
-				this.validation = false;
-			}
-			
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			log.error(e);
-		}
-	}
-
-	// obtiene todos los pagos de un alumno y calcula los totales
-	public String paymentsByStudent() {
-		this.totalCourse = 0.0;
-		this.totalPayment = 0.0;
-		this.remaining = 0.0;
-
-		try {
-			if(this.idProduct != null){
-			listaPsp = this.studentService.paymentByStudent(idStudent, idProduct);
-			
-				if (listaPsp.size() != 0) {
-					for (int i = 0; i < listaPsp.size(); i++) {
-						if (i == 0) {
-
-							this.totalCourse = listaPsp.get(i).getTotalCourse();
-							this.nameStudent = listaPsp.get(i).getStudentName();
-						}
-						this.totalPayment = this.totalPayment + listaPsp.get(i).getAmountPayment();
-					}
-					this.remaining = this.totalCourse - this.totalPayment;					
-					return "consult";
-				} else {
-					RequestContext.getCurrentInstance().execute("PF('no_payments').show()");
-					return "";
-				}
-			}else{
-				RequestContext.getCurrentInstance().execute("PF('seleccionar').show()");
-				return "";
-			}
-		
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			log.error(e);
-			return "";	
-		}
-		
-		
-	}
+	// obtiene todos los pagos de un alumno y calcula los totales PENDIENTE
+//	public String paymentsByStudent() {
+//		this.totalCourse = 0.0;
+//		this.totalPayment = 0.0;
+//		this.remaining = 0.0;
+//
+//		try {
+//			if(this.idProduct != null){
+//			listaPsp = this.studentService.paymentByStudent(idStudent, idProduct);
+//			
+//				if (listaPsp.size() != 0) {
+//					for (int i = 0; i < listaPsp.size(); i++) {
+//						if (i == 0) {
+//
+//							this.totalCourse = listaPsp.get(i).getTotalCourse();
+//							this.nameStudent = listaPsp.get(i).getStudentName();
+//						}
+//						this.totalPayment = this.totalPayment + listaPsp.get(i).getAmountPayment();
+//					}
+//					this.remaining = this.totalCourse - this.totalPayment;					
+//					return "consult";
+//				} else {
+//					RequestContext.getCurrentInstance().execute("PF('no_payments').show()");
+//					return "";
+//				}
+//			}else{
+//				RequestContext.getCurrentInstance().execute("PF('seleccionar').show()");
+//				return "";
+//			}
+//		
+//		} catch (Exception e) {
+//			// TODO Auto-generated catch block
+//			log.error(e);
+//			return "";	
+//		}
+//		
+//		
+//	}
 
 	// crea los tikets de pago
 	public void createReport() {
@@ -306,16 +310,16 @@ public class StudentBean implements Serializable {
 
 	// metodos getters y setters
 
-	public IStudentService getStudentService() {
-		return studentService;
-	}
-
-	public void setStudentService(IStudentService studentService) {
-		this.studentService = studentService;
-	}
+//	public IStudentService getStudentService() {
+//		return studentService;
+//	}
+//
+//	public void setStudentService(IStudentService studentService) {
+//		this.studentService = studentService;
+//	}
 
 	public List<CourseDTO> getListaC() {
-		courses();
+		listaC = controller.courses();
 		return listaC;
 	}
 
@@ -324,7 +328,7 @@ public class StudentBean implements Serializable {
 	}
 
 	public List<StudentDTO> getListaA() {
-		students();
+		listaA = controller.students();
 		return listaA;
 	}
 
@@ -333,6 +337,7 @@ public class StudentBean implements Serializable {
 	}
 
 	public List<ProductDTO> getListaD() {
+		listaD = controller.startDates(idCourse, getFormatDate1(), getFormatDate2());
 		return listaD;
 	}
 
@@ -425,7 +430,7 @@ public class StudentBean implements Serializable {
 	}
 
 	public List<PSPDTO> getListaPsp() {
-		paymentsByStudent();
+//		paymentsByStudent();
 		return listaPsp;
 	}
 
@@ -473,30 +478,30 @@ public class StudentBean implements Serializable {
 		this.temListaPsp = temListaPsp;
 	}
 
-	public String getFrom() {
-		try {
-			this.from = (this.studentService.selectStudent(this.idStudent)).getEmail();
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			log.error(e);
-		}
-		return from;
-	}
+//	public String getFrom() { PENDIENTE
+//		try {
+//			this.from = (this.studentService.selectStudent(this.idStudent)).getEmail();
+//		} catch (Exception e) {
+//			// TODO Auto-generated catch block
+//			log.error(e);
+//		}
+//		return from;
+//	}
 
 	public void setFrom(String from) {
 		this.from = from;
 	}
 
-	public String getSubject() {
-		try {
-			this.subject = "Recibos de pagos realizados  para el curso "
-					+ this.studentService.selectCourseName(this.idCourse);
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			log.error(e);
-		}
-		return subject;
-	}
+//	public String getSubject() { PENDIENTE
+//		try {
+//			this.subject = "Recibos de pagos realizados  para el curso "
+//					+ this.studentService.selectCourseName(this.idCourse);
+//		} catch (Exception e) {
+//			// TODO Auto-generated catch block
+//			log.error(e);
+//		}
+//		return subject;
+//	}
 
 	public void setSubject(String subject) {
 		this.subject = subject;
@@ -518,4 +523,11 @@ public class StudentBean implements Serializable {
 		this.validation = validation;
 	}
 
+	public StudentController getController() {
+		return controller;
+	}
+
+	public void setController(StudentController controller) {
+		this.controller = controller;
+	}
 }

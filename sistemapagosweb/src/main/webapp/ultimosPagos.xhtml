@@ -11,10 +11,10 @@
 	<h:form id="form1" styleClass="center">
 		<p:growl id="msgs" showDetail="true" />
 
-		<p:dataTable id="basicDT" var="lp" value="#{paymentLast.listaPsp}"
+		<p:dataTable id="basicDT" var="lp" value="#{MbLastPayment.listaPsp}"
 			paginator="true" rows="10"
 			paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}"
-			filteredValue="#{paymentLast.filterPayments}">
+			filteredValue="#{MbLastPayment.filterPayments}">
 
 			<f:facet name="header">
             PAGOS
@@ -44,7 +44,7 @@
 					oncomplete="PF('detail').show()" icon="ui-icon-document"
 					title="ver detalles">
 					<f:setPropertyActionListener value="#{lp}"
-						target="#{paymentLast.detail}" />
+						target="#{MbLastPayment.detail}" />
 				</p:commandButton>
 			</p:column>
 		</p:dataTable>
@@ -55,31 +55,31 @@
 				<p:panelGrid columns="2" columnClasses="label,value">
 
 					<h:outputText value="Curso:" />
-					<h:outputText value="#{paymentLast.detail.courseName}" />
+					<h:outputText value="#{MbLastPayment.detail.courseName}" />
 
 					<h:outputText value="Nombre" />
-					<h:outputText value="#{paymentLast.detail.studentName}" />
+					<h:outputText value="#{MbLastPayment.detail.studentName}" />
 
 					<h:outputText value="Email:" />
-					<h:outputText value="#{paymentLast.detail.email}" />
+					<h:outputText value="#{MbLastPayment.detail.email}" />
 
 					<h:outputText value="Telefono:" />
-					<h:outputText value="#{paymentLast.detail.phone}" />
+					<h:outputText value="#{MbLastPayment.detail.phone}" />
 
 					<h:outputText value="Fecha:" />
-					<h:outputText value="#{paymentLast.detail.datePayment}" />
+					<h:outputText value="#{MbLastPayment.detail.datePayment}" />
 
 					<h:outputText value="Total Curso:" />
-					<h:outputText value="$#{paymentLast.detail.totalCourse}" />
+					<h:outputText value="$#{MbLastPayment.detail.totalCourse}" />
 
 					<h:outputText value="Monto:" />
-					<h:outputText value="$#{paymentLast.detail.amountPayment}" />
+					<h:outputText value="$#{MbLastPayment.detail.amountPayment}" />
 
 					<h:outputText value="No Pago:" />
-					<h:outputText value="#{paymentLast.detail.numPayment}" />
+					<h:outputText value="#{MbLastPayment.detail.numPayment}" />
 
 					<h:outputText value="Forma de pago:" />
-					<h:outputText value="#{paymentLast.detail.typePayment}" />
+					<h:outputText value="#{MbLastPayment.detail.typePayment}" />
 				</p:panelGrid>
 			</p:outputPanel>
 		</p:dialog>

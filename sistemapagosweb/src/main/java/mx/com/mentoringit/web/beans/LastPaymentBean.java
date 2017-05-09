@@ -1,52 +1,52 @@
 package mx.com.mentoringit.web.beans;
 
-import java.io.File;
+
 import java.io.InputStream;
+import java.io.Serializable;
 import java.util.List;
 
 import javax.faces.bean.ManagedBean;
-import javax.faces.bean.SessionScoped;
+import javax.faces.bean.ManagedProperty;
+import javax.faces.bean.RequestScoped;
+import javax.faces.bean.ViewScoped;
 
 import org.apache.log4j.Logger;
 import org.apache.log4j.PropertyConfigurator;
 
 import mx.com.mentoringit.model.dto.PSPDTO;
+import mx.com.mentoringit.web.controllers.LastPaymentController;
 import mx.com.mentoringit.web.services.ILastPaymentService;
 
-@ManagedBean
-@SessionScoped
-public class LastPaymentBean {
-	private final static Logger log = Logger.getLogger(LastPaymentBean.class);
+@ManagedBean(name = "MbLastPayment")
+@RequestScoped
+public class LastPaymentBean implements Serializable{
+		
+	@ManagedProperty(value = "#{lastPaymentController}")
+	private LastPaymentController controller;
+//	@ManagedProperty(value = "#{lastPaymentService}")
+//	private ILastPaymentService lastPaymentService;	
 	
-	private ILastPaymentService lastPaymentService;
-	
-	private List<PSPDTO> listaPsp;
+	private List<PSPDTO> listaPsp;	
 	private List<PSPDTO> filterPayments;
 	private PSPDTO detail;
 	
-	public LastPaymentBean(){
-		try {
-			InputStream in = getClass().getClassLoader().getResourceAsStream("log4j.properties");
-			PropertyConfigurator.configure(in);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
+	public LastPaymentBean(){}
+	
 	//obtiene los pagos realizados
-	public void lastPaymens(){
-		try {
-			listaPsp = this.lastPaymentService.payments();
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			log.error(e);
-		}
-	}
+//	public void lastPaymens(){
+//		try {
+//			listaPsp = this.lastPaymentService.payments();
+//		} catch (Exception e) {
+//			// TODO Auto-generated catch block
+//			log.error(e);
+//		}
+//	}
 
 	
 	//getters and setters
 	
 	public List<PSPDTO> getListaPsp() {
-		lastPaymens();
+		listaPsp = controller.lastPaymens();
 		return listaPsp;
 	}
 
@@ -73,19 +73,11 @@ public class LastPaymentBean {
 		this.filterPayments = filterPayments;
 	}
 
-
-	public ILastPaymentService getLastPaymentService() {
-		return lastPaymentService;
+	public LastPaymentController getController() {
+		return controller;
 	}
 
-
-	public void setLastPaymentService(ILastPaymentService lastPaymentService) {
-		this.lastPaymentService = lastPaymentService;
+	public void setController(LastPaymentController controller) {
+		this.controller = controller;
 	}
-
-
-
-
-
-
 }
