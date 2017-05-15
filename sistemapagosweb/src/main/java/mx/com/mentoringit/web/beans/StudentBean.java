@@ -51,7 +51,7 @@ import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 @SessionScoped
 public class StudentBean implements Serializable {
 
-	private final static Logger log = Logger.getLogger(StudentBean.class);
+	
 		
 	private List<CourseDTO> listaC;
 	private List<StudentDTO> listaA;	
@@ -83,12 +83,7 @@ public class StudentBean implements Serializable {
 	private MimeMultipart m;
 	
 	public StudentBean(){
-		try {
-			InputStream in = getClass().getClassLoader().getResourceAsStream("log4j.properties");
-			PropertyConfigurator.configure(in);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+		
 	}
 	
 //	// obtiene todos los cursos
@@ -544,13 +539,5 @@ public class StudentBean implements Serializable {
 	public void setAdjunto(BodyPart adjunto) {
 		this.adjunto = adjunto;
 	}
-
-//	public StudentController getController() {
-//		return controller;
-//	}
-//
-//	public void setController(StudentController controller) {
-//		this.controller = controller;
-//	}
 
 }

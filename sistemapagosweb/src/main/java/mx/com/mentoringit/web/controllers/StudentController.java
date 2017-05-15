@@ -2,6 +2,7 @@ package mx.com.mentoringit.web.controllers;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.InputStream;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -26,6 +27,8 @@ import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMultipart;
 import javax.mail.util.ByteArrayDataSource;
 
+import org.apache.log4j.Logger;
+import org.apache.log4j.PropertyConfigurator;
 import org.primefaces.context.RequestContext;
 
 import mx.com.mentoringit.model.dto.Correo;
@@ -43,7 +46,8 @@ import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 @ManagedBean(name = "MbStudentController")
 @SessionScoped
 public class StudentController implements Serializable {
-
+	private final static Logger log = Logger.getLogger(StudentController.class);
+	
 	@ManagedProperty(value = "#{studentService}")
 	private IStudentService studentService;
 	
@@ -51,6 +55,12 @@ public class StudentController implements Serializable {
 	private StudentBean stb;
 
 	public StudentController() {
+		try {
+			InputStream in = getClass().getClassLoader().getResourceAsStream("log4j.properties");
+			PropertyConfigurator.configure(in);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 	// obtiene todos los cursos
@@ -59,7 +69,7 @@ public class StudentController implements Serializable {
 			return studentService.allCourse();
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			log.error(e);
 			return null;
 		}
 	}
@@ -70,7 +80,7 @@ public class StudentController implements Serializable {
 			return studentService.allStudent();
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			log.error(e);
 			return null;
 		}
 	}
@@ -86,7 +96,7 @@ public class StudentController implements Serializable {
 			}
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			log.error(e);
 		}
 	}
 	
@@ -123,7 +133,7 @@ public class StudentController implements Serializable {
 		
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
-//			log.error(e);
+			log.error(e);
 			return "";	
 		}	
 	}
@@ -189,7 +199,7 @@ public class StudentController implements Serializable {
 			// TODO Auto-generated catch block
 			RequestContext rc = RequestContext.getCurrentInstance();
 			rc.execute("PF('fallido').show()");
-//			log.error(e);
+			log.error(e);
 		}
 	}
 
@@ -264,8 +274,7 @@ public class StudentController implements Serializable {
 
 			return true;
 		} catch (Exception e) {
-//			e.printStackTrace();
-//			log.error(e);
+			log.error(e);
 			return false;
 		}
 	}
