@@ -11,7 +11,7 @@
 	<h:form id="form1" styleClass="center">
 		<p:growl id="msgs" showDetail="true" />
 
-		<p:dataTable id="basicDT" var="lp" value="#{MbLastPayment.listaPsp}"
+		<p:dataTable id="basicDT" var="lp" value="#{MbLastPaymetsController.lastPaymens()}"
 			paginator="true" rows="10"
 			paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}"
 			filteredValue="#{MbLastPayment.filterPayments}">

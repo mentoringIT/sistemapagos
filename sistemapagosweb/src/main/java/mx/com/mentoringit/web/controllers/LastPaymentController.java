@@ -13,16 +13,20 @@ import org.apache.log4j.Logger;
 import org.apache.log4j.PropertyConfigurator;
 
 import mx.com.mentoringit.model.dto.PSPDTO;
+import mx.com.mentoringit.web.beans.LastPaymentBean;
 import mx.com.mentoringit.web.services.ILastPaymentService;
 
 
-@ManagedBean
+@ManagedBean(name = "MbLastPaymetsController")
 @RequestScoped
 public class LastPaymentController implements Serializable{
 	private final static Logger log = Logger.getLogger(LastPaymentController.class);
 
 	@ManagedProperty(value = "#{lastPaymentService}")
 	private ILastPaymentService lastPaymentService;
+	
+	@ManagedProperty(value = "#{MbLastPayment}")
+	private LastPaymentBean lpb;
 	
 	public LastPaymentController(){
 		try {
@@ -34,13 +38,14 @@ public class LastPaymentController implements Serializable{
 	}
 	
 	//obtiene los pagos realizados
-	public List<PSPDTO> lastPaymens(){		
+	public List<PSPDTO> lastPaymens(){				
 			try {
-				return this.lastPaymentService.payments();
-			} catch (Exception e) {	
+				return lastPaymentService.payments();
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
 				log.error(e);
 				return null;
-			}		
+			}						
 	}
 
 	public ILastPaymentService getLastPaymentService() {
@@ -49,6 +54,14 @@ public class LastPaymentController implements Serializable{
 
 	public void setLastPaymentService(ILastPaymentService lastPaymentService) {
 		this.lastPaymentService = lastPaymentService;
+	}
+
+	public LastPaymentBean getLpb() {
+		return lpb;
+	}
+
+	public void setLpb(LastPaymentBean lpb) {
+		this.lpb = lpb;
 	}
 	
 }

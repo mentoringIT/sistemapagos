@@ -7,7 +7,7 @@
 
 <h:head></h:head>
 <body>
-		<ui:include src="header.xhtml" />
+	<ui:include src="header.xhtml" />
 	<p:messages id="messages" globalOnly="true" showDetail="true"
 		closable="true" />
 	<h:form id="form">
@@ -15,16 +15,16 @@
 			<pm:fieldset>
 				<h:panelGrid id="student" columns="2" cellpadding="5">
 					<p:outputLabel value="Alumno:" />
-					<p:outputLabel value="#{StudentList.nameStudent}" />
+					<p:outputLabel value="#{MbStudentList.nameStudent}" />
 				</h:panelGrid>
 			</pm:fieldset>
 		</div>
 
-		<p:dataTable id="checkboxDT" var="lp" value="#{StudentList.listaPsp}"
-			selection="#{StudentList.temListaPsp}" rowKey="#{lp.numPayment}"
+		<p:dataTable id="checkboxDT" var="lp" value="#{MbStudentList.listaPsp}"
+			selection="#{MbStudentList.temListaPsp}" rowKey="#{lp.numPayment}"
 			paginator="true" rows="10"
 			paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}"
-			filteredValue="#{StudentList.filterPayments}" style="margin-bottom:0">
+			filteredValue="#{MbStudentList.filterPayments}" style="margin-bottom:0">
 
 			<f:facet name="header">
             Pagos
@@ -51,20 +51,20 @@
 		<pm:fieldset>
 			<h:panelGrid id="totals" columns="2" cellpadding="5">
 				<p:outputLabel value="Costo curso: " />
-				<p:outputLabel value="#{StudentList.totalCourse}" />
+				<p:outputLabel value="#{MbStudentList.totalCourse}" />
 
 				<p:outputLabel value="Total pagado: " />
-				<p:outputLabel value="#{StudentList.totalPayment}" />
+				<p:outputLabel value="#{MbStudentList.totalPayment}" />
 
 				<p:outputLabel value="Restante: " />
-				<p:outputLabel value="#{StudentList.remaining}" />
+				<p:outputLabel value="#{MbStudentList.remaining}" />
 			</h:panelGrid>
 		</pm:fieldset>
 
 		<p:toolbar>
 			<f:facet name="left">
 				<p:commandButton value="Generar pago(s)"
-					actionListener="#{StudentList.createReport()}"
+					actionListener="#{MbStudentController.createReport()}"
 					icon="ui-icon-document" tabindex="1"/>
 			</f:facet>
 			<f:facet name="right">

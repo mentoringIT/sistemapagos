@@ -7,7 +7,7 @@
 
 <h:head></h:head>
 <body>
-		<ui:include src="header.xhtml" />
+	<ui:include src="header.xhtml" />
 	<p:messages id="messages" showDetail="true" autoUpdate="true"
 		closable="true" globalOnly="true" />
 	<h:form>
@@ -16,18 +16,18 @@
 			<pm:fieldset>
 				<h:panelGrid columns="2" cellpadding="5">
 					<p:outputLabel value="Para:" />
-					<p:inputText value="#{StudentList.from}" style="width:550px" tabindex="1"/>
+					<p:inputText value="#{MbStudentList.from}" style="width:550px" tabindex="1"/>
 					<p:outputLabel value="Asunto" />
-					<p:inputText value="#{StudentList.subject}" style="width:550px" tabindex="2"/>
+					<p:inputText value="#{MbStudentList.subject}" style="width:550px" tabindex="2"/>
 
 					<p:outputLabel value="Mensaje" />
-					<p:inputTextarea rows="10" cols="50" value="#{StudentList.message}"
+					<p:inputTextarea rows="10" cols="50" value="#{MbStudentList.message}"
 						queryDelay="750" minQueryLength="4" style="width:550px" tabindex="3"/>
 				</h:panelGrid>
 
 				<p:toolbar>
 					<f:facet name="left">
-						<p:commandButton value="Enviar" action="#{StudentList.sendMail}" tabindex="4"/>
+						<p:commandButton value="Enviar" action="#{MbStudentController.sendMail}" tabindex="4"/>
 					</f:facet>
 					<f:facet name="right">
 						<p:commandButton value="Atras" action="back" tabindex="5"/>

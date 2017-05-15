@@ -21,11 +21,6 @@ import mx.com.mentoringit.web.services.ILastPaymentService;
 @RequestScoped
 public class LastPaymentBean implements Serializable{
 		
-	@ManagedProperty(value = "#{lastPaymentController}")
-	private LastPaymentController controller;
-//	@ManagedProperty(value = "#{lastPaymentService}")
-//	private ILastPaymentService lastPaymentService;	
-	
 	private List<PSPDTO> listaPsp;	
 	private List<PSPDTO> filterPayments;
 	private PSPDTO detail;
@@ -46,7 +41,6 @@ public class LastPaymentBean implements Serializable{
 	//getters and setters
 	
 	public List<PSPDTO> getListaPsp() {
-		listaPsp = controller.lastPaymens();
 		return listaPsp;
 	}
 
@@ -71,13 +65,5 @@ public class LastPaymentBean implements Serializable{
 
 	public void setFilterPayments(List<PSPDTO> filterPayments) {
 		this.filterPayments = filterPayments;
-	}
-
-	public LastPaymentController getController() {
-		return controller;
-	}
-
-	public void setController(LastPaymentController controller) {
-		this.controller = controller;
 	}
 }

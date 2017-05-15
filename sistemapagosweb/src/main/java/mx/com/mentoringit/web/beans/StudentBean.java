@@ -13,12 +13,11 @@ import java.util.Properties;
 import javax.activation.DataHandler;
 import javax.activation.DataSource;
 
-
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.RequestScoped;
 import javax.faces.bean.SessionScoped;
-
+import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import javax.mail.BodyPart;
 import javax.mail.Message;
@@ -49,13 +48,11 @@ import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 
 @ManagedBean(name = "MbStudentList")
-@RequestScoped
+@SessionScoped
 public class StudentBean implements Serializable {
+
 	private final static Logger log = Logger.getLogger(StudentBean.class);
-	
-	@ManagedProperty(value = "#{MbStudentController}")
-	private StudentController controller;
-	
+		
 	private List<CourseDTO> listaC;
 	private List<StudentDTO> listaA;	
 	private List<ProductDTO> listaD;
@@ -64,7 +61,7 @@ public class StudentBean implements Serializable {
 	private List<PSPDTO> filterPayments;
 	private PSPDTO detail;
 
-	private Integer idCourse = null;
+	private Integer idCourse;
 	private Integer idStudent;
 	private Integer idProduct;
 	private Date date1 = new Date();
@@ -169,144 +166,144 @@ public class StudentBean implements Serializable {
 //		
 //	}
 
-	// crea los tikets de pago
-	public void createReport() {
-		List<ReportData> listaR = new ArrayList<ReportData>();
-		ReportData report = new ReportData();
-		Double totalPayment = 0.0;
-		m = new MimeMultipart();
-
-		try {
-
-			if (this.temListaPsp.size() != 0) {
-				for (int i = 0; i < this.temListaPsp.size(); i++) {
-
-					Double remaining2;
-					totalPayment = totalPayment + this.temListaPsp.get(i).getAmountPayment();
-					remaining2 = this.temListaPsp.get(i).getTotalCourse() - totalPayment;
-
-					report.setStudentName(this.temListaPsp.get(i).getStudentName());
-					report.setCourseName(this.temListaPsp.get(i).getCourseName());
-					report.setNumPayment(this.temListaPsp.get(i).getNumPayment().toString());
-					report.setAmountPayment(this.temListaPsp.get(i).getAmountPayment().toString());
-					report.setDatePayment(this.temListaPsp.get(i).getDatePayment().toString());
-					report.setTypePayment(this.temListaPsp.get(i).getTypePayment());
-					report.setRemaining(remaining2.toString());
-					report.setTotalCourse(this.temListaPsp.get(i).getTotalCourse().toString());
-
-					listaR.add(report);
-
-					File jasper = new File(
-							FacesContext.getCurrentInstance().getExternalContext().getRealPath("/payment.jasper"));
-					JasperPrint jasperPrint = JasperFillManager.fillReport(jasper.getPath(), null,
-							new JRBeanCollectionDataSource(listaR));
-					outputStream = new ByteArrayOutputStream();
-					JasperExportManager.exportReportToPdfStream(jasperPrint, outputStream);
-
-					adjunto = new MimeBodyPart();
-
-					DataSource ds = new ByteArrayDataSource(outputStream.toByteArray(), "application/pdf");
-					adjunto.setDataHandler(new DataHandler(ds));
-					adjunto.setFileName("Recibo " + this.temListaPsp.get(i).getNumPayment() + "_"
-							+ this.temListaPsp.get(i).getStudentName() + ".pdf");
-					m.addBodyPart(adjunto);
-
-					listaR.clear();
-
-				}
-				// this.temListaPsp.clear();
-				RequestContext rc = RequestContext.getCurrentInstance();
-				rc.execute("PF('exito').show()");
-
-			} else {
-				RequestContext rc = RequestContext.getCurrentInstance();
-				rc.execute("PF('vacio').show()");
-
-			}
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			RequestContext rc = RequestContext.getCurrentInstance();
-			rc.execute("PF('fallido').show()");
-			log.error(e);
-		}
-	}
-
-	// establece los valores para el envio del correo
-	public void sendMail() {
-		Correo c = new Correo();
-		c.setPassword("Zaq12wsx123");
-		c.setUserEmail("contacto@mentoringit.com.mx");
-		c.setSubject(this.subject);
-		c.setFrom(this.from.trim());
-		c.setMessage(this.message);
-
-		if (controller(c)) {
-			RequestContext rc = RequestContext.getCurrentInstance();
-			rc.execute("PF('success').show()");
-		} else {
-			RequestContext rc = RequestContext.getCurrentInstance();
-			rc.execute("PF('fail').show()");
-		}
-
-	}
-
-	// controla el envio del correo
-	private boolean controller(Correo c) {
-
-		try {
-			Properties props = new Properties();
-			props.setProperty("mail.smtp.host", "gator4105.hostgator.com"); // Depende del servidor 
-			props.setProperty("mail.smtp.starttls.enable", "true"); // Depende del servidor
-			props.setProperty("mail.smtp.port", "587"); // Puede ser otro puerto
-			props.setProperty("mail.smtp.user", "contacto@mentoringit.com.mx");
-			props.setProperty("mail.smtp.auth", "true"); // Depende del servidor
-			
-	        Session s = Session.getInstance(props,
-	          new javax.mail.Authenticator() {
-	            protected PasswordAuthentication getPasswordAuthentication() {
-	                return new PasswordAuthentication(c.getUserEmail(), c.getPassword());
-	            }
-	          });
-
-	        BodyPart texto = new MimeBodyPart();
-			// BodyPart adjunto;
-			// MimeMultipart m = new MimeMultipart();
-
-			texto.setText(c.getMessage());
-
-			// for (int i=0; i<3;i++) {
-			// adjunto = new MimeBodyPart();
-			//
-			//
-			// DataSource ds = new
-			// ByteArrayDataSource(outputStream.toByteArray(),
-			// "application/pdf");
-			// adjunto.setDataHandler(new DataHandler(ds));
-			// adjunto.setFileName("Recibo");
-			// m.addBodyPart(adjunto);
-
-			// }
-
-			m.addBodyPart(texto);
-
-			MimeMessage mensaje = new MimeMessage(s);
-			mensaje.setFrom(new InternetAddress(c.getUserEmail()));
-			mensaje.addRecipient(Message.RecipientType.TO, new InternetAddress(c.getFrom()));
-			mensaje.setSubject(c.getSubject());
-			mensaje.setContent(m,"text/html; charset=utf-8");
-
-			Transport t = s.getTransport("smtp");
-			t.connect(c.getUserEmail(), c.getPassword());
-			t.sendMessage(mensaje, mensaje.getAllRecipients());
-			t.close();
-
-			return true;
-		} catch (Exception e) {
-//			e.printStackTrace();
-			log.error(e);
-			return false;
-		}
-	}
+//	// crea los tikets de pago
+//	public void createReport() {
+//		List<ReportData> listaR = new ArrayList<ReportData>();
+//		ReportData report = new ReportData();
+//		Double totalPayment = 0.0;
+//		m = new MimeMultipart();
+//
+//		try {
+//
+//			if (this.temListaPsp.size() != 0) {
+//				for (int i = 0; i < this.temListaPsp.size(); i++) {
+//
+//					Double remaining2;
+//					totalPayment = totalPayment + this.temListaPsp.get(i).getAmountPayment();
+//					remaining2 = this.temListaPsp.get(i).getTotalCourse() - totalPayment;
+//
+//					report.setStudentName(this.temListaPsp.get(i).getStudentName());
+//					report.setCourseName(this.temListaPsp.get(i).getCourseName());
+//					report.setNumPayment(this.temListaPsp.get(i).getNumPayment().toString());
+//					report.setAmountPayment(this.temListaPsp.get(i).getAmountPayment().toString());
+//					report.setDatePayment(this.temListaPsp.get(i).getDatePayment().toString());
+//					report.setTypePayment(this.temListaPsp.get(i).getTypePayment());
+//					report.setRemaining(remaining2.toString());
+//					report.setTotalCourse(this.temListaPsp.get(i).getTotalCourse().toString());
+//
+//					listaR.add(report);
+//
+//					File jasper = new File(
+//							FacesContext.getCurrentInstance().getExternalContext().getRealPath("/payment.jasper"));
+//					JasperPrint jasperPrint = JasperFillManager.fillReport(jasper.getPath(), null,
+//							new JRBeanCollectionDataSource(listaR));
+//					outputStream = new ByteArrayOutputStream();
+//					JasperExportManager.exportReportToPdfStream(jasperPrint, outputStream);
+//
+//					adjunto = new MimeBodyPart();
+//
+//					DataSource ds = new ByteArrayDataSource(outputStream.toByteArray(), "application/pdf");
+//					adjunto.setDataHandler(new DataHandler(ds));
+//					adjunto.setFileName("Recibo " + this.temListaPsp.get(i).getNumPayment() + "_"
+//							+ this.temListaPsp.get(i).getStudentName() + ".pdf");
+//					m.addBodyPart(adjunto);
+//
+//					listaR.clear();
+//
+//				}
+//				// this.temListaPsp.clear();
+//				RequestContext rc = RequestContext.getCurrentInstance();
+//				rc.execute("PF('exito').show()");
+//
+//			} else {
+//				RequestContext rc = RequestContext.getCurrentInstance();
+//				rc.execute("PF('vacio').show()");
+//
+//			}
+//		} catch (Exception e) {
+//			// TODO Auto-generated catch block
+//			RequestContext rc = RequestContext.getCurrentInstance();
+//			rc.execute("PF('fallido').show()");
+//			log.error(e);
+//		}
+//	}
+//
+//	// establece los valores para el envio del correo
+//	public void sendMail() {
+//		Correo c = new Correo();
+//		c.setPassword("Zaq12wsx123");
+//		c.setUserEmail("contacto@mentoringit.com.mx");
+//		c.setSubject(this.subject);
+//		c.setFrom(this.from.trim());
+//		c.setMessage(this.message);
+//
+//		if (controller(c)) {
+//			RequestContext rc = RequestContext.getCurrentInstance();
+//			rc.execute("PF('success').show()");
+//		} else {
+//			RequestContext rc = RequestContext.getCurrentInstance();
+//			rc.execute("PF('fail').show()");
+//		}
+//
+//	}
+//
+//	// controla el envio del correo
+//	private boolean controller(Correo c) {
+//
+//		try {
+//			Properties props = new Properties();
+//			props.setProperty("mail.smtp.host", "gator4105.hostgator.com"); // Depende del servidor 
+//			props.setProperty("mail.smtp.starttls.enable", "true"); // Depende del servidor
+//			props.setProperty("mail.smtp.port", "587"); // Puede ser otro puerto
+//			props.setProperty("mail.smtp.user", "contacto@mentoringit.com.mx");
+//			props.setProperty("mail.smtp.auth", "true"); // Depende del servidor
+//			
+//	        Session s = Session.getInstance(props,
+//	          new javax.mail.Authenticator() {
+//	            protected PasswordAuthentication getPasswordAuthentication() {
+//	                return new PasswordAuthentication(c.getUserEmail(), c.getPassword());
+//	            }
+//	          });
+//
+//	        BodyPart texto = new MimeBodyPart();
+//			// BodyPart adjunto;
+//			// MimeMultipart m = new MimeMultipart();
+//
+//			texto.setText(c.getMessage());
+//
+//			// for (int i=0; i<3;i++) {
+//			// adjunto = new MimeBodyPart();
+//			//
+//			//
+//			// DataSource ds = new
+//			// ByteArrayDataSource(outputStream.toByteArray(),
+//			// "application/pdf");
+//			// adjunto.setDataHandler(new DataHandler(ds));
+//			// adjunto.setFileName("Recibo");
+//			// m.addBodyPart(adjunto);
+//
+//			// }
+//
+//			m.addBodyPart(texto);
+//
+//			MimeMessage mensaje = new MimeMessage(s);
+//			mensaje.setFrom(new InternetAddress(c.getUserEmail()));
+//			mensaje.addRecipient(Message.RecipientType.TO, new InternetAddress(c.getFrom()));
+//			mensaje.setSubject(c.getSubject());
+//			mensaje.setContent(m,"text/html; charset=utf-8");
+//
+//			Transport t = s.getTransport("smtp");
+//			t.connect(c.getUserEmail(), c.getPassword());
+//			t.sendMessage(mensaje, mensaje.getAllRecipients());
+//			t.close();
+//
+//			return true;
+//		} catch (Exception e) {
+////			e.printStackTrace();
+//			log.error(e);
+//			return false;
+//		}
+//	}
 
 	// metodos getters y setters
 
@@ -319,7 +316,7 @@ public class StudentBean implements Serializable {
 //	}
 
 	public List<CourseDTO> getListaC() {
-		listaC = controller.courses();
+//		listaC = controller.courses();
 		return listaC;
 	}
 
@@ -328,7 +325,7 @@ public class StudentBean implements Serializable {
 	}
 
 	public List<StudentDTO> getListaA() {
-		listaA = controller.students();
+//		listaA = controller.students();
 		return listaA;
 	}
 
@@ -337,7 +334,7 @@ public class StudentBean implements Serializable {
 	}
 
 	public List<ProductDTO> getListaD() {
-		listaD = controller.startDates(idCourse, getFormatDate1(), getFormatDate2());
+//		listaD = controller.startDates(idCourse, getFormatDate1(), getFormatDate2());
 		return listaD;
 	}
 
@@ -357,7 +354,7 @@ public class StudentBean implements Serializable {
 			this.idProduct = null;
 			this.listaD = null;
 		}
-
+		System.out.println("id curso"+idCourse);
 		this.idCourse = idCourse;
 	}
 
@@ -426,6 +423,7 @@ public class StudentBean implements Serializable {
 	}
 
 	public void setIdProduct(Integer idProduct) {
+		System.out.println("id producto" + idProduct);
 		this.idProduct = idProduct;
 	}
 
@@ -478,21 +476,21 @@ public class StudentBean implements Serializable {
 		this.temListaPsp = temListaPsp;
 	}
 
-//	public String getFrom() { PENDIENTE
+	public String getFrom() { 
 //		try {
 //			this.from = (this.studentService.selectStudent(this.idStudent)).getEmail();
 //		} catch (Exception e) {
 //			// TODO Auto-generated catch block
 //			log.error(e);
 //		}
-//		return from;
-//	}
+		return from;
+	}
 
 	public void setFrom(String from) {
 		this.from = from;
 	}
 
-//	public String getSubject() { PENDIENTE
+	public String getSubject() { 
 //		try {
 //			this.subject = "Recibos de pagos realizados  para el curso "
 //					+ this.studentService.selectCourseName(this.idCourse);
@@ -500,8 +498,8 @@ public class StudentBean implements Serializable {
 //			// TODO Auto-generated catch block
 //			log.error(e);
 //		}
-//		return subject;
-//	}
+		return subject;
+	}
 
 	public void setSubject(String subject) {
 		this.subject = subject;
@@ -523,11 +521,36 @@ public class StudentBean implements Serializable {
 		this.validation = validation;
 	}
 
-	public StudentController getController() {
-		return controller;
+	public ByteArrayOutputStream getOutputStream() {
+		return outputStream;
 	}
 
-	public void setController(StudentController controller) {
-		this.controller = controller;
+	public void setOutputStream(ByteArrayOutputStream outputStream) {
+		this.outputStream = outputStream;
 	}
+
+	public MimeMultipart getM() {
+		return m;
+	}
+
+	public void setM(MimeMultipart m) {
+		this.m = m;
+	}
+
+	public BodyPart getAdjunto() {
+		return adjunto;
+	}
+
+	public void setAdjunto(BodyPart adjunto) {
+		this.adjunto = adjunto;
+	}
+
+//	public StudentController getController() {
+//		return controller;
+//	}
+//
+//	public void setController(StudentController controller) {
+//		this.controller = controller;
+//	}
+
 }
