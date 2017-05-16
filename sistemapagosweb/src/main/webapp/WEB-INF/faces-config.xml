@@ -27,15 +27,15 @@
 <!-- 		</managed-property> -->
 <!-- 	</managed-bean> -->
 
-	<managed-bean>
-		<managed-bean-name>CourseList</managed-bean-name>
-		<managed-bean-class>mx.com.mentoringit.web.beans.CourseBean</managed-bean-class>
-		<managed-bean-scope>session</managed-bean-scope>
-		<managed-property>
-			<property-name>courseService</property-name>
-			<value>#{courseService}</value>
-		</managed-property>
-	</managed-bean>
+<!-- 	<managed-bean> -->
+<!-- 		<managed-bean-name>CourseList</managed-bean-name> -->
+<!-- 		<managed-bean-class>mx.com.mentoringit.web.beans.ExistingStudentBean</managed-bean-class> -->
+<!-- 		<managed-bean-scope>session</managed-bean-scope> -->
+<!-- 		<managed-property> -->
+<!-- 			<property-name>courseService</property-name> -->
+<!-- 			<value>#{courseService}</value> -->
+<!-- 		</managed-property> -->
+<!-- 	</managed-bean> -->
 
 <!-- 	<managed-bean> -->
 <!-- 		<managed-bean-name>NewStudent</managed-bean-name> -->

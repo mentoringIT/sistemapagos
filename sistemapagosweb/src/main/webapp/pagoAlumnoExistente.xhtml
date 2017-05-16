@@ -29,15 +29,15 @@
 			<h:panelGrid columns="3" cellpadding="5">
 
 				<p:outputLabel value="Curso" />
-				<p:selectOneMenu id="course" value="#{CourseList.idCourse}"
+				<p:selectOneMenu id="course" value="#{MbExistingStudentBean.idCourse}"
 					filter="true" filterMatchMode="contains" height="100"
 					required="true" requiredMessage="campo obligatorio" tabindex="1">
 
 					<f:selectItem itemLabel="--Seleccione Curso--"
 						noSelectionOption="true" />
-					<f:selectItems value="#{CourseList.listaC}" var="c"
+					<f:selectItems value="#{MbExistingStudentController.selectCourse()}" var="c"
 						itemValue="#{c.id}" itemLabel="#{c.name}" />
-					<p:ajax process=":form1:course"
+					<p:ajax process="@this"
 						update=":form1:startsDates :form1:data :form1:totals :form1" />
 				</p:selectOneMenu>
 				<p:message for="course" display="text"
@@ -45,29 +45,29 @@
 
 				<p:outputLabel value="Fecha de inicio" />
 				<h:panelGrid id="startsDates" columns="2" cellpadding="5">
-					<p:calendar id="date1" value="#{CourseList.date1}" navigator="true"
+					<p:calendar id="date1" value="#{MbExistingStudentBean.date1}" navigator="true"
 						showOn="button"
-						disabled="#{CourseList.idCourse eq 0 or CourseList.idCourse eq null}"
+						disabled="#{MbExistingStudentBean.idCourse eq 0 or MbExistingStudentBean.idCourse eq null}"
 						tabindex="2" />
 
-					<p:calendar id="date2" value="#{CourseList.date2}" navigator="true"
+					<p:calendar id="date2" value="#{MbExistingStudentBean.date2}" navigator="true"
 						showOn="button"
-						disabled="#{CourseList.idCourse eq 0 or CourseList.idCourse eq null}"
+						disabled="#{MbExistingStudentBean.idCourse eq 0 or MbExistingStudentBean.idCourse eq null}"
 						tabindex="3" />
 
-					<p:selectOneMenu id="fechas" value="#{CourseList.idProduct}"
-						disabled="#{CourseList.idCourse eq 0 or CourseList.idCourse eq null}"
-						required="#{CourseList.validation}"
+					<p:selectOneMenu id="fechas" value="#{MbExistingStudentBean.idProduct}"
+						disabled="#{MbExistingStudentBean.idCourse eq 0 or MbExistingStudentBean.idCourse eq null}"
+						required="#{MbExistingStudentBean.validation}"
 						requiredMessage="campo obligatorio" tabindex="4">
 						<f:selectItem itemLabel="--Fechas de inicio--" />
-						<f:selectItems value="#{CourseList.listaD}" var="d"
+						<f:selectItems value="#{MbExistingStudentBean.listaD}" var="d"
 							itemValue="#{d.id}" itemLabel="#{d.start_date}" />
-						<p:ajax process=":form1:fechas" update=":form1:data" />
+						<p:ajax process="@this" update=":form1:data" />
 					</p:selectOneMenu>
 
 					<p:commandButton id="busqueda" value="buscar" icon="ui-icon-search"
-						actionListener="#{CourseList.startDates}" update="fechas"
-						disabled="#{CourseList.idCourse eq 0 or CourseList.idCourse eq null}"
+						actionListener="#{MbExistingStudentController.startDates}" update="fechas"
+						disabled="#{MbExistingStudentBean.idCourse eq 0 or MbExistingStudentBean.idCourse eq null}"
 						tabindex="5">
 
 					</p:commandButton>
@@ -80,77 +80,77 @@
 			<h:panelGrid id="data" columns="3" cellpadding="5">
 
 				<p:outputLabel value="Nombre del alumno" />
-				<p:selectOneMenu id="student" value="#{CourseList.idStudent}"
+				<p:selectOneMenu id="student" value="#{MbExistingStudentBean.idStudent}"
 					filter="true" filterMatchMode="contains" height="100"
 					required="true" requiredMessage="campo obligatorio"
-					disabled="#{CourseList.idProduct eq 0 or CourseList.idProduct eq null}"
+					disabled="#{MbExistingStudentBean.idProduct eq 0 or MbExistingStudentBean.idProduct eq null}"
 					tabindex="6">
 
 					<f:selectItem itemLabel="--Seleccione Alumno--"
 						noSelectionOption="true" />
-					<f:selectItems value="#{CourseList.listaAllS}" var="s"
+					<f:selectItems value="#{MbExistingStudentController.selectAllStudent()}" var="s"
 						itemValue="#{s.id}" itemLabel="#{s.name}" />
-					<p:ajax listener="#{CourseList.totals}" process=":form1:student"
-						update=":form1:numPayment :form1:totals :form1:total1" />
+					<p:ajax listener="#{MbExistingStudentController.totals}" process="@this"
+						update=":form1:numPayment, :form1:totals, :form1:total1" />
 				</p:selectOneMenu>
 				<p:message for="student" display="text"
 					style="width:150px; font-size:14px;" />
 
 				<p:outputLabel value="Fecha de pago" />
-				<p:calendar id="paymentDate" value="#{CourseList.date_payment}"
+				<p:calendar id="paymentDate" value="#{MbExistingStudentBean.date_payment}"
 					showOn="button" required="true"
-					disabled="#{CourseList.idProduct eq 0 or CourseList.idProduct eq null}"
+					disabled="#{MbExistingStudentBean.idProduct eq 0 or MbExistingStudentBean.idProduct eq null}"
 					tabindex="7" />
 				<p:message for="paymentDate" display="text"
 					style="width:300px; font-size:14px;" />
 
 
 				<p:outputLabel value="Total del curso" />
-				<p:spinner id="total1" value="#{CourseList.total}" prefix="$"
+				<p:spinner id="total1" value="#{MbExistingStudentBean.total}" prefix="$"
 					min="0"
-					disabled="#{CourseList.totalCourse > 0 or CourseList.idProduct eq 0 or CourseList.idProduct eq null}"
+					disabled="#{MbExistingStudentBean.totalCourse > 0 or MbExistingStudentBean.idProduct eq 0 or MbExistingStudentBean.idProduct eq null}"
 					required="true"
 					validatorMessage="el valor tiene que ser mayor que 0.0"
 					converterMessage="caracter invalido"
 					tabindex="8">
 					<f:validateDoubleRange minimum="1.0" />
-					<p:ajax process=":form1:total1" update=":form1:amount @this" />
+					<p:ajax process="@this" update="@this,:form1:amount,form1" />
 				</p:spinner>
 				<p:message for="total1" display="text"
 					style="width:270px; font-size:14px;" />
 
 
 				<p:outputLabel value="Pago o Monto" />
-				<p:spinner id="amount" value="#{CourseList.amount}" prefix="$" 
+				<p:spinner id="amount" value="#{MbExistingStudentBean.amount}" prefix="$" 
 					min="0" required="true"
 					validatorMessage="el valor tiene que ser mayor que 0.0"
 					converterMessage="caracter invalido"
-					max="#{CourseList.total}"
-					disabled="#{CourseList.idProduct eq 0 or CourseList.idProduct eq null}"
+					max="#{MbExistingStudentBean.total}"
+					disabled="#{MbExistingStudentBean.idProduct eq 0 or MbExistingStudentBean.idProduct eq null}"
 					tabindex="9">
 					<f:validateDoubleRange minimum="1.0" />
-					<p:ajax update="@this" />
+					<p:ajax process="@this" update="@this,form1" />
 				</p:spinner>
 				<p:message for="amount" display="text"
 					style="width:270px; font-size:14px;" />
 
 				<p:outputLabel value="No. de Pago" />
-				<p:spinner id="numPayment" value="#{CourseList.num_payment}" min="1"
-					required="true"
+				<p:spinner id="numPayment" value="#{MbExistingStudentBean.num_payment}" min="1"
+					required="true" readonly="true"
 					validatorMessage="el valor tiene que ser mayor que 0"
 					converterMessage="caracter invalido"
-					disabled="#{CourseList.idProduct eq 0 or CourseList.idProduct eq null}"
+					disabled="#{MbExistingStudentBean.idProduct eq 0 or MbExistingStudentBean.idProduct eq null}"
 					tabindex="10">
 					<f:validateLongRange minimum="1" />
-					<p:ajax update="@this" />
+					<p:ajax process="@this" update="@this,form1" />
 				</p:spinner>
 				<p:message for="numPayment" display="text"
 					style="width:270px; font-size:14px;" />
 
 				<p:outputLabel value="Forma de pago" />
-				<p:selectOneMenu id="typePayment" value="#{CourseList.type_payment}"
+				<p:selectOneMenu id="typePayment" value="#{MbExistingStudentBean.type_payment}"
 					required="true" requiredMessage="campo obligatorio"
-					disabled="#{CourseList.idProduct eq 0 or CourseList.idProduct eq null}"
+					disabled="#{MbExistingStudentBean.idProduct eq 0 or MbExistingStudentBean.idProduct eq null}"
 					tabindex="11">
 					<f:selectItem itemLabel="--Seleccione opcion--"
 						noSelectionOption="true" />
@@ -167,21 +167,21 @@
 			<pm:fieldset>
 				<h:panelGrid id="totals" columns="2" cellpadding="5">
 					<p:outputLabel value="Costo curso: " />
-					<p:outputLabel value="#{CourseList.totalCourse}" />
+					<p:outputLabel value="#{MbExistingStudentBean.totalCourse}" />
 
 					<p:outputLabel value="Total pagado: " />
-					<p:outputLabel value="#{CourseList.totalPayment}" />
+					<p:outputLabel value="#{MbExistingStudentBean.totalPayment}" />
 
 					<p:outputLabel value="Restante: " />
-					<p:outputLabel value="#{CourseList.remaining}" />
+					<p:outputLabel value="#{MbExistingStudentBean.remaining}" />
 				</h:panelGrid>
 			</pm:fieldset>
 
 			<p:toolbar id="tools">
 				<f:facet name="left">
 					<p:commandButton id="gPago" value="Generar pago"
-						actionListener="#{CourseList.createReport()}" update="form1"
-						disabled="#{CourseList.paymentStatus == true}" tabindex="12" />
+						actionListener="#{MbExistingStudentController.createReport()}" update="form1"
+						disabled="#{MbExistingStudentBean.paymentStatus == true}" tabindex="12" />
 				</f:facet>
 
 				<f:facet name="right">
@@ -193,12 +193,12 @@
 
 		<p:dialog id="detail" widgetVar="detail" header="Detalles del pago"
 			modal="true" width="60%">
-			<p:media cache="false" rendered="#{CourseList.media ne null}"
-				width="100%" height="300px" value="#{CourseList.media}" player="pdf" />
+			<p:media cache="false" rendered="#{MbExistingStudentBean.media ne null}"
+				width="100%" height="300px" value="#{MbExistingStudentBean.media}" player="pdf" />
 			<p:toolbar>
 				<f:facet name="left">
 					<p:commandButton value="Confirmar pago"
-						action="#{CourseList.insertPayment()}" update="form1:totals"/>
+						action="#{MbExistingStudentController.insertPayment()}" update="form1:totals"/>
 				</f:facet>
 				<f:facet name="right">
 					<p:commandButton value="Cancelar" onclick="PF().hide()" />
