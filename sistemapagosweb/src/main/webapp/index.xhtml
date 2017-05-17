@@ -24,19 +24,19 @@
 			<h:panelGrid columns="2" cellpadding="5">
 
 				<h:outputLabel for="username" value="Usuario:" />
-				<p:inputText value="#{LoginUser.username}" id="username"
+				<p:inputText value="#{MbLoginUserBean.username}" id="username"
 					required="true" label="username" tabindex="1"
-					requiredMessage="#{LoginUser.messageUser()}" />
+					requiredMessage="#{MbLoginUserController.messageUser()}" />
 
 				<h:outputLabel for="password" value="Clave:" />
-				<p:password value="#{LoginUser.password}" id="password"
+				<p:password value="#{MbLoginUserBean.password}" id="password"
 					required="true" label="password" tabindex="2"
-					requiredMessage="#{LoginUser.messageKey()}" />
+					requiredMessage="#{MbLoginUserController.messageKey()}" />
 
 
 				<f:facet name="footer">
 					<p:commandButton id="loginButton" value="Entrar"
-						action="#{LoginUser.userLogin}" onclick="PF().show()" tabindex="3"/>
+						action="#{MbLoginUserController.userLogin}" update="form" tabindex="3"/>
 				</f:facet>
 			</h:panelGrid>
 			<p:messages id="messages" style="width:300px; font-size:10px;"

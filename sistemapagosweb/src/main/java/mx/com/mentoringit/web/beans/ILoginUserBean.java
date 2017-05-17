@@ -1,6 +1,6 @@
 package mx.com.mentoringit.web.beans;
 
-public interface IUserBean {
+public interface ILoginUserBean {
 
 	public String userLogin();
 

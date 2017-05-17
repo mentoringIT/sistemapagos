@@ -57,32 +57,41 @@ public class StudentBean implements Serializable {
 	private List<StudentDTO> listaA;	
 	private List<ProductDTO> listaD;
 	private List<PSPDTO> listaPsp;
-	private List<PSPDTO> temListaPsp = new ArrayList<PSPDTO>();
+	private List<PSPDTO> temListaPsp;
 	private List<PSPDTO> filterPayments;
 	private PSPDTO detail;
 
 	private Integer idCourse;
 	private Integer idStudent;
 	private Integer idProduct;
-	private Date date1 = new Date();
-	private Date date2 = new Date();
+	private Date date1;
+	private Date date2;
 	private String formatDate1;
 	private String formatDate2;
 	private String nameStudent;
-	private Double totalCourse = 0.0;
-	private Double totalPayment = 0.0;
-	private Double remaining = 0.0;
-	private Boolean validation = false;
+	private Double totalCourse;
+	private Double totalPayment;
+	private Double remaining;
+	private Boolean validation;
 	
 	private String from;
 	private String subject;
 	private String message;
 
-	private ByteArrayOutputStream outputStream = null;
+	private ByteArrayOutputStream outputStream;
 	private BodyPart adjunto;
 	private MimeMultipart m;
 	
 	public StudentBean(){
+		this.temListaPsp = new ArrayList<PSPDTO>();
+		this.idProduct = null;
+		this.date1 = new Date();
+		this.date2 = new Date();
+		this.totalCourse = 0.0;
+		this.totalPayment = 0.0;
+		this.remaining = 0.0;
+		this.validation = false;
+		this.outputStream = null;
 		
 	}
 	
@@ -349,7 +358,6 @@ public class StudentBean implements Serializable {
 			this.idProduct = null;
 			this.listaD = null;
 		}
-		System.out.println("id curso"+idCourse);
 		this.idCourse = idCourse;
 	}
 
@@ -418,7 +426,6 @@ public class StudentBean implements Serializable {
 	}
 
 	public void setIdProduct(Integer idProduct) {
-		System.out.println("id producto" + idProduct);
 		this.idProduct = idProduct;
 	}
 

@@ -7,15 +7,15 @@
 
 	<!-- beans para el flujo de alumnos -->
 
-	<managed-bean>
-		<managed-bean-name>LoginUser</managed-bean-name>
-		<managed-bean-class>mx.com.mentoringit.web.beans.UserBean</managed-bean-class>
-		<managed-bean-scope>session</managed-bean-scope>
-		<managed-property>
-			<property-name>userService</property-name>
-			<value>#{userService}</value>
-		</managed-property>
-	</managed-bean>
+<!-- 	<managed-bean> -->
+<!-- 		<managed-bean-name>LoginUser</managed-bean-name> -->
+<!-- 		<managed-bean-class>mx.com.mentoringit.web.beans.UserBean</managed-bean-class> -->
+<!-- 		<managed-bean-scope>session</managed-bean-scope> -->
+<!-- 		<managed-property> -->
+<!-- 			<property-name>userService</property-name> -->
+<!-- 			<value>#{userService}</value> -->
+<!-- 		</managed-property> -->
+<!-- 	</managed-bean> -->
 
 <!-- 	<managed-bean> -->
 <!-- 		<managed-bean-name>StudentList</managed-bean-name> -->

@@ -26,6 +26,8 @@ import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMultipart;
 import javax.mail.util.ByteArrayDataSource;
 
+import org.apache.log4j.Logger;
+import org.apache.log4j.PropertyConfigurator;
 import org.primefaces.context.RequestContext;
 import org.primefaces.model.DefaultStreamedContent;
 
@@ -44,6 +46,7 @@ import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 @ManagedBean(name = "MbExistingStudentController")
 @SessionScoped
 public class ExistingStudentController {
+	private final static Logger log = Logger.getLogger(ExistingStudentController.class);
 	
 	@ManagedProperty(value = "#{MbExistingStudentBean}")
 	private ExistingStudentBean esb;
@@ -51,7 +54,14 @@ public class ExistingStudentController {
 	@ManagedProperty(value = "#{courseService}")
 	private ICourseService courseService;
 	
-	public ExistingStudentController(){}
+	public ExistingStudentController(){
+		try {
+			InputStream in = getClass().getClassLoader().getResourceAsStream("log4j.properties");
+			PropertyConfigurator.configure(in);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
 	
 	// obtiene todos los cursos
 		public List<CourseDTO> selectCourse() {
@@ -59,8 +69,7 @@ public class ExistingStudentController {
 				return courseService.allCourse();
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
-				e.printStackTrace();
-//				log.error(e);
+				log.error(e);
 				return null;
 			}
 		}
@@ -72,8 +81,7 @@ public class ExistingStudentController {
 				return courseService.allStudent();
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
-				e.printStackTrace();
-//				log.error(e);
+				log.error(e);
 				return null;
 			}
 		}
@@ -91,9 +99,8 @@ public class ExistingStudentController {
 
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
-//				log.error(e);
+				log.error(e);
 				esb.setValidation(false);
-				e.printStackTrace();
 			}
 		}
 		
@@ -132,8 +139,7 @@ public class ExistingStudentController {
 
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
-//				log.error(e);
-				e.printStackTrace();
+				log.error(e);
 			}
 		}
 
@@ -210,8 +216,7 @@ public class ExistingStudentController {
 				// TODO Auto-generated catch block
 				RequestContext rc = RequestContext.getCurrentInstance();
 				rc.execute("PF('genPago').show()");
-//				log.error(e);
-				e.printStackTrace();
+				log.error(e);
 
 			}
 
@@ -279,8 +284,7 @@ public class ExistingStudentController {
 				// TODO Auto-generated catch block
 				RequestContext rc = RequestContext.getCurrentInstance();
 				rc.execute("PF('regFallido').show()");
-//				log.error(e);
-				e.printStackTrace();
+				log.error(e);
 			}
 
 		}
@@ -334,10 +338,7 @@ public class ExistingStudentController {
 
 				return true;
 			} catch (Exception e) {
-
-//				e.printStackTrace();
-//				log.error(e);
-				e.printStackTrace();
+				log.error(e);
 				return false;
 			}
 		}

@@ -97,6 +97,7 @@ public class StudentController implements Serializable {
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			log.error(e);
+			stb.setValidation(false);
 		}
 	}
 	
@@ -107,7 +108,7 @@ public class StudentController implements Serializable {
 		stb.setRemaining(0.0);//		this.remaining = 0.0;
 		
 		try {
-			if(!(stb.getIdProduct().equals(null))){
+			if(stb.getIdProduct() != null){
 			stb.setListaPsp(studentService.paymentByStudent(stb.getIdStudent(), stb.getIdProduct()));
 			
 				if (stb.getListaPsp().size() != 0) {
@@ -126,14 +127,15 @@ public class StudentController implements Serializable {
 					return "";
 				}
 			}else{
-//				RequestContext.getCurrentInstance().execute("PF('seleccionar').show()");
-				System.out.println("debe selecionar una fecha de inicio");
+				RequestContext.getCurrentInstance().execute("PF('seleccionar').show()");
 				return "";
 			}
 		
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
+			
 			log.error(e);
+//			RequestContext.getCurrentInstance().execute("PF('seleccionar').show()");
 			return "";	
 		}	
 	}

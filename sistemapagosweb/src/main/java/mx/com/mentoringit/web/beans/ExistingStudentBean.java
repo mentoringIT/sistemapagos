@@ -50,7 +50,6 @@ import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 @ManagedBean(name = "MbExistingStudentBean")
 @SessionScoped
 public class ExistingStudentBean implements Serializable {
-	private final static Logger log = Logger.getLogger(ExistingStudentBean.class);
 	
 	private ICourseService courseService;
 
@@ -88,14 +87,7 @@ public class ExistingStudentBean implements Serializable {
 	private StreamedContent media = null;
 //	private String realPath;
 
-	public ExistingStudentBean() {
-		try {
-			InputStream in = getClass().getClassLoader().getResourceAsStream("log4j.properties");
-			PropertyConfigurator.configure(in);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
+	public ExistingStudentBean() {}
 
 //	// obtiene todos los cursos
 //	public void selectCourse() {
