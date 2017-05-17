@@ -170,14 +170,11 @@ public class ExistingStudentController {
 			
 			if(esb.getTotal().equals(esb.getTotalPayment())){			
 					flag = true;
-					esb.setPaymentStatus(true);
+//					esb.setPaymentStatus(true);
 			}
 
 			try {				
-				esb.setFrom((courseService.selectStudent(esb.getIdStudent())).getEmail());
-				
-				esb.setSubject("Recibo de pago No. " + esb.getNum_payment() + " para el curso "
-						+ courseService.selectCourseName(esb.getIdCourse()));					
+									
 				
 				if (esb.getIdProduct() != null) {
 					if (!flag) {
@@ -203,9 +200,16 @@ public class ExistingStudentController {
 						esb.setMedia(new DefaultStreamedContent(is, "application/pdf", "Recibo.pdf"));
 
 						listaR.clear();
+						
+						esb.setFrom((courseService.selectStudent(esb.getIdStudent())).getEmail());
+						
+						esb.setSubject("Recibo de pago No. " + esb.getNum_payment() + " para el curso "
+								+ courseService.selectCourseName(esb.getIdCourse()));
+						
 						RequestContext rc = RequestContext.getCurrentInstance();
 						rc.execute("PF('detail').show()");
 					} else {
+						esb.setPaymentStatus(true);
 						RequestContext.getCurrentInstance().execute("PF('status').show()");
 					}
 				} else {

@@ -47,10 +47,10 @@ import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 @SessionScoped
 public class StudentController implements Serializable {
 	private final static Logger log = Logger.getLogger(StudentController.class);
-	
+
 	@ManagedProperty(value = "#{studentService}")
 	private IStudentService studentService;
-	
+
 	@ManagedProperty(value = "#{MbStudentList}")
 	private StudentBean stb;
 
@@ -89,9 +89,9 @@ public class StudentController implements Serializable {
 	public void startDates() {
 		try {
 			stb.setListaD(studentService.startDates(stb.getIdCourse(), stb.getFormatDate1(), stb.getFormatDate2()));
-			if(stb.getListaD().size() != 0){
+			if (stb.getListaD().size() != 0) {
 				stb.setValidation(true);
-			}else{
+			} else {
 				stb.setValidation(false);
 			}
 		} catch (Exception e) {
@@ -100,47 +100,46 @@ public class StudentController implements Serializable {
 			stb.setValidation(false);
 		}
 	}
-	
+
 	// obtiene todos los pagos de un alumno y calcula los totales PENDIENTE
 	public String paymentsByStudent() {
-		stb.setTotalCourse(0.0); //		this.totalCourse = 0.0;
-		stb.setTotalPayment(0.0);//		this.totalPayment = 0.0;
-		stb.setRemaining(0.0);//		this.remaining = 0.0;
-		
+		stb.setTotalCourse(0.0); // this.totalCourse = 0.0;
+		stb.setTotalPayment(0.0);// this.totalPayment = 0.0;
+		stb.setRemaining(0.0);// this.remaining = 0.0;
+
 		try {
-			if(stb.getIdProduct() != null){
-			stb.setListaPsp(studentService.paymentByStudent(stb.getIdStudent(), stb.getIdProduct()));
-			
+			if (stb.getIdProduct() != null) {
+				stb.setListaPsp(studentService.paymentByStudent(stb.getIdStudent(), stb.getIdProduct()));
+
 				if (stb.getListaPsp().size() != 0) {
 					for (int i = 0; i < stb.getListaPsp().size(); i++) {
 						if (i == 0) {
 							stb.setTotalCourse(stb.getListaPsp().get(i).getTotalCourse());
-							stb.setNameStudent(stb.getListaPsp().get(i).getStudentName());							
+							stb.setNameStudent(stb.getListaPsp().get(i).getStudentName());
 						}
 						stb.setTotalPayment(stb.getTotalPayment() + stb.getListaPsp().get(i).getAmountPayment());
-						
+
 					}
-					stb.setRemaining(stb.getTotalCourse() - stb.getTotalPayment());					
+					stb.setRemaining(stb.getTotalCourse() - stb.getTotalPayment());
 					return "consult";
 				} else {
 					RequestContext.getCurrentInstance().execute("PF('no_payments').show()");
 					return "";
 				}
-			}else{
+			} else {
 				RequestContext.getCurrentInstance().execute("PF('seleccionar').show()");
 				return "";
 			}
-		
+
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
-			
+
 			log.error(e);
-//			RequestContext.getCurrentInstance().execute("PF('seleccionar').show()");
-			return "";	
-		}	
+			// RequestContext.getCurrentInstance().execute("PF('seleccionar').show()");
+			return "";
+		}
 	}
-	
-	
+
 	// crea los tikets de pago
 	public void createReport() {
 		List<ReportData> listaR = new ArrayList<ReportData>();
@@ -149,8 +148,6 @@ public class StudentController implements Serializable {
 		stb.setM(new MimeMultipart());
 
 		try {
-			 stb.setFrom((studentService.selectStudent(stb.getIdStudent())).getEmail()); 
-			 stb.setSubject("Recibos de pagos realizados  para el curso " + studentService.selectCourseName(stb.getIdCourse()));		
 
 			if (stb.getTemListaPsp().size() != 0) {
 				for (int i = 0; i < stb.getTemListaPsp().size(); i++) {
@@ -189,6 +186,9 @@ public class StudentController implements Serializable {
 
 				}
 				// this.temListaPsp.clear();
+				stb.setFrom((studentService.selectStudent(stb.getIdStudent())).getEmail());
+				stb.setSubject("Recibos de pagos realizados  para el curso "
+						+ studentService.selectCourseName(stb.getIdCourse()));
 				RequestContext rc = RequestContext.getCurrentInstance();
 				rc.execute("PF('exito').show()");
 
@@ -229,20 +229,23 @@ public class StudentController implements Serializable {
 
 		try {
 			Properties props = new Properties();
-			props.setProperty("mail.smtp.host", "gator4105.hostgator.com"); // Depende del servidor 
-			props.setProperty("mail.smtp.starttls.enable", "true"); // Depende del servidor
+			props.setProperty("mail.smtp.host", "gator4105.hostgator.com"); // Depende
+																			// del
+																			// servidor
+			props.setProperty("mail.smtp.starttls.enable", "true"); // Depende
+																	// del
+																	// servidor
 			props.setProperty("mail.smtp.port", "587"); // Puede ser otro puerto
 			props.setProperty("mail.smtp.user", "contacto@mentoringit.com.mx");
 			props.setProperty("mail.smtp.auth", "true"); // Depende del servidor
-			
-	        Session s = Session.getInstance(props,
-	          new javax.mail.Authenticator() {
-	            protected PasswordAuthentication getPasswordAuthentication() {
-	                return new PasswordAuthentication(c.getUserEmail(), c.getPassword());
-	            }
-	          });
 
-	        BodyPart texto = new MimeBodyPart();
+			Session s = Session.getInstance(props, new javax.mail.Authenticator() {
+				protected PasswordAuthentication getPasswordAuthentication() {
+					return new PasswordAuthentication(c.getUserEmail(), c.getPassword());
+				}
+			});
+
+			BodyPart texto = new MimeBodyPart();
 			// BodyPart adjunto;
 			// MimeMultipart m = new MimeMultipart();
 
@@ -261,13 +264,13 @@ public class StudentController implements Serializable {
 
 			// }
 
-			 stb.getM().addBodyPart(texto);
+			stb.getM().addBodyPart(texto);
 
 			MimeMessage mensaje = new MimeMessage(s);
 			mensaje.setFrom(new InternetAddress(c.getUserEmail()));
 			mensaje.addRecipient(Message.RecipientType.TO, new InternetAddress(c.getFrom()));
 			mensaje.setSubject(c.getSubject());
-			mensaje.setContent(stb.getM(),"text/html; charset=utf-8");
+			mensaje.setContent(stb.getM(), "text/html; charset=utf-8");
 
 			Transport t = s.getTransport("smtp");
 			t.connect(c.getUserEmail(), c.getPassword());
@@ -281,15 +284,13 @@ public class StudentController implements Serializable {
 		}
 	}
 
-	
-	public void validateTrue(){
+	public void validateTrue() {
 		stb.setValidation(true);
 	}
-	
-	public void validateFalse(){
+
+	public void validateFalse() {
 		stb.setValidation(false);
 	}
-	
 
 	// getters and setters
 	public IStudentService getStudentService() {

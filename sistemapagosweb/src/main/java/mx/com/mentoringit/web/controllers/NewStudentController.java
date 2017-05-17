@@ -101,10 +101,7 @@ public class NewStudentController implements Serializable {
 			Double remaining = 0.0;
 	
 			try {				
-				nsb.setSubject("Recibo de pago No. " + nsb.getNum_payment() + " para el curso "
-						+ this.newStudentService.selectCourseName(nsb.getIdCourse()));			
-
-				
+							
 				if (nsb.getIdProduct() != null) {
 					if (nsb.getAmount().doubleValue() > nsb.getTotal().doubleValue()) {
 						RequestContext.getCurrentInstance().execute("PF('invalidPayment').show()");
@@ -133,6 +130,9 @@ public class NewStudentController implements Serializable {
 						nsb.setMedia(new DefaultStreamedContent(is, "application/pdf", "Recibo.pdf"));
 	
 						listaR.clear();
+						
+						nsb.setSubject("Recibo de pago No. " + nsb.getNum_payment() + " para el curso "
+								+ this.newStudentService.selectCourseName(nsb.getIdCourse()));			
 	
 						RequestContext rc = RequestContext.getCurrentInstance();
 						rc.execute("PF('detail').show()");

@@ -463,6 +463,7 @@ public class ExistingStudentBean implements Serializable {
 			this.idStudent = null;
 			this.idProduct = null;
 			this.listaD = null;
+			this.paymentStatus = false;
 		}
 		this.idCourse = idCourse;
 
