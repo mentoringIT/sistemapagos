@@ -3,14 +3,14 @@
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:f="http://java.sun.com/jsf/core"
 	xmlns:h="http://java.sun.com/jsf/html"
-	xmlns:p="http://primefaces.org/ui" xmlns:pm="http://primefaces.org/ui">
+	xmlns:p="http://primefaces.org/ui">
 
 <h:head></h:head>
 <body>
 	<ui:include src="header.xhtml" />
 	<h:form id="form1" styleClass="center">	
 		<p:panel header="Buscar pagos de alumno">
-			<pm:fieldset>
+			<p:fieldset>
 				<h:panelGrid columns="3" cellpadding="5">
 
 					<p:outputLabel value="Curso" />
@@ -65,7 +65,7 @@
 					</p:selectOneMenu>
 					<p:message id="st" for="student" display="text" style="width:150px; font-size:14px;"/>
 				</h:panelGrid>
-			</pm:fieldset>
+			</p:fieldset>
 		</p:panel>
 		<p:toolbar>
 			<f:facet name="left">
