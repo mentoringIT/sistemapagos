@@ -1,0 +1,235 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui">
+
+<h:head>
+	<title>Pago instructor existente</title>
+	<style>
+/* 	CSS para centrar el formulario de login */
+.center {
+	margin: auto;
+	width: 90%;
+	padding: 0% 0;
+}
+</style>
+
+</h:head>
+
+<h:body>
+	<!-- 	<ui:include src="header.xhtml" /> -->
+	<p:messages id="messages" globalOnly="true" showDetail="true"
+		closable="true" />
+	<h:form id="form1" styleClass="center">
+
+		<p:panel id="panel" header="Pago instructor existente">
+
+
+			<h:panelGrid columns="3" cellpadding="5">
+
+				<p:outputLabel value="Curso" />
+				<p:selectOneMenu id="course" tabindex="1">
+				</p:selectOneMenu>
+				<p:message for="course" display="text"
+					style="width:150px; font-size:14px;" />
+
+				<p:outputLabel value="Inicio del curso" />
+				<h:panelGrid id="startsDates" columns="2" cellpadding="5">
+					<p:calendar id="date1" navigator="true" showOn="button"
+						tabindex="2" />
+
+					<p:calendar id="date2" navigator="true" showOn="button"
+						tabindex="3" />
+
+					<p:selectOneMenu id="fechas" tabindex="4">
+					</p:selectOneMenu>
+
+					<p:commandButton id="busqueda" value="buscar" icon="ui-icon-search"
+						tabindex="5">
+					</p:commandButton>
+				</h:panelGrid>
+				<p:message for="fechas" display="text"
+					style="width:150px; font-size:14px;" />
+
+				<p:outputLabel value="Lugar del curso" />
+				<p:selectOneMenu id="placeCourse" tabindex="6"></p:selectOneMenu>
+				<p:message for="placeCourse" display="text"
+					style="width:150px; font-size:14px;" />
+					
+				<p:outputLabel id="timeCourse" value="Horario del curso" />
+				<p:inputText tabindex="7"/>
+				<p:message for="timeCourse" display="text"
+					style="width:150px; font-size:14px;" />
+
+			</h:panelGrid>
+
+			<h:panelGrid id="data" columns="3" cellpadding="5">
+
+				<p:outputLabel value="Nombre del instructor(a)" />
+				<p:selectOneMenu id="teacher" tabindex="8">				
+				</p:selectOneMenu>
+				<p:message for="teacher" display="text"
+					style="width:150px; font-size:14px;" />
+
+				<p:outputLabel value="Fecha de pago" />
+				<p:calendar id="paymentDate" showOn="button" tabindex="9" />
+				<p:message for="paymentDate" display="text"
+					style="width:300px; font-size:14px;" />
+
+
+				<p:outputLabel value="Total del curso" />
+				<p:spinner id="total1" prefix="$" min="0" tabindex="10">
+				</p:spinner>
+				<p:message for="total1" display="text"
+					style="width:270px; font-size:14px;" />
+
+
+				<p:outputLabel value="Pago o Monto" />
+				<p:spinner id="amount" prefix="$" min="0" tabindex="11">
+				</p:spinner>
+				<p:message for="amount" display="text"
+					style="width:270px; font-size:14px;" />
+
+				<p:outputLabel value="No. de Pago" />
+				<p:spinner id="numPayment" min="1" tabindex="12">
+				</p:spinner>
+				<p:message for="numPayment" display="text"
+					style="width:270px; font-size:14px;" />
+
+				<p:outputLabel value="Forma de pago" />
+				<p:selectOneMenu id="typePayment" tabindex="13">
+					<f:selectItem itemLabel="--Seleccione opcion--"
+						noSelectionOption="true" />
+					<f:selectItem itemValue="Tarjeta" itemLabel="Tarjeta" />
+					<f:selectItem itemValue="Efectivo" itemLabel="Efectivo" />
+					<f:selectItem itemValue="Deposito" itemLabel="Deposito" />
+				</p:selectOneMenu>
+				<p:message for="typePayment" display="text"
+					style="width:150px; font-size:14px;" />
+
+			</h:panelGrid>
+
+
+			<p:fieldset>
+				<h:panelGrid id="totals" columns="2" cellpadding="5">
+					<p:outputLabel value="Costo curso: " />
+					<p:outputLabel value="#"/>
+
+					<p:outputLabel value="Total pagado: " />
+					<p:outputLabel value="#" />
+
+					<p:outputLabel value="Restante: " />
+					<p:outputLabel value="#" />
+				</h:panelGrid>
+			</p:fieldset>
+
+			<p:toolbar id="tools">
+				<f:facet name="left">
+					<p:commandButton id="gPago" value="Generar pago"						
+						update="form1" tabindex="14" />
+				</f:facet>
+
+				<f:facet name="right">
+					<p:commandButton value="Atras" action="back" immediate="true"
+						tabindex="15" />
+				</f:facet>
+			</p:toolbar>
+		</p:panel>
+
+		<p:dialog id="detail" widgetVar="detail" header="Detalles del pago"
+			modal="true" width="60%">
+			<p:toolbar>
+				<f:facet name="left">
+					<p:commandButton value="Confirmar pago"
+						update="form1:totals" />
+				</f:facet>
+				<f:facet name="right">
+					<p:commandButton value="Cancelar" onclick="PF().hide()" />
+				</f:facet>
+			</p:toolbar>
+		</p:dialog>
+
+		<p:dialog id="regExito" widgetVar="regExito" closable="false"
+			modal="true" header="Mensaje" height="50px" width="350px"
+			draggable="false" resizable="false">
+			<p:fieldset>
+				<p:outputLabel value="Pago registrado con exito" />
+			</p:fieldset>
+			<f:facet name="footer">
+				<p:commandButton value="Enviar" action="enviarCorreo" />
+				<p:commandButton value="Cancelar" onclick="PF().hide()" />
+			</f:facet>
+		</p:dialog>
+
+		<p:dialog id="regFallido" widgetVar="regFallido" closable="false"
+			modal="true" header="Mensaje" height="50px" width="350px"
+			draggable="false" resizable="false">
+			<p:fieldset>
+				<p:outputLabel value="No se ha podido registrar el pago" />
+			</p:fieldset>
+			<f:facet name="footer">
+				<p:commandButton value="Aceptar" onclick="PF().hide()" />
+			</f:facet>
+		</p:dialog>
+
+		<p:dialog id="selecionar" widgetVar="selecionar" closable="false"
+			modal="true" header="Mensaje" height="60px" width="350px"
+			draggable="false" resizable="false">
+			<p:fieldset>
+				<p:outputLabel value="Debe selecionar una fecha de inicio" />
+			</p:fieldset>
+			<f:facet name="footer">
+				<p:commandButton value="Aceptar" onclick="PF().hide()" />
+			</f:facet>
+		</p:dialog>
+
+		<p:dialog id="genPago" widgetVar="genPago" closable="false"
+			modal="true" header="Mensaje" height="50px" width="350px"
+			draggable="false" resizable="false">
+			<p:fieldset>
+				<p:outputLabel value="No se ha podido generar el pago" />
+			</p:fieldset>
+			<f:facet name="footer">
+				<p:commandButton value="Aceptar" onclick="PF().hide()" />
+			</f:facet>
+		</p:dialog>
+
+		<p:dialog id="invalidPayment" widgetVar="invalidPayment"
+			closable="false" modal="true" header="Mensaje" height="80px"
+			width="350px" draggable="false" resizable="false">
+			<p:fieldset>
+				<p:outputLabel
+					value="El pago actual es mayor al total del curso
+										o a la cantidad restante" />
+			</p:fieldset>
+			<f:facet name="footer">
+				<p:commandButton value="Aceptar" onclick="ocultar()"
+					immediate="true" />
+			</f:facet>
+		</p:dialog>
+
+		<p:dialog id="status" widgetVar="status" closable="false" modal="true"
+			header="Mensaje" height="50px" width="350px" draggable="false"
+			resizable="false">
+			<p:fieldset>
+				<p:outputLabel value="Curso pagado" />
+			</p:fieldset>
+			<f:facet name="footer">
+				<p:commandButton value="Aceptar" onclick="ocultar()"
+					immediate="true" />
+			</f:facet>
+		</p:dialog>
+
+
+
+		<script>
+			function ocultar(){
+				document.getElementById('status').style.display = 'none';
+				}
+		</script>
+
+	</h:form>
+</h:body>
+</html>

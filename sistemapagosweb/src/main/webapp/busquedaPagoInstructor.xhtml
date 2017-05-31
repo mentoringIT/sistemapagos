@@ -1,0 +1,84 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"> 
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"> 
+
+<h:head><title>Búsqueda pago instructor</title></h:head> 
+<body> 
+
+<ui:include src="header.xhtml" />
+	<h:form id="form1" styleClass="center">	
+		<p:panel header="Buscar pagos de instructor">
+			<p:fieldset>
+				<h:panelGrid columns="3" cellpadding="5">
+
+					<p:outputLabel value="Curso" />
+					<p:selectOneMenu id="course"  tabindex="1">
+					</p:selectOneMenu>
+					<p:message id="curso" for="course" display="text" style="width:150px; font-size:14px;"/>
+
+					<p:outputLabel value="Fecha inicio" />
+					<h:panelGrid id="consultaFecha" columns="2" cellpadding="5">
+						<p:calendar navigator="true" 
+							showOn="button"  tabindex="2"></p:calendar>
+							
+						<p:calendar navigator="true" 
+							showOn="button"  tabindex="3"/>
+
+						<p:selectOneMenu id="fechas" 
+						 tabindex="4">
+						</p:selectOneMenu>						
+						
+							<p:commandButton id="busqueda" value="buscar"
+							    icon="ui-icon-search"  
+							    tabindex="5"/>
+					
+					</h:panelGrid>
+					<p:message id="date" for="fechas" display="text" style="width:150px; font-size:14px;"/>
+
+					<p:outputLabel value="Nombre del instructor" />
+					<p:selectOneMenu id="teacher" tabindex="6">
+					</p:selectOneMenu>
+					<p:message id="st" for="teacher" display="text" style="width:150px; font-size:14px;"/>
+				</h:panelGrid>
+			</p:fieldset>
+		</p:panel>
+		<p:toolbar>
+			<f:facet name="left">
+				<p:commandButton id="consult" value="Consultar"
+						update="form1,fechas" tabindex="7"/>
+			</f:facet>
+			<f:facet name="right">
+				<p:commandButton value="Atras" action="back" immediate="true" tabindex="8"/>
+			</f:facet>
+		</p:toolbar>
+		
+		<p:dialog id="seleccionar" widgetVar="seleccionar" closable="false"
+			modal="true" header="Mensaje" height="60px" width="350px"
+			draggable="false" resizable="false">
+			<p:fieldset>
+				<p:outputLabel value="Debe selecionar una fecha de inicio" />
+			</p:fieldset>
+			<f:facet name="footer">				
+				<p:commandButton value="Aceptar" onclick="PF().hide()" />
+			</f:facet>
+		</p:dialog>
+		
+		<p:dialog id="no_payments" widgetVar="no_payments" closable="false"
+			modal="true" header="Mensaje" height="60px" width="350px"
+			draggable="false" resizable="false">
+			<p:fieldset>
+				<p:outputLabel value="El alumno no tiene pagos realizados" />
+			</p:fieldset>
+			<f:facet name="footer">				
+				<p:commandButton value="Aceptar" onclick="PF().hide()" />
+			</f:facet>
+		</p:dialog>
+
+	</h:form>
+
+
+</body> 
+</html>
