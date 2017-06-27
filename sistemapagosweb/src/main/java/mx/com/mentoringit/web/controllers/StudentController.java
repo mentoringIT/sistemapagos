@@ -75,9 +75,9 @@ public class StudentController implements Serializable {
 	}
 
 	// obtiene todos los alumnos
-	public List<StudentDTO> students() {
+	public List<StudentDTO> studentsByCourse() {
 		try {
-			return studentService.allStudent();
+			return studentService.studentByCourse(stb.getIdCourse());
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			log.error(e);
@@ -101,7 +101,7 @@ public class StudentController implements Serializable {
 		}
 	}
 
-	// obtiene todos los pagos de un alumno y calcula los totales PENDIENTE
+	// obtiene todos los pagos de un alumno y calcula los totales 
 	public String paymentsByStudent() {
 		stb.setTotalCourse(0.0); // this.totalCourse = 0.0;
 		stb.setTotalPayment(0.0);// this.totalPayment = 0.0;
@@ -215,6 +215,10 @@ public class StudentController implements Serializable {
 		c.setMessage(stb.getMessage());
 
 		if (controller(c)) {
+			FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("MbExistingStudentBean", null);
+			FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("MbNewStudent", null);
+			FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("MbStudentList", null);
+			
 			RequestContext rc = RequestContext.getCurrentInstance();
 			rc.execute("PF('success').show()");
 		} else {

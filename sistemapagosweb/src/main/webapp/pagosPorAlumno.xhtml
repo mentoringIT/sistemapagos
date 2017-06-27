@@ -59,7 +59,7 @@
 						disabled="#{MbStudentList.idProduct eq 0 or MbStudentList.idProduct eq null}" tabindex="6">
 
 						<f:selectItem itemLabel="--Seleccione Alumno--" noSelectionOption="true"/>
-						<f:selectItems value="#{MbStudentController.students()}" var="s"
+						<f:selectItems value="#{MbStudentController.studentsByCourse()}" var="s"
 							itemLabel="#{s.name}" itemValue="#{s.id}" />
 						<p:ajax process="@this" update="@this"/>	
 					</p:selectOneMenu>

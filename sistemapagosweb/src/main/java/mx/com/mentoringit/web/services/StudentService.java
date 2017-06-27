@@ -3,6 +3,7 @@ package mx.com.mentoringit.web.services;
 import mx.com.mentoringit.model.dao.CourseDAO;
 import mx.com.mentoringit.model.dao.PSPDAO;
 import mx.com.mentoringit.model.dao.ProductDAO;
+import mx.com.mentoringit.model.dao.RegistrationDAO;
 import mx.com.mentoringit.model.dao.StudentDAO;
 import mx.com.mentoringit.model.dto.CourseDTO;
 import mx.com.mentoringit.model.dto.PSPDTO;
@@ -21,6 +22,7 @@ public class StudentService implements IStudentService {
 	private StudentDAO studentDAO;
 	private ProductDAO productDAO;
 	private PSPDAO pspDAO;
+	private RegistrationDAO registrationDAO;
 
 	public CourseDAO getCourseDAO() {
 		return courseDAO;
@@ -58,6 +60,15 @@ public class StudentService implements IStudentService {
 	}
 	
 
+	public RegistrationDAO getRegistrationDAO() {
+		return registrationDAO;
+	}
+
+	@Autowired
+	public void setRegistrationDAO(RegistrationDAO registrationDAO) {
+		this.registrationDAO = registrationDAO;
+	}
+
 	@Override
 	public List<CourseDTO> allCourse() throws Exception {
 		return this.courseDAO.select();
@@ -84,6 +95,11 @@ public class StudentService implements IStudentService {
 	@Override
 	public String selectCourseName(Integer idCourse) throws Exception {
 		return this.courseDAO.selectName(idCourse).getName();
+	}
+
+	@Override
+	public List<StudentDTO> studentByCourse(Integer id) throws Exception {
+		return this.registrationDAO.select(id);
 	}
 
 }

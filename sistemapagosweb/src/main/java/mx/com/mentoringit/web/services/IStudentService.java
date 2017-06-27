@@ -9,10 +9,17 @@ import mx.com.mentoringit.model.dto.StudentDTO;
 
 public interface IStudentService {
 	public List<CourseDTO> allCourse() throws Exception;
+
 	public List<StudentDTO> allStudent() throws Exception;
+
 	public List<ProductDTO> startDates(int id, String date1, String date2) throws Exception;
-	public List<PSPDTO> paymentByStudent(Integer idStudent,Integer idProduct) throws Exception;
-	 public StudentDTO selectStudent(Integer idStudent) throws Exception;
-	 public String selectCourseName(Integer idCourse) throws Exception;
+
+	public List<PSPDTO> paymentByStudent(Integer idStudent, Integer idProduct) throws Exception;
+
+	public StudentDTO selectStudent(Integer idStudent) throws Exception;
+
+	public String selectCourseName(Integer idCourse) throws Exception;
+	
+	public List<StudentDTO> studentByCourse(Integer id) throws Exception;
 
 }

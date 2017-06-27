@@ -87,7 +87,7 @@
 
 					<f:selectItem itemLabel="--Seleccione Alumno--"
 						noSelectionOption="true" />
-					<f:selectItems value="#{MbExistingStudentController.selectAllStudent()}" var="s"
+					<f:selectItems value="#{MbExistingStudentController.studentByCourse()}" var="s"
 						itemValue="#{s.id}" itemLabel="#{s.name}" />
 					<p:ajax listener="#{MbExistingStudentController.totals}" process="@this"
 						update=":form1:numPayment, :form1:totals, :form1:total1" />

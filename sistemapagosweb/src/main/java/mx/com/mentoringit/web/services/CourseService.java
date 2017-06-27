@@ -26,6 +26,7 @@ public class CourseService implements ICourseService {
 	private StudentDAO studentDAO;
 	private ProductDAO productDAO;
 	private PaymentDAO paymentDAO;
+	
 		
 	//getter y setter 
 	public ProductDAO getProductDAO() {

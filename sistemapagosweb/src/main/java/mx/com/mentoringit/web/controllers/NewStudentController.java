@@ -5,7 +5,9 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.InputStream;
 import java.io.Serializable;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Properties;
 
@@ -35,6 +37,8 @@ import org.primefaces.model.DefaultStreamedContent;
 import mx.com.mentoringit.model.dto.Correo;
 import mx.com.mentoringit.model.dto.CourseDTO;
 import mx.com.mentoringit.model.dto.PaymentDTO;
+import mx.com.mentoringit.model.dto.ProductDTO;
+import mx.com.mentoringit.model.dto.RegistrationDTO;
 import mx.com.mentoringit.model.dto.ReportData;
 import mx.com.mentoringit.model.dto.StudentDTO;
 import mx.com.mentoringit.web.beans.NewStudentBean;
@@ -155,14 +159,24 @@ public class NewStudentController implements Serializable {
 		// inserta al estudiante en la base
 		public String inStudent() {
 			StudentDTO student = new StudentDTO();
-
+			RegistrationDTO register = new RegistrationDTO();
+			
 			student.setEmail(nsb.getEmail());
 			student.setName(nsb.getCompleteName());
 			student.setPhone(nsb.getTel());
+			student.setStatus((short)1);
+			student.setType_register("s");
+			
+			register.setCourseId(nsb.getIdCourse());
+			register.setProductoId(nsb.getIdProduct());
+
+			
 
 			try {
 				newStudentService.insertStudent(student);
 				nsb.setIdStudent(newStudentService.idMax());
+				register.setStudentId(nsb.getIdStudent());
+				newStudentService.insertRegister(register);
 				insertPayment();
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
@@ -183,6 +197,7 @@ public class NewStudentController implements Serializable {
 			payment.setDate_payment(nsb.getPaymentDate());
 			payment.setTotal_course(nsb.getTotal());
 			payment.setProduct_id(nsb.getIdProduct());
+			payment.setType_register("s");
 
 			try {
 				this.newStudentService.insertPayment(payment);
@@ -262,6 +277,10 @@ public class NewStudentController implements Serializable {
 			c.setMessage(nsb.getMessage());
 
 			if (controller(c)) {
+				FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("MbExistingStudentBean", null);
+				FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("MbNewStudent", null);
+				FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("MbStudentList", null);
+				
 				RequestContext rc = RequestContext.getCurrentInstance();
 				rc.execute("PF('success').show()");
 			} else {

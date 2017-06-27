@@ -76,10 +76,10 @@ public class ExistingStudentController {
 		}
 	
 		// obtiene todos los alumnos
-		public List<StudentDTO> selectAllStudent() {
+		public List<StudentDTO> studentByCourse() {
 
 			try {
-				return courseService.allStudent();
+				return courseService.studentByCourse(esb.getIdCourse());
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
 				log.error(e);
@@ -239,6 +239,8 @@ public class ExistingStudentController {
 			Double restante = 0.0;
 
 			try {
+				//valida que el pago actual no sea mayor que el total del curso o 
+				//el restante a pagar
 				if ((esb.getAmount().doubleValue() > esb.getTotal().doubleValue())
 						|| ((esb.getAmount().doubleValue() > esb.getRemaining().doubleValue())
 								&& (esb.getRemaining().doubleValue() != 0.0))) {
@@ -268,7 +270,9 @@ public class ExistingStudentController {
 						payment.setDate_payment(esb.getDate_payment());
 						payment.setTotal_course(esb.getTotal());
 						payment.setProduct_id(esb.getIdProduct());
+						payment.setType_register("s");
 
+						//muestra el estado de pagos actual si el alumno ya ha realizado pagos	
 						if (pay.getNum_payment() != null) {
 							esb.setTotalCourse(totalC);
 							esb.setTotalPayment(totalP + esb.getAmount().doubleValue());
@@ -358,6 +362,10 @@ public class ExistingStudentController {
 			c.setMessage(esb.getMessage());
 
 			if (controller(c)) {
+				FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("MbExistingStudentBean", null);
+				FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("MbNewStudent", null);
+				FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("MbStudentList", null);
+				
 				RequestContext rc = RequestContext.getCurrentInstance();
 				rc.execute("PF('success').show()");
 			} else {
