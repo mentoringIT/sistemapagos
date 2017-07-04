@@ -220,6 +220,10 @@
 			<to-view-id>menuInstructorExistente.xhtml</to-view-id>
 		</navigation-case>
 		<navigation-case>
+			<from-outcome>new</from-outcome>
+			<to-view-id>pagoInstructorNuevo1.xhtml</to-view-id>
+		</navigation-case>
+		<navigation-case>
 			<from-outcome>back</from-outcome>
 			<to-view-id>menuPrincipal.xhtml</to-view-id>
 		</navigation-case>
@@ -254,6 +258,26 @@
 		<navigation-case>
 			<from-outcome>back</from-outcome>
 			<to-view-id>menuInstructorExistente.xhtml</to-view-id>
+		</navigation-case>
+	</navigation-rule>
+	
+	<navigation-rule>
+		<from-view-id>pagoInstructorNuevo1.xhtml</from-view-id>
+		<navigation-case>
+			<from-outcome>next</from-outcome>
+			<to-view-id>pagoInstructorNuevo2.xhtml</to-view-id>
+		</navigation-case>
+		<navigation-case>
+			<from-outcome>back</from-outcome>
+			<to-view-id>menuInstructor.xhtml</to-view-id>
+		</navigation-case>
+	</navigation-rule>
+	
+	<navigation-rule>
+		<from-view-id>pagoInstructorNuevo2.xhtml</from-view-id>
+		<navigation-case>
+			<from-outcome>back</from-outcome>
+			<to-view-id>pagoInstructorNuevo1.xhtml</to-view-id>
 		</navigation-case>
 	</navigation-rule>
 	
