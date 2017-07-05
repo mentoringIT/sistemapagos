@@ -24,7 +24,7 @@
 			<h:panelGrid id="data" columns="3" cellpadding="5">
 
 				<p:outputLabel value="Nombre(s)" />
-				<p:inputText id="name" required="true"
+				<p:inputText id="name" value="#{MbNewInstructorBean.name}" required="true"
 					requiredMessage="campo obligatorio"
 					validatorMessage="ingrese solo letras" tabindex="1">
 					<f:validateRegex pattern="[a-zA-Z ]+" />
@@ -34,7 +34,7 @@
 					style="width:150px; font-size:14px;" />
 
 				<p:outputLabel value="Apellido paterno" />
-				<p:inputText id="aPaterno" required="true"
+				<p:inputText id="aPaterno" value="#{MbNewInstructorBean.pLastName}" required="true"
 					requiredMessage="campo obligatorio"
 					validatorMessage="ingrese sólo letras" tabindex="2">
 					<f:validateRegex pattern="[a-zA-Z ]+" />
@@ -44,7 +44,7 @@
 					style="width:150px; font-size:14px;" />
 
 				<p:outputLabel value="Apellido materno" />
-				<p:inputText id="aMaterno" required="true"
+				<p:inputText id="aMaterno" value="#{MbNewInstructorBean.mLastName}" required="true"
 					requiredMessage="campo obligatorio"
 					validatorMessage="ingrese sólo letras" tabindex="3">
 					<f:validateRegex pattern="[a-zA-Z ]+" />
@@ -54,17 +54,18 @@
 					style="width:150px; font-size:14px;" />
 
 				<p:outputLabel value="Tel. o Cel.:" />
-				<p:inputText id="phone" required="true"
+				<p:inputText id="phone" value="#{MbNewInstructorBean.phone}" required="true"
 					requiredMessage="campo obligatorio"
-					validatorMessage="ingrese sólo numeros" tabindex="4">
+					validatorMessage="ingrese solo numeros"
+					tabindex="4">
 					<f:validateRegex pattern="[0-9]+" />
-					<p:ajax update="form1" />
+					<p:ajax update="form1"/>
 				</p:inputText>
 				<p:message for="phone" display="text"
 					style="width:150px; font-size:14px;" />
-
+					
 				<p:outputLabel value="Correo:" />
-				<p:inputText id="email" required="true"
+				<p:inputText id="email" value="#{MbNewInstructorBean.email}" required="true"
 					requiredMessage="campo obligatorio"
 					validatorMessage="correo invalido" tabindex="5">
 					<f:validateRegex
@@ -75,7 +76,7 @@
 					style="width:150px; font-size:14px;" />
 
 				<p:outputLabel value="Tipo de estudio" />
-				<p:inputText id="typeStudy" required="true"
+				<p:inputText id="typeStudy" value="#{MbNewInstructorBean.typeStudy}" required="true"
 					requiredMessage="campo obligatorio"
 					validatorMessage="ingrese sólo letras" tabindex="6">
 					<f:validateRegex pattern="[a-zA-Z ]+" />
@@ -85,7 +86,7 @@
 					style="width:150px; font-size:14px;" />
 
 				<p:outputLabel value="Certificación" />
-				<p:inputText id="certificate" required="true"
+				<p:inputText id="certificate" value="#{MbNewInstructorBean.certification}" required="true"
 					requiredMessage="campo obligatorio"
 					validatorMessage="caracter invalido" tabindex="7">
 					<f:validateRegex pattern="[A-Za-z0-9 ]+" />
@@ -95,17 +96,22 @@
 					style="width:150px; font-size:14px;" />
 
 				<p:outputLabel value="Título" />
-				<p:selectOneRadio id="title" tabindex="8">
+				<p:selectOneRadio id="title" value="#{MbNewInstructorBean.title}" required="true" 
+				requiredMessage="campo requerido" tabindex="8">
 					<f:selectItem itemLabel="Si" itemValue="Si" />
 					<f:selectItem itemLabel="No" itemValue="No" />
+					<p:ajax update="form1" />
 				</p:selectOneRadio>
 				<p:message for="title" display="text"
 					style="width:150px; font-size:14px;" />
+				
 
 				<p:outputLabel value="Cédula profesional" />
-				<p:selectOneRadio id="cedula" tabindex="9">
+				<p:selectOneRadio id="cedula" value="#{MbNewInstructorBean.cedula}" required="true" 
+				requiredMessage="campo requerido" tabindex="9">
 					<f:selectItem itemLabel="Si" itemValue="Si" />
 					<f:selectItem itemLabel="No" itemValue="No" />
+					<p:ajax update="form1" />
 				</p:selectOneRadio>
 				<p:message for="cedula" display="text"
 					style="width:150px; font-size:14px;" />

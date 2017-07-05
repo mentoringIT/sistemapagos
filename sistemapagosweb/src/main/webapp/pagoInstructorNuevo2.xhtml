@@ -24,7 +24,7 @@
 			<h:panelGrid columns="3" cellpadding="5">
 
 				<p:outputLabel value="Curso" />
-				<p:selectOneMenu id="course" filter="true"
+				<p:selectOneMenu id="course" value="#{MbNewInstructorBean.idCourse}" filter="true"
 					filterMatchMode="contains" height="100" required="true"
 					requiredMessage="campo obligatorio" tabindex="1">
 					<f:selectItem itemLabel="--Seleccione Curso--"
@@ -38,9 +38,11 @@
 				<p:outputLabel value="Fecha de inicio" />
 				<h:panelGrid id="consultaFecha" columns="2" cellpadding="5">
 
-					<p:calendar navigator="true" showOn="button" tabindex="2" />
+					<p:calendar navigator="true" value="#{MbNewInstructorBean.date1}" 
+					showOn="button" tabindex="2" />
 
-					<p:calendar navigator="true" showOn="button" tabindex="3" />
+					<p:calendar navigator="true" value="#{MbNewInstructorBean.date2}" 
+					showOn="button" tabindex="3" />
 
 					<p:selectOneMenu id="fechas" requiredMessage="campo requerido"
 						tabindex="4">
@@ -60,7 +62,7 @@
 			<h:panelGrid id="data" columns="3" cellpadding="5">
 
 				<p:outputLabel value="Lugar del curso" />
-				<p:inputText id="placeCourse" required="true"
+				<p:inputText id="placeCourse" value="#{MbNewInstructorBean.placeCourse}" required="true"
 					requiredMessage="campo obligatorio"
 					validatorMessage="ingrese sólo letras"
 					tabindex="6">
@@ -71,7 +73,7 @@
 					style="width:150px; font-size:14px;" />
 
 				<p:outputLabel value="Horario del curso" />
-				<p:inputText id="timeCourse" 
+				<p:inputText id="timeCourse" value="#{MbNewInstructorBean.timeCourse}"
 					required="true" requiredMessage="campo obligatorio"
 					validatorMessage="ingrese sólo numeros y letras"
 					tabindex="7">
@@ -82,14 +84,14 @@
 					style="width:150px; font-size:14px;" />
 				
 				<p:outputLabel value="Fecha de pago:" />
-				<p:calendar id="datePayment" 
+				<p:calendar id="datePayment" value="#{MbNewInstructorBean.datePayment}"
 					showOn="button" required="true"
 					tabindex="8" />
 				<p:message for="datePayment" display="text"
 					style="width:150px; font-size:14px;" />
 
 				<p:outputLabel value="Total del curso:" />
-				<p:spinner id="total" prefix="$"
+				<p:spinner id="total" prefix="$" value="#{MbNewInstructorBean.total}"
 					min="0" required="true"
 					validatorMessage="el valor debe ser mayor que 0.0"
 					converterMessage="caracter invalido"
@@ -101,7 +103,7 @@
 					style="width:230px; font-size:14px;" />
 
 				<p:outputLabel value="Pago o Monto" />
-				<p:spinner id="amount" prefix="$"
+				<p:spinner id="amount" prefix="$" value="#{MbNewInstructorBean.amount}"
 					min="0" required="true"
 					validatorMessage="el valor debe ser mayor que 0.0"
 					converterMessage="caracter invalido"
@@ -113,8 +115,8 @@
 					style="width:230px; font-size:14px;" />
 
 				<p:outputLabel value="No. de Pago" />
-				<p:spinner id="numPayment"
-					min="1" required="true"
+				<p:spinner id="numPayment" value="#{MbNewInstructorBean.numPayment}"
+					min="1" required="true" 
 					validatorMessage="el valor debe ser mayor que 0"
 					converterMessage="caracter invalido"
 					tabindex="11" readonly="true">
@@ -125,7 +127,7 @@
 					style="width:230px; font-size:14px;" />
 
 				<p:outputLabel value="Forma de pago" />
-				<p:selectOneMenu id="typePayment"
+				<p:selectOneMenu id="typePayment" value="#{MbNewInstructorBean.typePayment}"
 					required="true"
 					requiredMessage="campo obligatorio"
 					tabindex="12">
@@ -134,6 +136,7 @@
 					<f:selectItem itemValue="Tarjeta" itemLabel="Tarjeta" />
 					<f:selectItem itemValue="Efectivo" itemLabel="Efectivo" />
 					<f:selectItem itemValue="Deposito" itemLabel="Deposito" />
+					<p:ajax update="form1" />
 				</p:selectOneMenu>
 				<p:message for="typePayment" display="text"
 					style="width:150px; font-size:14px;" />
