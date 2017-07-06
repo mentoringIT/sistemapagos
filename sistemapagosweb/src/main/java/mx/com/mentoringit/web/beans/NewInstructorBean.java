@@ -2,9 +2,12 @@ package mx.com.mentoringit.web.beans;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
+
+import mx.com.mentoringit.model.dto.ProductDTO;
 
 @ManagedBean(name = "MbNewInstructorBean")
 @SessionScoped
@@ -36,7 +39,8 @@ public class NewInstructorBean {
 	private Double amount;
 	private Integer numPayment;
 	private String typePayment;
-
+	private List<ProductDTO> listaD;
+	private Boolean validation;
 
 	public NewInstructorBean() {		
 		this.date1 = new Date();
@@ -44,7 +48,8 @@ public class NewInstructorBean {
 		this.datePayment = new Date();
 		this.total = 0.0;
 		this.amount = 0.0;
-		this.numPayment = 1;		
+		this.numPayment = 1;	
+		this.validation = false;
 	}
 
 
@@ -243,6 +248,26 @@ public class NewInstructorBean {
 		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
 		this.formatDatePayment = format.format(datePayment);
 		return formatDatePayment;
+	}
+
+
+	public List<ProductDTO> getListaD() {
+		return listaD;
+	}
+
+
+	public void setListaD(List<ProductDTO> listaD) {
+		this.listaD = listaD;
+	}
+
+
+	public Boolean getValidation() {
+		return validation;
+	}
+
+
+	public void setValidation(Boolean validation) {
+		this.validation = validation;
 	}
 
 }
