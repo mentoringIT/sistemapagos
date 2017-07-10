@@ -1,11 +1,14 @@
 package mx.com.mentoringit.web.beans;
 
+import java.io.ByteArrayOutputStream;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
+
+import org.primefaces.model.StreamedContent;
 
 import mx.com.mentoringit.model.dto.ProductDTO;
 
@@ -41,6 +44,9 @@ public class NewInstructorBean {
 	private String typePayment;
 	private List<ProductDTO> listaD;
 	private Boolean validation;
+	private Integer idStudent;
+	private ByteArrayOutputStream outputStream;
+	private StreamedContent media;
 
 	public NewInstructorBean() {		
 		this.date1 = new Date();
@@ -50,6 +56,8 @@ public class NewInstructorBean {
 		this.amount = 0.0;
 		this.numPayment = 1;	
 		this.validation = false;
+		outputStream = null;
+		media = null;
 	}
 
 
@@ -268,6 +276,36 @@ public class NewInstructorBean {
 
 	public void setValidation(Boolean validation) {
 		this.validation = validation;
+	}
+
+
+	public ByteArrayOutputStream getOutputStream() {
+		return outputStream;
+	}
+
+
+	public StreamedContent getMedia() {
+		return media;
+	}
+
+
+	public void setOutputStream(ByteArrayOutputStream outputStream) {
+		this.outputStream = outputStream;
+	}
+
+
+	public void setMedia(StreamedContent media) {
+		this.media = media;
+	}
+
+
+	public Integer getIdStudent() {
+		return idStudent;
+	}
+
+
+	public void setIdStudent(Integer idStudent) {
+		this.idStudent = idStudent;
 	}
 
 }
