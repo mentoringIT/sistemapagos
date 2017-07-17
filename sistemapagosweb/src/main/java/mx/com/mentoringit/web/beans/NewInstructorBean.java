@@ -47,7 +47,9 @@ public class NewInstructorBean {
 	private Integer idStudent;
 	private ByteArrayOutputStream outputStream;
 	private StreamedContent media;
-
+	
+	private String subject;
+	
 	public NewInstructorBean() {		
 		this.date1 = new Date();
 		this.date2 = new Date();
@@ -306,6 +308,16 @@ public class NewInstructorBean {
 
 	public void setIdStudent(Integer idStudent) {
 		this.idStudent = idStudent;
+	}
+
+
+	public String getSubject() {
+		return subject;
+	}
+
+
+	public void setSubject(String subject) {
+		this.subject = subject;
 	}
 
 }

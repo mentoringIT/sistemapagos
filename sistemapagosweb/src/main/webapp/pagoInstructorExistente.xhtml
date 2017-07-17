@@ -54,12 +54,17 @@
 					style="width:150px; font-size:14px;" />
 
 				<p:outputLabel value="Lugar del curso" />
-				<p:selectOneMenu id="placeCourse" tabindex="6"></p:selectOneMenu>
+				<p:inputText id="placeCourse" required="true" requiredMessage="campo obligatorio"
+					validatorMessage="ingrese sólo letras" tabindex="6">
+					<f:validateRegex pattern="[a-zA-Z ]+" />
+					<p:ajax update="form1" />
+				</p:inputText>
 				<p:message for="placeCourse" display="text"
 					style="width:150px; font-size:14px;" />
-					
+
+
 				<p:outputLabel id="timeCourse" value="Horario del curso" />
-				<p:inputText tabindex="7"/>
+				<p:inputText tabindex="7" />
 				<p:message for="timeCourse" display="text"
 					style="width:150px; font-size:14px;" />
 
@@ -68,7 +73,7 @@
 			<h:panelGrid id="data" columns="3" cellpadding="5">
 
 				<p:outputLabel value="Nombre del instructor(a)" />
-				<p:selectOneMenu id="teacher" tabindex="8">				
+				<p:selectOneMenu id="teacher" tabindex="8">
 				</p:selectOneMenu>
 				<p:message for="teacher" display="text"
 					style="width:150px; font-size:14px;" />
@@ -115,7 +120,7 @@
 			<p:fieldset>
 				<h:panelGrid id="totals" columns="2" cellpadding="5">
 					<p:outputLabel value="Costo curso: " />
-					<p:outputLabel value="#"/>
+					<p:outputLabel value="#" />
 
 					<p:outputLabel value="Total pagado: " />
 					<p:outputLabel value="#" />
@@ -127,8 +132,8 @@
 
 			<p:toolbar id="tools">
 				<f:facet name="left">
-					<p:commandButton id="gPago" value="Generar pago"						
-						update="form1" tabindex="14" />
+					<p:commandButton id="gPago" value="Generar pago" update="form1"
+						tabindex="14" />
 				</f:facet>
 
 				<f:facet name="right">
@@ -142,8 +147,7 @@
 			modal="true" width="60%">
 			<p:toolbar>
 				<f:facet name="left">
-					<p:commandButton value="Confirmar pago"
-						update="form1:totals" />
+					<p:commandButton value="Confirmar pago" update="form1:totals" />
 				</f:facet>
 				<f:facet name="right">
 					<p:commandButton value="Cancelar" onclick="PF().hide()" />

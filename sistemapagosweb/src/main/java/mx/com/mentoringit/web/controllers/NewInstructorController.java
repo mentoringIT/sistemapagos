@@ -12,6 +12,7 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
+import javax.servlet.http.HttpSession;
 
 import org.primefaces.context.RequestContext;
 import org.primefaces.model.DefaultStreamedContent;
@@ -106,8 +107,8 @@ public class NewInstructorController implements Serializable {
 		
 							listaR.clear();
 							
-//							instructorBean.setSubject("Recibo de pago No. " + instructorBean.getNumPayment() + " para el curso "
-//									+ this.newIntructorService.selectCourseName(instructorBean.getIdCourse()));			
+							instructorBean.setSubject("Recibo de pago No. " + instructorBean.getNumPayment() + " para el curso "
+									+ this.newIntructorService.selectCourseName(instructorBean.getIdCourse()));			
 		
 							RequestContext rc = RequestContext.getCurrentInstance();
 							rc.execute("PF('detail').show()");
@@ -191,15 +192,13 @@ public class NewInstructorController implements Serializable {
 				}
 
 			}
-
-	
-	
-	
-	
-	
-	
-	
-	
+			
+			public void addAttribute(){
+				HttpSession session = (HttpSession)FacesContext.getCurrentInstance().getExternalContext().getSession(true);
+				session.setAttribute("object", instructorBean);
+				
+				
+			}	
 	
 	
 

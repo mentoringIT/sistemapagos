@@ -5,58 +5,7 @@
 	http://xmlns.jcp.org/xml/ns/javaee/web-facesconfig_2_2.xsd"
 	version="2.2">
 
-	<!-- beans para el flujo de alumnos -->
-
-	<!-- <managed-bean> -->
-	<!-- <managed-bean-name>LoginUser</managed-bean-name> -->
-	<!-- <managed-bean-class>mx.com.mentoringit.web.beans.UserBean</managed-bean-class> -->
-	<!-- <managed-bean-scope>session</managed-bean-scope> -->
-	<!-- <managed-property> -->
-	<!-- <property-name>userService</property-name> -->
-	<!-- <value>#{userService}</value> -->
-	<!-- </managed-property> -->
-	<!-- </managed-bean> -->
-
-	<!-- <managed-bean> -->
-	<!-- <managed-bean-name>StudentList</managed-bean-name> -->
-	<!-- <managed-bean-class>mx.com.mentoringit.web.beans.StudentBean</managed-bean-class> -->
-	<!-- <managed-bean-scope>session</managed-bean-scope> -->
-	<!-- <managed-property> -->
-	<!-- <property-name>studentService</property-name> -->
-	<!-- <value>#{studentService}</value> -->
-	<!-- </managed-property> -->
-	<!-- </managed-bean> -->
-
-	<!-- <managed-bean> -->
-	<!-- <managed-bean-name>CourseList</managed-bean-name> -->
-	<!-- <managed-bean-class>mx.com.mentoringit.web.beans.ExistingStudentBean</managed-bean-class> -->
-	<!-- <managed-bean-scope>session</managed-bean-scope> -->
-	<!-- <managed-property> -->
-	<!-- <property-name>courseService</property-name> -->
-	<!-- <value>#{courseService}</value> -->
-	<!-- </managed-property> -->
-	<!-- </managed-bean> -->
-
-	<!-- <managed-bean> -->
-	<!-- <managed-bean-name>NewStudent</managed-bean-name> -->
-	<!-- <managed-bean-class>mx.com.mentoringit.web.beans.NewStudentBean</managed-bean-class> -->
-	<!-- <managed-bean-scope>session</managed-bean-scope> -->
-	<!-- <managed-property> -->
-	<!-- <property-name>newStudentService</property-name> -->
-	<!-- <value>#{newStudentService}</value> -->
-	<!-- </managed-property> -->
-	<!-- </managed-bean> -->
-
-	<!-- <managed-bean> -->
-	<!-- <managed-bean-name>paymentLast</managed-bean-name> -->
-	<!-- <managed-bean-class>mx.com.mentoringit.web.beans.LastPaymentBean</managed-bean-class> -->
-	<!-- <managed-bean-scope>session</managed-bean-scope> -->
-	<!-- <managed-property> -->
-	<!-- <property-name>lastPaymentService</property-name> -->
-	<!-- <value>#{lastPaymentService}</value> -->
-	<!-- </managed-property> -->
-	<!-- </managed-bean> -->
-
+	
 	<!-- reglas de navegacion para el flujo de alumnos -->
 
 	<navigation-rule>
@@ -275,6 +224,10 @@
 	
 	<navigation-rule>
 		<from-view-id>pagoInstructorNuevo2.xhtml</from-view-id>
+		<navigation-case>
+			<from-outcome>send</from-outcome>
+			<to-view-id>envioCorreoInstructor.xhtml</to-view-id>
+		</navigation-case>
 		<navigation-case>
 			<from-outcome>back</from-outcome>
 			<to-view-id>pagoInstructorNuevo1.xhtml</to-view-id>
