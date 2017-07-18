@@ -30,7 +30,15 @@
 			<h:panelGrid columns="3" cellpadding="5">
 
 				<p:outputLabel value="Curso" />
-				<p:selectOneMenu id="course" tabindex="1">
+				<p:selectOneMenu id="course" filter="true" value="#{MbExistingInstructor.idCourse}"
+					filterMatchMode="contains" height="100" required="true"
+					requiredMessage="campo obligatorio" tabindex="1">
+					<f:selectItem itemLabel="--Seleccione Curso--"
+						noSelectionOption="true" />
+					<f:selectItems value="#{MbExistingInstructorController.selectCourse()}"
+					var="c"	itemValue="#{c.id}" itemLabel="#{c.name}"/>
+					<p:ajax process="@this"
+						update=":form1:startsDates :form1:data :form1:totals :form1" />
 				</p:selectOneMenu>
 				<p:message for="course" display="text"
 					style="width:150px; font-size:14px;" />
@@ -38,23 +46,39 @@
 				<p:outputLabel value="Inicio del curso" />
 				<h:panelGrid id="startsDates" columns="2" cellpadding="5">
 					<p:calendar id="date1" navigator="true" showOn="button"
-						tabindex="2" />
+					disabled="#{MbExistingInstructor.idCourse eq 0 or MbExistingInstructor.idCourse eq null}"
+						value="#{MbExistingInstructor.date1}" tabindex="2" />
 
 					<p:calendar id="date2" navigator="true" showOn="button"
-						tabindex="3" />
+					disabled="#{MbExistingInstructor.idCourse eq 0 or MbExistingInstructor.idCourse eq null}"
+						value="#{MbExistingInstructor.date2}" tabindex="3" />
 
-					<p:selectOneMenu id="fechas" tabindex="4">
+					<p:selectOneMenu id="fechas" required="#{MbExistingInstructor.validation}" value="#{MbExistingInstructor.idProduct}"
+					disabled="#{MbExistingInstructor.idCourse eq 0 or MbExistingInstructor.idCourse eq null}"
+						requiredMessage="campo obligatorio" tabindex="4">
+						<f:selectItem itemLabel="--Fechas de inicio--" />
+						<f:selectItems value="#{MbExistingInstructor.listaD}" var="d"
+							itemValue="#{d.id}" itemLabel="#{d.start_date}"/>
+						<p:ajax process="@this" update=":form1:data" />
 					</p:selectOneMenu>
 
 					<p:commandButton id="busqueda" value="buscar" icon="ui-icon-search"
-						tabindex="5">
+					disabled="#{MbExistingInstructor.idCourse eq 0 or MbExistingInstructor.idCourse eq null}"
+					actionListener="#{MbExistingInstructorController.startDates}"	update="fechas" tabindex="5">
 					</p:commandButton>
 				</h:panelGrid>
 				<p:message for="fechas" display="text"
 					style="width:150px; font-size:14px;" />
 
-				<p:outputLabel value="Lugar del curso" />
-				<p:inputText id="placeCourse" required="true" requiredMessage="campo obligatorio"
+				
+			</h:panelGrid>
+
+			<h:panelGrid id="data" columns="3" cellpadding="5">
+			
+			<p:outputLabel value="Lugar del curso" />
+				<p:inputText id="placeCourse" required="true"
+				disabled="#{MbExistingInstructor.idProduct eq 0 or MbExistingInstructor.idProduct eq null}"
+					requiredMessage="campo obligatorio"
 					validatorMessage="ingrese sólo letras" tabindex="6">
 					<f:validateRegex pattern="[a-zA-Z ]+" />
 					<p:ajax update="form1" />
@@ -63,48 +87,80 @@
 					style="width:150px; font-size:14px;" />
 
 
-				<p:outputLabel id="timeCourse" value="Horario del curso" />
-				<p:inputText tabindex="7" />
+				<p:outputLabel id="time" value="Horario del curso" />
+				<p:inputText id="timeCourse" required="true"
+				disabled="#{MbExistingInstructor.idProduct eq 0 or MbExistingInstructor.idProduct eq null}"
+					requiredMessage="campo obligatorio"
+					validatorMessage="ingrese sólo numeros y letras" tabindex="7">
+					<f:validateRegex pattern="[a-zA-Z0-9 ]+" />
+					<p:ajax update="form1" />
+				</p:inputText>
 				<p:message for="timeCourse" display="text"
 					style="width:150px; font-size:14px;" />
-
-			</h:panelGrid>
-
-			<h:panelGrid id="data" columns="3" cellpadding="5">
+			
 
 				<p:outputLabel value="Nombre del instructor(a)" />
-				<p:selectOneMenu id="teacher" tabindex="8">
+				<p:selectOneMenu id="teacher" tabindex="8" filter="true"
+				disabled="#{MbExistingInstructor.idProduct eq 0 or MbExistingInstructor.idProduct eq null}"
+					filterMatchMode="contains" height="100" required="true"
+					requiredMessage="campo obligatorio">
+					<f:selectItem itemLabel="--Seleccione Alumno--"
+						noSelectionOption="true" />
+					<f:selectItems value="#{MbExistingInstructorController.allInstructors()}" var="t"
+						itemValue="#{t.id}" itemLabel="#{t.name}" />	
 				</p:selectOneMenu>
 				<p:message for="teacher" display="text"
 					style="width:150px; font-size:14px;" />
 
 				<p:outputLabel value="Fecha de pago" />
-				<p:calendar id="paymentDate" showOn="button" tabindex="9" />
+				<p:calendar id="paymentDate" showOn="button" tabindex="9"
+				disabled="#{MbExistingInstructor.idProduct eq 0 or MbExistingInstructor.idProduct eq null}"
+					value="#{MbExistingInstructor.datePayment}" required="true" />
 				<p:message for="paymentDate" display="text"
 					style="width:300px; font-size:14px;" />
 
 
 				<p:outputLabel value="Total del curso" />
-				<p:spinner id="total1" prefix="$" min="0" tabindex="10">
+				<p:spinner id="total1" prefix="$" min="0" tabindex="10"
+				disabled="#{MbExistingInstructor.idProduct eq 0 or MbExistingInstructor.idProduct eq null}"
+					value="#{MbExistingInstructor.total}" required="true"
+					validatorMessage="el valor debe ser mayor que 0.0"
+					converterMessage="caracter invalido">
+					<f:validateDoubleRange minimum="1.0" />
+					<p:ajax update="form1" />
 				</p:spinner>
 				<p:message for="total1" display="text"
 					style="width:270px; font-size:14px;" />
 
 
 				<p:outputLabel value="Pago o Monto" />
-				<p:spinner id="amount" prefix="$" min="0" tabindex="11">
+				<p:spinner id="amount" prefix="$" min="0" tabindex="11"
+				disabled="#{MbExistingInstructor.idProduct eq 0 or MbExistingInstructor.idProduct eq null}"
+					required="true" validatorMessage="el valor debe ser mayor que 0.0"
+					value="#{MbExistingInstructor.amount}"
+					converterMessage="caracter invalido">
+					<f:validateDoubleRange minimum="1.0" />
+					<p:ajax update="form1" />
 				</p:spinner>
 				<p:message for="amount" display="text"
 					style="width:270px; font-size:14px;" />
 
 				<p:outputLabel value="No. de Pago" />
-				<p:spinner id="numPayment" min="1" tabindex="12">
+				<p:spinner id="numPayment" min="1" tabindex="12" required="true"
+				disabled="#{MbExistingInstructor.idProduct eq 0 or MbExistingInstructor.idProduct eq null}"
+					readonly="true" value="#{MbExistingInstructor.numPayment}"
+					validatorMessage="el valor tiene que ser mayor que 0"
+					converterMessage="caracter invalido">
+					<f:validateLongRange minimum="1" />
+					<p:ajax process="@this" update="@this,form1" />
 				</p:spinner>
 				<p:message for="numPayment" display="text"
 					style="width:270px; font-size:14px;" />
 
 				<p:outputLabel value="Forma de pago" />
-				<p:selectOneMenu id="typePayment" tabindex="13">
+				<p:selectOneMenu id="typePayment" tabindex="13" required="true"
+				disabled="#{MbExistingInstructor.idProduct eq 0 or MbExistingInstructor.idProduct eq null}"
+					requiredMessage="campo obligatorio">
 					<f:selectItem itemLabel="--Seleccione opcion--"
 						noSelectionOption="true" />
 					<f:selectItem itemValue="Tarjeta" itemLabel="Tarjeta" />
@@ -120,13 +176,13 @@
 			<p:fieldset>
 				<h:panelGrid id="totals" columns="2" cellpadding="5">
 					<p:outputLabel value="Costo curso: " />
-					<p:outputLabel value="#" />
+					<p:outputLabel value="#{MbExistingInstructor.totalCourse}" />
 
 					<p:outputLabel value="Total pagado: " />
-					<p:outputLabel value="#" />
+					<p:outputLabel value="#{MbExistingInstructor.totalPayment}" />
 
 					<p:outputLabel value="Restante: " />
-					<p:outputLabel value="#" />
+					<p:outputLabel value="#{MbExistingInstructor.remaining}" />
 				</h:panelGrid>
 			</p:fieldset>
 
