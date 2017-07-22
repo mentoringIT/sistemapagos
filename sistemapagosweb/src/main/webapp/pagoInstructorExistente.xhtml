@@ -100,14 +100,16 @@
 			
 
 				<p:outputLabel value="Nombre del instructor(a)" />
-				<p:selectOneMenu id="teacher" tabindex="8" filter="true"
+				<p:selectOneMenu id="teacher" tabindex="8" filter="true" value="#{MbExistingInstructor.idStudent}"
 				disabled="#{MbExistingInstructor.idProduct eq 0 or MbExistingInstructor.idProduct eq null}"
 					filterMatchMode="contains" height="100" required="true"
 					requiredMessage="campo obligatorio">
 					<f:selectItem itemLabel="--Seleccione Alumno--"
 						noSelectionOption="true" />
 					<f:selectItems value="#{MbExistingInstructorController.allInstructors()}" var="t"
-						itemValue="#{t.id}" itemLabel="#{t.name}" />	
+						itemValue="#{t.id}" itemLabel="#{t.name}" />
+						<p:ajax listener="#{MbExistingInstructorController.totals()}" process="@this"
+						update=":form1:numPayment, :form1:totals, :form1:total1" />	
 				</p:selectOneMenu>
 				<p:message for="teacher" display="text"
 					style="width:150px; font-size:14px;" />
@@ -158,7 +160,7 @@
 					style="width:270px; font-size:14px;" />
 
 				<p:outputLabel value="Forma de pago" />
-				<p:selectOneMenu id="typePayment" tabindex="13" required="true"
+				<p:selectOneMenu id="typePayment" tabindex="13" required="true" value="#{MbExistingInstructor.typePayment}"
 				disabled="#{MbExistingInstructor.idProduct eq 0 or MbExistingInstructor.idProduct eq null}"
 					requiredMessage="campo obligatorio">
 					<f:selectItem itemLabel="--Seleccione opcion--"
@@ -189,6 +191,8 @@
 			<p:toolbar id="tools">
 				<f:facet name="left">
 					<p:commandButton id="gPago" value="Generar pago" update="form1"
+					actionListener="#{MbExistingInstructorController.createReport()}"
+					disabled="#{MbExistingInstructor.paymentStatus == true}"
 						tabindex="14" />
 				</f:facet>
 
@@ -201,9 +205,13 @@
 
 		<p:dialog id="detail" widgetVar="detail" header="Detalles del pago"
 			modal="true" width="60%">
+			<p:media cache="false" rendered="#{MbExistingInstructor.media ne null}"
+				width="100%" height="300px" value="#{MbExistingInstructor.media}" player="pdf" />
 			<p:toolbar>
 				<f:facet name="left">
-					<p:commandButton value="Confirmar pago" update="form1:totals" />
+					<p:commandButton value="Confirmar pago" update="form1:totals"
+					actionListener="#{MbExistingInstructorController.addAttribute()}" 
+					action="#{MbExistingInstructorController.insertPayment()}"/>
 				</f:facet>
 				<f:facet name="right">
 					<p:commandButton value="Cancelar" onclick="PF().hide()" />
@@ -218,7 +226,7 @@
 				<p:outputLabel value="Pago registrado con exito" />
 			</p:fieldset>
 			<f:facet name="footer">
-				<p:commandButton value="Enviar" action="enviarCorreo" />
+				<p:commandButton value="Enviar" action="envioCorreoInstructor" />
 				<p:commandButton value="Cancelar" onclick="PF().hide()" />
 			</f:facet>
 		</p:dialog>

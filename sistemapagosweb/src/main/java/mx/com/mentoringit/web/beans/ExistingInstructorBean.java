@@ -28,9 +28,9 @@ public class ExistingInstructorBean {
 	private Double total;
 	private Double amount;
 	private Integer numPayment;
-	private String type_payment;
+	private String typePayment;
 	private Date datePayment;
-	private String date_payment2;
+	private String datePayment2;
 	private Boolean validation;
 	private Boolean paymentStatus;
 	private Boolean valData;
@@ -114,16 +114,18 @@ public class ExistingInstructorBean {
 		return numPayment;
 	}
 
-	public String getType_payment() {
-		return type_payment;
+	public String getTypePayment() {
+		return typePayment;
 	}
 
 	public Date getDatePayment() {
 		return datePayment;
 	}
 
-	public String getDate_payment2() {
-		return date_payment2;
+	public String getDatePayment2() {
+		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+		datePayment2 = format.format(datePayment);
+		return datePayment2;
 	}
 
 	public Boolean getValidation() {
@@ -203,6 +205,7 @@ public class ExistingInstructorBean {
 	}
 
 	public void setIdProduct(Integer idProduct) {
+		System.out.println("id product: " + idProduct);
 		this.idProduct = idProduct;
 	}
 
@@ -234,16 +237,16 @@ public class ExistingInstructorBean {
 		this.numPayment = numPayment;
 	}
 
-	public void setType_payment(String type_payment) {
-		this.type_payment = type_payment;
+	public void setTypePayment(String typePayment) {
+		this.typePayment = typePayment;
 	}
 
 	public void setDatePayment(Date datePayment) {
 		this.datePayment = datePayment;
 	}
 
-	public void setDate_payment2(String date_payment2) {
-		this.date_payment2 = date_payment2;
+	public void setDatePayment2(String datePayment2) {
+		this.datePayment2 = datePayment2;
 	}
 
 	public void setValidation(Boolean validation) {

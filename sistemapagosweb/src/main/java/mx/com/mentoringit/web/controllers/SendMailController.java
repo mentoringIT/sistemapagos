@@ -58,11 +58,8 @@ public class SendMailController {
 			MimeMultipart m = new MimeMultipart();
 
 			texto.setText(c.getMessage());
-
-			adjunto = new MimeBodyPart();
-			DataSource ds = new ByteArrayDataSource( mailBean.getInstructorBean().getOutputStream().toByteArray(), "application/pdf");
-			adjunto.setDataHandler(new DataHandler(ds));
-			adjunto.setFileName("Recibo");
+			adjunto = mailBean.getAdjunto();
+			
 			m.addBodyPart(adjunto);
 
 			m.addBodyPart(texto);

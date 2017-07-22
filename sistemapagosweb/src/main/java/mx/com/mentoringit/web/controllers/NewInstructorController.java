@@ -128,7 +128,7 @@ public class NewInstructorController implements Serializable {
 			}
 			
 
-			// inserta al estudiante en la base
+			// inserta al instructor en la base
 			public String inStudent() {
 				StudentDTO student = new StudentDTO();
 				ProfileDTO profileDTO = new ProfileDTO();
@@ -195,8 +195,7 @@ public class NewInstructorController implements Serializable {
 			
 			public void addAttribute(){
 				HttpSession session = (HttpSession)FacesContext.getCurrentInstance().getExternalContext().getSession(true);
-				session.setAttribute("object", instructorBean);
-				
+				session.setAttribute("object", instructorBean);				
 				
 			}	
 	
