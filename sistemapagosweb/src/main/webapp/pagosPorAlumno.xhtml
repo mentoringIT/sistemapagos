@@ -5,7 +5,7 @@
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:p="http://primefaces.org/ui">
 
-<h:head></h:head>
+<h:head><title>Búsqueda pago alumno</title></h:head>
 <body>
 	<ui:include src="header.xhtml" />
 	<h:form id="form1" styleClass="center">	
@@ -39,7 +39,7 @@
 						 disabled="#{MbStudentList.idCourse eq 0 or MbStudentList.idCourse eq null}">
 							<f:selectItem itemLabel="--Fechas de inicio--" noSelectionOption="true"/> 
 							<f:selectItems value="#{MbStudentList.listaD}" var="d"
-								itemLabel="#{d.start_date}" itemValue="#{d.id}" />
+								itemLabel="#{d}" itemValue="#{d.id}" />
 							<p:ajax process="@this,:form1:fechas" update="@this,:form1:student" />
 						</p:selectOneMenu>						
 						

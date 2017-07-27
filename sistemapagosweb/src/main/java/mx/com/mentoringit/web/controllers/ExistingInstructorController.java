@@ -47,7 +47,7 @@ public class ExistingInstructorController {
 		}
 	}
 
-	// obtiene todos los alumnos
+	// obtiene todos los instructores
 	public List<StudentDTO> allInstructors() {
 
 		try {

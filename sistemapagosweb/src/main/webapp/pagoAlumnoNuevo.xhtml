@@ -53,7 +53,7 @@
 						required="#{MbNewStudent.validation}" requiredMessage="campo requerido" tabindex="4">
 						<f:selectItem itemLabel="--Fechas de inicio--" />
 						<f:selectItems value="#{MbNewStudent.listaD}" var="d"
-							itemValue="#{d.id}" itemLabel="#{d.start_date}" />
+							itemValue="#{d.id}" itemLabel="#{d}" />
 						<p:ajax process=":form1:fechas" update=":form1:data" />
 					</p:selectOneMenu>
 

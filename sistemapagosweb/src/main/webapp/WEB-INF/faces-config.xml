@@ -186,7 +186,7 @@
 		</navigation-case>
 		<navigation-case>
 			<from-outcome>serch</from-outcome>
-			<to-view-id>busquedaPagoInstructor.xhtml</to-view-id>
+			<to-view-id>pagoPorInstructor.xhtml</to-view-id>
 		</navigation-case>
 		<navigation-case>
 			<from-outcome>back</from-outcome>
@@ -203,10 +203,22 @@
 	</navigation-rule>
 	
 	<navigation-rule>
-		<from-view-id>busquedaPagoInstructor.xhtml</from-view-id>
+		<from-view-id>pagoPorInstructor.xhtml</from-view-id>
+		<navigation-case>
+			<from-outcome>consult</from-outcome>
+			<to-view-id>historialPagosInstructor.xhtml</to-view-id>
+		</navigation-case>
 		<navigation-case>
 			<from-outcome>back</from-outcome>
 			<to-view-id>menuInstructorExistente.xhtml</to-view-id>
+		</navigation-case>
+	</navigation-rule>
+	
+	<navigation-rule>
+		<from-view-id>historialPagosInstructor.xhtml</from-view-id>
+		<navigation-case>
+			<from-outcome>back</from-outcome>
+			<to-view-id>pagoPorInstructor.xhtml</to-view-id>
 		</navigation-case>
 	</navigation-rule>
 	
@@ -233,6 +245,8 @@
 			<to-view-id>pagoInstructorNuevo1.xhtml</to-view-id>
 		</navigation-case>
 	</navigation-rule>
+	
+	
 	
 	<application>
 		<el-resolver>org.springframework.web.jsf.el.SpringBeanFacesELResolver</el-resolver>

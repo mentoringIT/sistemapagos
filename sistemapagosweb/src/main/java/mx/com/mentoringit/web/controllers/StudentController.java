@@ -85,7 +85,7 @@ public class StudentController implements Serializable {
 		}
 	}
 
-	// obtiene las fechas de inicio de los productos(cursos) PENDIENTE
+	// obtiene las fechas de inicio de los productos(cursos) 
 	public void startDates() {
 		try {
 			stb.setListaD(studentService.startDates(stb.getIdCourse(), stb.getFormatDate1(), stb.getFormatDate2()));

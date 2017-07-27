@@ -58,7 +58,7 @@
 						requiredMessage="campo obligatorio" tabindex="4">
 						<f:selectItem itemLabel="--Fechas de inicio--" />
 						<f:selectItems value="#{MbExistingInstructor.listaD}" var="d"
-							itemValue="#{d.id}" itemLabel="#{d.start_date}"/>
+							itemValue="#{d.id}" itemLabel="#{d}"/>
 						<p:ajax process="@this" update=":form1:data" />
 					</p:selectOneMenu>
 

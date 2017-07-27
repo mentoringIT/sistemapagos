@@ -5,24 +5,24 @@
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:p="http://primefaces.org/ui" xmlns:pm="http://primefaces.org/ui">
 
-<h:head><title>Pagos de alumno</title></h:head>
+<h:head><title>Pagos de instructor</title></h:head>
 <body>
-	<ui:include src="header.xhtml" />
+<!-- 	<ui:include src="header.xhtml" /> -->
 	<h:form id="form">
 		<div>
 			<pm:fieldset>
 				<h:panelGrid id="student" columns="2" cellpadding="5">
 					<p:outputLabel value="Alumno:" />
-					<p:outputLabel value="#{MbStudentList.nameStudent}" />
+					<p:outputLabel value="#{MbPaymentByInstructor.nameInstructor}" />
 				</h:panelGrid>
 			</pm:fieldset>
 		</div>
 
-		<p:dataTable id="checkboxDT" var="lp" value="#{MbStudentList.listaPsp}"
-			selection="#{MbStudentList.temListaPsp}" rowKey="#{lp.numPayment}"
+		<p:dataTable id="checkboxDT" var="lp" value="#{MbPaymentByInstructor.listaPsp}"
+			selection="#{MbPaymentByInstructor.temListaPsp}" rowKey="#{lp.numPayment}"
 			paginator="true" rows="10"
 			paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}"
-			filteredValue="#{MbStudentList.filterPayments}" style="margin-bottom:0">
+			filteredValue="#{MbPaymentByInstructor.filterPayments}" style="margin-bottom:0">
 
 			<f:facet name="header">
             Pagos
@@ -49,13 +49,13 @@
 		<pm:fieldset>
 			<h:panelGrid id="totals" columns="2" cellpadding="5">
 				<p:outputLabel value="Costo curso: " />
-				<p:outputLabel value="#{MbStudentList.totalCourse}" />
+				<p:outputLabel value="#{MbPaymentByInstructor.totalCourse}" />
 
 				<p:outputLabel value="Total pagado: " />
-				<p:outputLabel value="#{MbStudentList.totalPayment}" />
+				<p:outputLabel value="#{MbPaymentByInstructor.totalPayment}" />
 
 				<p:outputLabel value="Restante: " />
-				<p:outputLabel value="#{MbStudentList.remaining}" />
+				<p:outputLabel value="#{MbPaymentByInstructor.remaining}" />
 			</h:panelGrid>
 		</pm:fieldset>
 
