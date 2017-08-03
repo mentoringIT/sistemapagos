@@ -54,15 +54,20 @@ public class SendMailController {
 			});
 
 			BodyPart texto = new MimeBodyPart();
-			BodyPart adjunto;
-			MimeMultipart m = new MimeMultipart();
-
-			texto.setText(c.getMessage());
-			adjunto = mailBean.getAdjunto();
+			BodyPart adjunto;			
+			MimeMultipart m;
 			
-			m.addBodyPart(adjunto);
-
-			m.addBodyPart(texto);
+			if(mailBean.getByInstructorBean() != null){
+				m = mailBean.getByInstructorBean().getM();
+				texto.setText(c.getMessage());
+				m.addBodyPart(texto);
+			}else{
+				m = new MimeMultipart();
+				texto.setText(c.getMessage());
+				adjunto = mailBean.getAdjunto();			
+				m.addBodyPart(adjunto);
+				m.addBodyPart(texto);
+			}
 
 			MimeMessage mensaje = new MimeMessage(s);
 			mensaje.setFrom(new InternetAddress(c.getUserEmail()));
@@ -96,6 +101,8 @@ public class SendMailController {
 			FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("MbNewStudent", null);
 			FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("MbStudentList", null);
 			FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("MbNewInstructorBean", null);
+			FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("MbExistingInstructor", null);
+			FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("MbPaymentByInstructor", null);
 			FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("MbSendMail", null);
 			
 			

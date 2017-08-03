@@ -1,18 +1,33 @@
 package mx.com.mentoringit.web.controllers;
 
+import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
+import javax.activation.DataHandler;
+import javax.activation.DataSource;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.SessionScoped;
+import javax.faces.context.FacesContext;
+import javax.mail.internet.MimeBodyPart;
+import javax.mail.internet.MimeMultipart;
+import javax.mail.util.ByteArrayDataSource;
+import javax.servlet.http.HttpSession;
 
 import org.primefaces.context.RequestContext;
 
 import mx.com.mentoringit.model.dto.CourseDTO;
+import mx.com.mentoringit.model.dto.ReportData;
 import mx.com.mentoringit.model.dto.StudentDTO;
 import mx.com.mentoringit.web.beans.PaymentByInstructorBean;
 import mx.com.mentoringit.web.services.IPaymentByInstructorService;
+import net.sf.jasperreports.engine.JasperExportManager;
+import net.sf.jasperreports.engine.JasperFillManager;
+import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 
 @ManagedBean(name = "MbPaymentByInstructorController")
 @SessionScoped
@@ -108,6 +123,79 @@ public class PaymentByInstructorController implements Serializable {
 			return "";
 		}
 	}
+	
+	
+	// crea los tikets de pago
+		public void createReport() {
+			List<ReportData> listaR = new ArrayList<ReportData>();
+			ReportData report = new ReportData();
+			Double totalPayment = 0.0;
+			byInstructorBean.setM(new MimeMultipart());
+
+			try {
+
+				if (byInstructorBean.getTemListaPsp().size() != 0) {
+					for (int i = 0; i < byInstructorBean.getTemListaPsp().size(); i++) {
+
+						Double remaining2;
+						totalPayment = totalPayment + byInstructorBean.getTemListaPsp().get(i).getAmountPayment();
+						remaining2 = byInstructorBean.getTemListaPsp().get(i).getTotalCourse() - totalPayment;
+
+						report.setStudentName(byInstructorBean.getTemListaPsp().get(i).getStudentName());
+						report.setCourseName(byInstructorBean.getTemListaPsp().get(i).getCourseName());
+						report.setNumPayment(byInstructorBean.getTemListaPsp().get(i).getNumPayment().toString());
+						report.setAmountPayment(byInstructorBean.getTemListaPsp().get(i).getAmountPayment().toString());
+						report.setDatePayment(byInstructorBean.getTemListaPsp().get(i).getDatePayment().toString());
+						report.setTypePayment(byInstructorBean.getTemListaPsp().get(i).getTypePayment());
+						report.setRemaining(remaining2.toString());
+						report.setTotalCourse(byInstructorBean.getTemListaPsp().get(i).getTotalCourse().toString());
+
+						listaR.add(report);
+
+						File jasper = new File(
+								FacesContext.getCurrentInstance().getExternalContext().getRealPath("/payment.jasper"));
+						JasperPrint jasperPrint = JasperFillManager.fillReport(jasper.getPath(), null,
+								new JRBeanCollectionDataSource(listaR));
+						byInstructorBean.setOutputStream(new ByteArrayOutputStream());
+						JasperExportManager.exportReportToPdfStream(jasperPrint, byInstructorBean.getOutputStream());
+
+						byInstructorBean.setAdjunto(new MimeBodyPart());
+
+						DataSource ds = new ByteArrayDataSource(byInstructorBean.getOutputStream().toByteArray(), "application/pdf");
+						byInstructorBean.getAdjunto().setDataHandler(new DataHandler(ds));
+						byInstructorBean.getAdjunto().setFileName("Recibo " + byInstructorBean.getTemListaPsp().get(i).getNumPayment() + "_"
+								+ byInstructorBean.getTemListaPsp().get(i).getStudentName() + ".pdf");
+						byInstructorBean.getM().addBodyPart(byInstructorBean.getAdjunto());
+
+						listaR.clear();
+
+					}
+					// this.temListaPsp.clear();
+					byInstructorBean.setFrom((instructorService.selectStudent(byInstructorBean.getIdStudent())).getEmail());
+					byInstructorBean.setSubject("Recibos de pagos realizados  para el curso "
+							+ instructorService.selectCourseName(byInstructorBean.getIdCourse()));
+					RequestContext rc = RequestContext.getCurrentInstance();
+					rc.execute("PF('exito').show()");
+
+				} else {
+					RequestContext rc = RequestContext.getCurrentInstance();
+					rc.execute("PF('vacio').show()");
+
+				}
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				RequestContext rc = RequestContext.getCurrentInstance();
+				rc.execute("PF('fallido').show()");
+//				log.error(e);
+			}
+		}
+
+		public void addAttribute(){
+			HttpSession session = (HttpSession)FacesContext.getCurrentInstance().getExternalContext().getSession(true);
+			session.setAttribute("object", byInstructorBean);				
+			
+		}
+	
 
 	/* getters and setters */
 	public IPaymentByInstructorService getInstructorService() {

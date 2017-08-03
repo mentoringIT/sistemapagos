@@ -16,4 +16,8 @@ public interface IPaymentByInstructorService {
 
 	public List<PSPDTO> paymentByInstructor(Integer idStudent, Integer idProduct) throws Exception;
 
+	public StudentDTO selectStudent(Integer idStudent) throws Exception;
+
+	public String selectCourseName(Integer idCourse) throws Exception;
+
 }

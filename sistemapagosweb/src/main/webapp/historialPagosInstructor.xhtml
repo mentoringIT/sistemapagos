@@ -7,12 +7,12 @@
 
 <h:head><title>Pagos de instructor</title></h:head>
 <body>
-<!-- 	<ui:include src="header.xhtml" /> -->
+	<ui:include src="header.xhtml" />
 	<h:form id="form">
 		<div>
 			<pm:fieldset>
 				<h:panelGrid id="student" columns="2" cellpadding="5">
-					<p:outputLabel value="Alumno:" />
+					<p:outputLabel value="Instructor:" />
 					<p:outputLabel value="#{MbPaymentByInstructor.nameInstructor}" />
 				</h:panelGrid>
 			</pm:fieldset>
@@ -62,7 +62,7 @@
 		<p:toolbar>
 			<f:facet name="left">
 				<p:commandButton value="Generar pago(s)"
-					actionListener="#{MbStudentController.createReport()}"
+					actionListener="#{MbPaymentByInstructorController.createReport()}"
 					icon="ui-icon-document" tabindex="1"/>
 			</f:facet>
 			<f:facet name="right">
@@ -78,7 +78,8 @@
 			</p:fieldset>
 
 			<f:facet name="footer">
-				<p:commandButton value="Enviar" action="send" />
+				<p:commandButton value="Enviar" actionListener="#{MbPaymentByInstructorController.addAttribute()}" 
+				action="envioCorreoInstructor" />
 				<p:commandButton value="Cancelar" onclick="PF().hide()" />
 			</f:facet>
 		</p:dialog>

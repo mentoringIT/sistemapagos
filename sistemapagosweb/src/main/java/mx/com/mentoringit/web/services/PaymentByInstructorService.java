@@ -45,4 +45,14 @@ public class PaymentByInstructorService implements IPaymentByInstructorService {
 		return this.pspDAO.paymentByStudent(idStudent, idProduct);
 	}
 
+	@Override
+	public StudentDTO selectStudent(Integer idStudent) throws Exception {
+		return studentDAO.selectStudent(idStudent);
+	}
+
+	@Override
+	public String selectCourseName(Integer idCourse) throws Exception {
+		return this.courseDAO.selectName(idCourse).getName();
+	}
+
 }
