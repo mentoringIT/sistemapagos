@@ -1,11 +1,16 @@
 package mx.com.mentoringit.web.controllers;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.Serializable;
 import java.util.Properties;
 
 import javax.activation.DataHandler;
 import javax.activation.DataSource;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
+import javax.faces.bean.RequestScoped;
+import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
 import javax.mail.BodyPart;
 import javax.mail.Message;
@@ -17,21 +22,32 @@ import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMultipart;
 import javax.mail.util.ByteArrayDataSource;
+import javax.servlet.http.HttpSession;
 
+import org.apache.log4j.Logger;
+import org.apache.log4j.PropertyConfigurator;
 import org.primefaces.context.RequestContext;
 
 import mx.com.mentoringit.model.dto.Correo;
 import mx.com.mentoringit.web.beans.SendMailBean;
 
 @ManagedBean(name = "MbSendMailController")
-public class SendMailController {
-	
+@RequestScoped
+public class SendMailController implements Serializable {
+	private final static Logger log = Logger.getLogger(SendMailController.class);
+
 	@ManagedProperty(value = "#{MbSendMail}")
-	private SendMailBean mailBean; 
-	
-	
-	
-	
+	private SendMailBean mailBean;
+
+	public SendMailController() {
+		try {
+			InputStream in = getClass().getClassLoader().getResourceAsStream("log4j.properties");
+			PropertyConfigurator.configure(in);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
 	// controla el envio del correo
 	private boolean controller(Correo c) {
 
@@ -54,17 +70,17 @@ public class SendMailController {
 			});
 
 			BodyPart texto = new MimeBodyPart();
-			BodyPart adjunto;			
+			BodyPart adjunto;
 			MimeMultipart m;
-			
-			if(mailBean.getByInstructorBean() != null){
+
+			if (mailBean.getByInstructorBean() != null) {
 				m = mailBean.getByInstructorBean().getM();
 				texto.setText(c.getMessage());
 				m.addBodyPart(texto);
-			}else{
+			} else {
 				m = new MimeMultipart();
 				texto.setText(c.getMessage());
-				adjunto = mailBean.getAdjunto();			
+				adjunto = mailBean.getAdjunto();
 				m.addBodyPart(adjunto);
 				m.addBodyPart(texto);
 			}
@@ -73,7 +89,7 @@ public class SendMailController {
 			mensaje.setFrom(new InternetAddress(c.getUserEmail()));
 			mensaje.addRecipient(Message.RecipientType.TO, new InternetAddress(c.getFrom()));
 			mensaje.setSubject(c.getSubject());
-			mensaje.setContent(m,"text/html; charset=utf-8");
+			mensaje.setContent(m, "text/html; charset=utf-8");
 
 			Transport t = s.getTransport("smtp");
 			t.connect(c.getUserEmail(), c.getPassword());
@@ -82,7 +98,7 @@ public class SendMailController {
 
 			return true;
 		} catch (Exception e) {
-//			log.error(e);
+			log.error(e);
 			return false;
 		}
 	}
@@ -100,12 +116,12 @@ public class SendMailController {
 			FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("MbExistingStudentBean", null);
 			FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("MbNewStudent", null);
 			FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("MbStudentList", null);
+			
 			FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("MbNewInstructorBean", null);
 			FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("MbExistingInstructor", null);
 			FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("MbPaymentByInstructor", null);
-			FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("MbSendMail", null);
-			
-			
+		
+
 			RequestContext rc = RequestContext.getCurrentInstance();
 			rc.execute("PF('success').show()");
 		} else {
@@ -115,6 +131,37 @@ public class SendMailController {
 
 	}
 
+	public void sendFail(){
+		if (mailBean.getExistingInsBean() != null) {
+			try {
+				mailBean.setExistingInsBean(null);
+				FacesContext.getCurrentInstance().getExternalContext()
+						.redirect("/sistemapagosweb/pagoInstructorExistente.xhtml");
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		} else if (mailBean.getInstructorBean() != null) {
+			try {
+				mailBean.setInstructorBean(null);
+				FacesContext.getCurrentInstance().getExternalContext()
+						.redirect("/sistemapagosweb/pagoInstructorNuevo1.xhtml");
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		} else if (mailBean.getByInstructorBean() != null) {
+			try {
+				mailBean.setByInstructorBean(null);
+				FacesContext.getCurrentInstance().getExternalContext()
+						.redirect("/sistemapagosweb/pagoPorInstructor.xhtml");
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+	}
+
 	public SendMailBean getMailBean() {
 		return mailBean;
 	}
@@ -122,6 +169,5 @@ public class SendMailController {
 	public void setMailBean(SendMailBean mailBean) {
 		this.mailBean = mailBean;
 	}
-
 
 }

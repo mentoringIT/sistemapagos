@@ -49,7 +49,7 @@
 			</p:fieldset>
 			
 			<f:facet name="footer">
-				<p:commandButton value="Aceptar" action="menuAlumnos"/>
+				<p:commandButton value="Aceptar" action="menuInstructor"/>
 			</f:facet>	
 			
 		</p:dialog>
@@ -62,7 +62,7 @@
 			</p:fieldset>
 			
 			<f:facet name="footer">
-				<p:commandButton value="Aceptar" action="pagoAlumnoExistente"/>
+				<p:commandButton value="Aceptar" actionListener="#{MbSendMailController.sendFail()}"/>
 			</f:facet>	
 			
 		</p:dialog>

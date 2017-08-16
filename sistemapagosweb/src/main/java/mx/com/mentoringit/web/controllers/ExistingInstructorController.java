@@ -4,6 +4,7 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.InputStream;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -13,6 +14,8 @@ import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
 import javax.servlet.http.HttpSession;
 
+import org.apache.log4j.Logger;
+import org.apache.log4j.PropertyConfigurator;
 import org.primefaces.context.RequestContext;
 import org.primefaces.model.DefaultStreamedContent;
 
@@ -29,12 +32,23 @@ import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 
 @ManagedBean(name = "MbExistingInstructorController")
 @SessionScoped
-public class ExistingInstructorController {
+public class ExistingInstructorController implements Serializable{
+	private final static Logger log = Logger.getLogger(ExistingInstructorController.class);
+
 	@ManagedProperty(value = "#{MbExistingInstructor}")
 	private ExistingInstructorBean existingInsBean;
 
 	@ManagedProperty(value = "#{existingInstructorService}")
 	private IExistingInstructorService instructorService;
+
+	public ExistingInstructorController() {
+		try {
+			InputStream in = getClass().getClassLoader().getResourceAsStream("log4j.properties");
+			PropertyConfigurator.configure(in);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
 
 	// obtiene todos los cursos
 	public List<CourseDTO> selectCourse() {
@@ -42,7 +56,7 @@ public class ExistingInstructorController {
 			return instructorService.allCourse();
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
-			// log.error(e);
+			log.error(e);
 			return null;
 		}
 	}
@@ -54,7 +68,7 @@ public class ExistingInstructorController {
 			return instructorService.allInstructors();
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
-			// log.error(e);
+			log.error(e);
 			return null;
 		}
 	}
@@ -73,15 +87,9 @@ public class ExistingInstructorController {
 
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
-			// log.error(e);
+			log.error(e);
 			existingInsBean.setValidation(false);
 		}
-	}
-
-	public void test() {
-		existingInsBean.setTotalCourse(100.0);
-		existingInsBean.setTotalPayment(100.0);
-		existingInsBean.setRemaining(100.0);
 	}
 
 	// muestra los totales
@@ -120,7 +128,7 @@ public class ExistingInstructorController {
 
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
-			// log.error(e);
+			log.error(e);
 		}
 	}
 
@@ -181,7 +189,8 @@ public class ExistingInstructorController {
 
 					listaR.clear();
 
-					existingInsBean.setFrom((instructorService.selectStudent(existingInsBean.getIdStudent())).getEmail());
+					existingInsBean
+							.setFrom((instructorService.selectStudent(existingInsBean.getIdStudent())).getEmail());
 
 					existingInsBean.setSubject("Recibo de pago No. " + existingInsBean.getNumPayment()
 							+ " para el curso " + instructorService.selectCourseName(existingInsBean.getIdCourse()));
@@ -200,7 +209,7 @@ public class ExistingInstructorController {
 			// TODO Auto-generated catch block
 			RequestContext rc = RequestContext.getCurrentInstance();
 			rc.execute("PF('genPago').show()");
-			// log.error(e);
+			log.error(e);
 
 		}
 
@@ -273,14 +282,14 @@ public class ExistingInstructorController {
 			// TODO Auto-generated catch block
 			RequestContext rc = RequestContext.getCurrentInstance();
 			rc.execute("PF('regFallido').show()");
-			// log.error(e);
+			log.error(e);
 		}
 
 	}
 
 	public void addAttribute() {
 		HttpSession session = (HttpSession) FacesContext.getCurrentInstance().getExternalContext().getSession(true);
-		session.setAttribute("object", existingInsBean);
+		session.setAttribute("existing", this.existingInsBean);
 
 	}
 

@@ -14,6 +14,8 @@ import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
 import javax.servlet.http.HttpSession;
 
+import org.apache.log4j.Logger;
+import org.apache.log4j.PropertyConfigurator;
 import org.primefaces.context.RequestContext;
 import org.primefaces.model.DefaultStreamedContent;
 
@@ -33,11 +35,24 @@ import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 @ManagedBean(name = "MbNewInstructorController")
 @SessionScoped
 public class NewInstructorController implements Serializable {
+	private final static Logger log = Logger.getLogger(NewInstructorController.class);
+	
 	@ManagedProperty(value = "#{newIntructorService}")
 	private INewInstructorServices newIntructorService;
 
 	@ManagedProperty(value = "#{MbNewInstructorBean}")
 	private NewInstructorBean instructorBean;
+	
+	public NewInstructorController(){
+		try {
+			InputStream in = getClass().getClassLoader().getResourceAsStream("log4j.properties");
+			PropertyConfigurator.configure(in);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+	}
+	
 
 	/* metodos */
 
@@ -47,7 +62,7 @@ public class NewInstructorController implements Serializable {
 			return newIntructorService.allCourse();
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			log.error(e);			
 			return null;
 		}
 	}
@@ -65,6 +80,7 @@ public class NewInstructorController implements Serializable {
 			}
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
+			log.error(e);
 			instructorBean.setValidation(true);
 		}
 	}
@@ -123,7 +139,7 @@ public class NewInstructorController implements Serializable {
 					// TODO Auto-generated catch block
 					RequestContext rc = RequestContext.getCurrentInstance();
 					rc.execute("PF('genPago').show()");
-//					log.error(e);
+					log.error(e);
 				}
 			}
 			
@@ -160,7 +176,7 @@ public class NewInstructorController implements Serializable {
 					insertPayment();
 				} catch (Exception e) {
 					// TODO Auto-generated catch block
-//					log.error(e);
+					log.error(e);
 				}
 				return "next";
 			}
@@ -188,14 +204,14 @@ public class NewInstructorController implements Serializable {
 					// TODO Auto-generated catch block
 					RequestContext rc = RequestContext.getCurrentInstance();
 					rc.execute("PF('regFallido').show()");
-//					log.error(e);
+					log.error(e);
 				}
 
 			}
 			
 			public void addAttribute(){
 				HttpSession session = (HttpSession)FacesContext.getCurrentInstance().getExternalContext().getSession(true);
-				session.setAttribute("object", instructorBean);				
+				session.setAttribute("new", this.instructorBean);				
 				
 			}	
 	

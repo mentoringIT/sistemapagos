@@ -365,6 +365,9 @@ public class ExistingStudentController {
 				FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("MbExistingStudentBean", null);
 				FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("MbNewStudent", null);
 				FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("MbStudentList", null);
+				FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("MbNewInstructorBean", null);
+				FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("MbExistingInstructor", null);
+				FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("MbPaymentByInstructor", null);
 				
 				RequestContext rc = RequestContext.getCurrentInstance();
 				rc.execute("PF('success').show()");

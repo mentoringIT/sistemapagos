@@ -4,6 +4,7 @@ import javax.activation.DataHandler;
 import javax.activation.DataSource;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
+import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import javax.mail.BodyPart;
 import javax.mail.MessagingException;
@@ -12,7 +13,7 @@ import javax.mail.util.ByteArrayDataSource;
 import javax.servlet.http.HttpSession;
 
 @ManagedBean(name = "MbSendMail")
-@SessionScoped
+@ViewScoped
 public class SendMailBean {
 
 	private String from;
@@ -27,9 +28,9 @@ public class SendMailBean {
 
 		HttpSession session = (HttpSession) FacesContext.getCurrentInstance().getExternalContext().getSession(true);
 
-		if (session.getAttribute("object").getClass().isInstance(new NewInstructorBean())) {
+		if (session.getAttribute("new") != null) {
 
-			instructorBean = (NewInstructorBean) session.getAttribute("object");
+			instructorBean = (NewInstructorBean) session.getAttribute("new");
 			from = instructorBean.getEmail();
 			subject = instructorBean.getSubject();
 
@@ -38,14 +39,15 @@ public class SendMailBean {
 			try {
 				adjunto.setDataHandler(new DataHandler(ds));
 				adjunto.setFileName("Recibo");
+				session.setAttribute("new", null);
 			} catch (MessagingException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 
-		} else if (session.getAttribute("object").getClass().isInstance(new ExistingInstructorBean())) {
+		} else if (session.getAttribute("existing") != null) {
 
-			existingInsBean = (ExistingInstructorBean) session.getAttribute("object");
+			existingInsBean = (ExistingInstructorBean) session.getAttribute("existing");
 			from = existingInsBean.getFrom();
 			subject = existingInsBean.getSubject();
 
@@ -54,16 +56,18 @@ public class SendMailBean {
 			try {
 				adjunto.setDataHandler(new DataHandler(ds));
 				adjunto.setFileName("Recibo");
+				session.setAttribute("existing", null);
 			} catch (MessagingException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 
-		} else if (session.getAttribute("object").getClass().isInstance(new PaymentByInstructorBean())) {
+		} else if (session.getAttribute("search") != null) {
 
-			byInstructorBean = (PaymentByInstructorBean) session.getAttribute("object");
+			byInstructorBean = (PaymentByInstructorBean) session.getAttribute("search");
 			from = byInstructorBean.getFrom();
 			subject = byInstructorBean.getSubject();
+			session.setAttribute("search", null);
 		}
 
 	}

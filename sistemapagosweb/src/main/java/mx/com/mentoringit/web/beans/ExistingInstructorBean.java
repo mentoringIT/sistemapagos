@@ -194,8 +194,7 @@ public class ExistingInstructorBean {
 			this.idProduct = null;
 			this.listaD = null;
 			this.paymentStatus = false;
-		}
-		this.idCourse = idCourse;
+		}		
 
 		this.idCourse = idCourse;
 	}
@@ -205,7 +204,6 @@ public class ExistingInstructorBean {
 	}
 
 	public void setIdProduct(Integer idProduct) {
-		System.out.println("id product: " + idProduct);
 		this.idProduct = idProduct;
 	}
 

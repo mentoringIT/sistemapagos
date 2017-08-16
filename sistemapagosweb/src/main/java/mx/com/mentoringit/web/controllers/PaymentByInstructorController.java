@@ -2,6 +2,7 @@ package mx.com.mentoringit.web.controllers;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.InputStream;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -17,6 +18,8 @@ import javax.mail.internet.MimeMultipart;
 import javax.mail.util.ByteArrayDataSource;
 import javax.servlet.http.HttpSession;
 
+import org.apache.log4j.Logger;
+import org.apache.log4j.PropertyConfigurator;
 import org.primefaces.context.RequestContext;
 
 import mx.com.mentoringit.model.dto.CourseDTO;
@@ -32,6 +35,7 @@ import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 @ManagedBean(name = "MbPaymentByInstructorController")
 @SessionScoped
 public class PaymentByInstructorController implements Serializable {
+	private final static Logger log = Logger.getLogger(PaymentByInstructorController.class);
 
 	@ManagedProperty(value = "#{paymentByInstructorService}")
 	private IPaymentByInstructorService instructorService;
@@ -40,6 +44,12 @@ public class PaymentByInstructorController implements Serializable {
 	private PaymentByInstructorBean byInstructorBean;
 
 	public PaymentByInstructorController() {
+		try {
+			InputStream in = getClass().getClassLoader().getResourceAsStream("log4j.properties");
+			PropertyConfigurator.configure(in);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 	// obtiene todos los cursos
@@ -48,7 +58,7 @@ public class PaymentByInstructorController implements Serializable {
 			return instructorService.allCourse();
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
-			// log.error(e);
+			log.error(e);
 			return null;
 		}
 	}
@@ -60,7 +70,7 @@ public class PaymentByInstructorController implements Serializable {
 			return instructorService.allInstructors();
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
-			// log.error(e);
+			log.error(e);
 			return null;
 		}
 	}
@@ -77,7 +87,7 @@ public class PaymentByInstructorController implements Serializable {
 			}
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
-			// log.error(e);
+			log.error(e);
 			byInstructorBean.setValidation(false);
 		}
 	}
@@ -118,84 +128,84 @@ public class PaymentByInstructorController implements Serializable {
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 
-			// log.error(e);
+			log.error(e);
 			// RequestContext.getCurrentInstance().execute("PF('seleccionar').show()");
 			return "";
 		}
 	}
-	
-	
+
 	// crea los tikets de pago
-		public void createReport() {
-			List<ReportData> listaR = new ArrayList<ReportData>();
-			ReportData report = new ReportData();
-			Double totalPayment = 0.0;
-			byInstructorBean.setM(new MimeMultipart());
+	public void createReport() {
+		List<ReportData> listaR = new ArrayList<ReportData>();
+		ReportData report = new ReportData();
+		Double totalPayment = 0.0;
+		byInstructorBean.setM(new MimeMultipart());
 
-			try {
+		try {
 
-				if (byInstructorBean.getTemListaPsp().size() != 0) {
-					for (int i = 0; i < byInstructorBean.getTemListaPsp().size(); i++) {
+			if (byInstructorBean.getTemListaPsp().size() != 0) {
+				for (int i = 0; i < byInstructorBean.getTemListaPsp().size(); i++) {
 
-						Double remaining2;
-						totalPayment = totalPayment + byInstructorBean.getTemListaPsp().get(i).getAmountPayment();
-						remaining2 = byInstructorBean.getTemListaPsp().get(i).getTotalCourse() - totalPayment;
+					Double remaining2;
+					totalPayment = totalPayment + byInstructorBean.getTemListaPsp().get(i).getAmountPayment();
+					remaining2 = byInstructorBean.getTemListaPsp().get(i).getTotalCourse() - totalPayment;
 
-						report.setStudentName(byInstructorBean.getTemListaPsp().get(i).getStudentName());
-						report.setCourseName(byInstructorBean.getTemListaPsp().get(i).getCourseName());
-						report.setNumPayment(byInstructorBean.getTemListaPsp().get(i).getNumPayment().toString());
-						report.setAmountPayment(byInstructorBean.getTemListaPsp().get(i).getAmountPayment().toString());
-						report.setDatePayment(byInstructorBean.getTemListaPsp().get(i).getDatePayment().toString());
-						report.setTypePayment(byInstructorBean.getTemListaPsp().get(i).getTypePayment());
-						report.setRemaining(remaining2.toString());
-						report.setTotalCourse(byInstructorBean.getTemListaPsp().get(i).getTotalCourse().toString());
+					report.setStudentName(byInstructorBean.getTemListaPsp().get(i).getStudentName());
+					report.setCourseName(byInstructorBean.getTemListaPsp().get(i).getCourseName());
+					report.setNumPayment(byInstructorBean.getTemListaPsp().get(i).getNumPayment().toString());
+					report.setAmountPayment(byInstructorBean.getTemListaPsp().get(i).getAmountPayment().toString());
+					report.setDatePayment(byInstructorBean.getTemListaPsp().get(i).getDatePayment().toString());
+					report.setTypePayment(byInstructorBean.getTemListaPsp().get(i).getTypePayment());
+					report.setRemaining(remaining2.toString());
+					report.setTotalCourse(byInstructorBean.getTemListaPsp().get(i).getTotalCourse().toString());
 
-						listaR.add(report);
+					listaR.add(report);
 
-						File jasper = new File(
-								FacesContext.getCurrentInstance().getExternalContext().getRealPath("/payment.jasper"));
-						JasperPrint jasperPrint = JasperFillManager.fillReport(jasper.getPath(), null,
-								new JRBeanCollectionDataSource(listaR));
-						byInstructorBean.setOutputStream(new ByteArrayOutputStream());
-						JasperExportManager.exportReportToPdfStream(jasperPrint, byInstructorBean.getOutputStream());
+					File jasper = new File(
+							FacesContext.getCurrentInstance().getExternalContext().getRealPath("/payment.jasper"));
+					JasperPrint jasperPrint = JasperFillManager.fillReport(jasper.getPath(), null,
+							new JRBeanCollectionDataSource(listaR));
+					byInstructorBean.setOutputStream(new ByteArrayOutputStream());
+					JasperExportManager.exportReportToPdfStream(jasperPrint, byInstructorBean.getOutputStream());
 
-						byInstructorBean.setAdjunto(new MimeBodyPart());
+					byInstructorBean.setAdjunto(new MimeBodyPart());
 
-						DataSource ds = new ByteArrayDataSource(byInstructorBean.getOutputStream().toByteArray(), "application/pdf");
-						byInstructorBean.getAdjunto().setDataHandler(new DataHandler(ds));
-						byInstructorBean.getAdjunto().setFileName("Recibo " + byInstructorBean.getTemListaPsp().get(i).getNumPayment() + "_"
-								+ byInstructorBean.getTemListaPsp().get(i).getStudentName() + ".pdf");
-						byInstructorBean.getM().addBodyPart(byInstructorBean.getAdjunto());
+					DataSource ds = new ByteArrayDataSource(byInstructorBean.getOutputStream().toByteArray(),
+							"application/pdf");
+					byInstructorBean.getAdjunto().setDataHandler(new DataHandler(ds));
+					byInstructorBean.getAdjunto()
+							.setFileName("Recibo " + byInstructorBean.getTemListaPsp().get(i).getNumPayment() + "_"
+									+ byInstructorBean.getTemListaPsp().get(i).getStudentName() + ".pdf");
+					byInstructorBean.getM().addBodyPart(byInstructorBean.getAdjunto());
 
-						listaR.clear();
-
-					}
-					// this.temListaPsp.clear();
-					byInstructorBean.setFrom((instructorService.selectStudent(byInstructorBean.getIdStudent())).getEmail());
-					byInstructorBean.setSubject("Recibos de pagos realizados  para el curso "
-							+ instructorService.selectCourseName(byInstructorBean.getIdCourse()));
-					RequestContext rc = RequestContext.getCurrentInstance();
-					rc.execute("PF('exito').show()");
-
-				} else {
-					RequestContext rc = RequestContext.getCurrentInstance();
-					rc.execute("PF('vacio').show()");
+					listaR.clear();
 
 				}
-			} catch (Exception e) {
-				// TODO Auto-generated catch block
+				// this.temListaPsp.clear();
+				byInstructorBean.setFrom((instructorService.selectStudent(byInstructorBean.getIdStudent())).getEmail());
+				byInstructorBean.setSubject("Recibos de pagos realizados  para el curso "
+						+ instructorService.selectCourseName(byInstructorBean.getIdCourse()));
 				RequestContext rc = RequestContext.getCurrentInstance();
-				rc.execute("PF('fallido').show()");
-//				log.error(e);
-			}
-		}
+				rc.execute("PF('exito').show()");
 
-		public void addAttribute(){
-			HttpSession session = (HttpSession)FacesContext.getCurrentInstance().getExternalContext().getSession(true);
-			session.setAttribute("object", byInstructorBean);				
-			
+			} else {
+				RequestContext rc = RequestContext.getCurrentInstance();
+				rc.execute("PF('vacio').show()");
+
+			}
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			RequestContext rc = RequestContext.getCurrentInstance();
+			rc.execute("PF('fallido').show()");
+			log.error(e);
 		}
-	
+	}
+
+	public void addAttribute() {
+		HttpSession session = (HttpSession) FacesContext.getCurrentInstance().getExternalContext().getSession(true);
+		session.setAttribute("search", this.byInstructorBean);
+
+	}
 
 	/* getters and setters */
 	public IPaymentByInstructorService getInstructorService() {
