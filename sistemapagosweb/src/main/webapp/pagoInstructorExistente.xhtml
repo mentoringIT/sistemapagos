@@ -104,7 +104,7 @@
 				disabled="#{MbExistingInstructor.idProduct eq 0 or MbExistingInstructor.idProduct eq null}"
 					filterMatchMode="contains" height="100" required="true"
 					requiredMessage="campo obligatorio">
-					<f:selectItem itemLabel="--Seleccione Alumno--"
+					<f:selectItem itemLabel="--Seleccione Instructor--"
 						noSelectionOption="true" />
 					<f:selectItems value="#{MbExistingInstructorController.allInstructors()}" var="t"
 						itemValue="#{t.id}" itemLabel="#{t.name}" />
