@@ -64,7 +64,7 @@ public class OptionsInstructorController implements Serializable {
 			
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			
 			log.error(e);
 
 		}
@@ -84,14 +84,13 @@ public class OptionsInstructorController implements Serializable {
 		try {
 			optionServices.updateInstructor(instructorDTO);
 			RequestContext.getCurrentInstance().execute("PF('success').show()");
-			System.out.println("Actualizado correctamente");
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			
 			RequestContext rc = RequestContext.getCurrentInstance();
 			rc.execute("PF('fail').show()");
 			log.error(e);
-			e.printStackTrace();
+			
 		}
 		
 	}
