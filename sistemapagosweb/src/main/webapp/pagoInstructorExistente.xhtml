@@ -76,7 +76,7 @@
 			<h:panelGrid id="data" columns="3" cellpadding="5">
 			
 			<p:outputLabel value="Lugar del curso" />
-				<p:inputText id="placeCourse" required="true"
+				<p:inputText id="placeCourse" required="true" value="#{MbExistingInstructor.placeCourse}"
 				disabled="#{MbExistingInstructor.idProduct eq 0 or MbExistingInstructor.idProduct eq null}"
 					requiredMessage="campo obligatorio"
 					validatorMessage="ingrese sólo letras" tabindex="6">
@@ -88,7 +88,7 @@
 
 
 				<p:outputLabel id="time" value="Horario del curso" />
-				<p:inputText id="timeCourse" required="true"
+				<p:inputText id="timeCourse" required="true" value="#{MbExistingInstructor.timeCourse}"
 				disabled="#{MbExistingInstructor.idProduct eq 0 or MbExistingInstructor.idProduct eq null}"
 					requiredMessage="campo obligatorio"
 					validatorMessage="ingrese sólo numeros y letras" tabindex="7">

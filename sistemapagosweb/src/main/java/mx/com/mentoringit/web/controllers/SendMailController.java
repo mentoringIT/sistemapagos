@@ -29,6 +29,7 @@ import org.apache.log4j.PropertyConfigurator;
 import org.primefaces.context.RequestContext;
 
 import mx.com.mentoringit.model.dto.Correo;
+import mx.com.mentoringit.web.beans.ExistingInstructorBean;
 import mx.com.mentoringit.web.beans.SendMailBean;
 
 @ManagedBean(name = "MbSendMailController")
@@ -118,9 +119,9 @@ public class SendMailController implements Serializable {
 			FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("MbStudentList", null);
 			
 			FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("MbNewInstructorBean", null);
-			FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("MbExistingInstructor", null);
+			FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("MbExistingInstructor", new ExistingInstructorBean());
 			FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("MbPaymentByInstructor", null);
-		
+			
 
 			RequestContext rc = RequestContext.getCurrentInstance();
 			rc.execute("PF('success').show()");
@@ -145,7 +146,7 @@ public class SendMailController implements Serializable {
 			try {
 				mailBean.setInstructorBean(null);
 				FacesContext.getCurrentInstance().getExternalContext()
-						.redirect("/sistemapagosweb/pagoInstructorNuevo1.xhtml");
+						.redirect("/sistemapagosweb/pagoInstructorNuevo2.xhtml");
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -154,7 +155,7 @@ public class SendMailController implements Serializable {
 			try {
 				mailBean.setByInstructorBean(null);
 				FacesContext.getCurrentInstance().getExternalContext()
-						.redirect("/sistemapagosweb/pagoPorInstructor.xhtml");
+						.redirect("/sistemapagosweb/historialPagosInstructor.xhtml");
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -162,6 +163,7 @@ public class SendMailController implements Serializable {
 		}
 	}
 
+	
 	public SendMailBean getMailBean() {
 		return mailBean;
 	}

@@ -77,6 +77,8 @@ public class ExistingInstructorController implements Serializable{
 	public void startDates() {
 
 		try {
+			System.out.println("date1: "+existingInsBean.getFormatDate1() + "\nDate2: "+existingInsBean.getFormatDate2());
+			System.out.println("validacion1:" + existingInsBean.getValidation());
 			existingInsBean.setListaD(instructorService.startDates(existingInsBean.getIdCourse(),
 					existingInsBean.getFormatDate1(), existingInsBean.getFormatDate2()));
 			if (existingInsBean.getListaD().size() != 0) {
@@ -84,9 +86,13 @@ public class ExistingInstructorController implements Serializable{
 			} else {
 				existingInsBean.setValidation(false);
 			}
-
+			
+			System.out.println("fechas:" + existingInsBean.getListaD().size());
+			System.out.println("validacion2:" + existingInsBean.getValidation());
+			System.out.println("-----------------------");
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
+			e.printStackTrace();
 			log.error(e);
 			existingInsBean.setValidation(false);
 		}
@@ -259,6 +265,8 @@ public class ExistingInstructorController implements Serializable{
 				payment.setTotal_course(existingInsBean.getTotal());
 				payment.setProduct_id(existingInsBean.getIdProduct());
 				payment.setType_register("t");
+				payment.setPlaceCourse(existingInsBean.getPlaceCourse());
+				payment.setTimeCourse(existingInsBean.getTimeCourse());
 
 				// muestra el estado de pagos actual si el alumno ya ha
 				// realizado pagos

@@ -36,23 +36,22 @@ import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 @SessionScoped
 public class NewInstructorController implements Serializable {
 	private final static Logger log = Logger.getLogger(NewInstructorController.class);
-	
+
 	@ManagedProperty(value = "#{newIntructorService}")
 	private INewInstructorServices newIntructorService;
 
 	@ManagedProperty(value = "#{MbNewInstructorBean}")
 	private NewInstructorBean instructorBean;
-	
-	public NewInstructorController(){
+
+	public NewInstructorController() {
 		try {
 			InputStream in = getClass().getClassLoader().getResourceAsStream("log4j.properties");
 			PropertyConfigurator.configure(in);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		
+
 	}
-	
 
 	/* metodos */
 
@@ -62,7 +61,7 @@ public class NewInstructorController implements Serializable {
 			return newIntructorService.allCourse();
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
-			log.error(e);			
+			log.error(e);
 			return null;
 		}
 	}
@@ -71,7 +70,7 @@ public class NewInstructorController implements Serializable {
 	public void startDates() {
 
 		try {
-			instructorBean.setListaD(newIntructorService.startDates(instructorBean.getIdCourse(), 
+			instructorBean.setListaD(newIntructorService.startDates(instructorBean.getIdCourse(),
 					instructorBean.getFormatDate1(), instructorBean.getFormatDate2()));
 			if (instructorBean.getListaD().size() != 0) {
 				instructorBean.setValidation(true);
@@ -84,138 +83,134 @@ public class NewInstructorController implements Serializable {
 			instructorBean.setValidation(true);
 		}
 	}
-	
-	
+
 	// crea el tiket de pago
-			public void createReport() {
-				List<ReportData> listaR = new ArrayList<ReportData>();
-				ReportData report = new ReportData();
-				Double remaining = 0.0;
-		
-				try {				
-								
-					if (instructorBean.getIdProduct() != null) {
-						if (instructorBean.getAmount().doubleValue() > instructorBean.getTotal().doubleValue()) {
-							RequestContext.getCurrentInstance().execute("PF('invalidPayment').show()");
-						} else {
-							remaining = instructorBean.getTotal() - instructorBean.getAmount();
-		
-							report.setStudentName(instructorBean.getCompleteName());
-							report.setCourseName(newIntructorService.selectCourseName(instructorBean.getIdCourse()));
-							report.setNumPayment(instructorBean.getNumPayment().toString());
-							report.setAmountPayment(instructorBean.getAmount().toString());
-							report.setDatePayment(instructorBean.getFormatDatePayment());
-							report.setTypePayment(instructorBean.getTypePayment());
-							report.setRemaining(remaining.toString());
-							report.setTotalCourse(instructorBean.getTotal().toString());
-		
-							listaR.add(report);
-		
-							File jasper = new File(
-									FacesContext.getCurrentInstance().getExternalContext().getRealPath("/payment.jasper"));
-							JasperPrint jasperPrint = JasperFillManager.fillReport(jasper.getPath(), null,
-									new JRBeanCollectionDataSource(listaR));
-							instructorBean.setOutputStream(new ByteArrayOutputStream());
-							JasperExportManager.exportReportToPdfStream(jasperPrint, instructorBean.getOutputStream());
-		
-							InputStream is = new ByteArrayInputStream(instructorBean.getOutputStream().toByteArray());
-							instructorBean.setMedia(new DefaultStreamedContent(is, "application/pdf", "Recibo.pdf"));
-		
-							listaR.clear();
-							
-							instructorBean.setSubject("Recibo de pago No. " + instructorBean.getNumPayment() + " para el curso "
-									+ this.newIntructorService.selectCourseName(instructorBean.getIdCourse()));			
-		
-							RequestContext rc = RequestContext.getCurrentInstance();
-							rc.execute("PF('detail').show()");
-		
-						}
-					} else {
-						RequestContext rc = RequestContext.getCurrentInstance();
-						rc.execute("PF('selecionar').show()");
-					}
-		
-				} catch (Exception e) {
-					// TODO Auto-generated catch block
+	public void createReport() {
+		List<ReportData> listaR = new ArrayList<ReportData>();
+		ReportData report = new ReportData();
+		Double remaining = 0.0;
+
+		try {
+
+			if (instructorBean.getIdProduct() != null) {
+				if (instructorBean.getAmount().doubleValue() > instructorBean.getTotal().doubleValue()) {
+					RequestContext.getCurrentInstance().execute("PF('invalidPayment').show()");
+				} else {
+					remaining = instructorBean.getTotal() - instructorBean.getAmount();
+
+					report.setStudentName(instructorBean.getCompleteName());
+					report.setCourseName(newIntructorService.selectCourseName(instructorBean.getIdCourse()));
+					report.setNumPayment(instructorBean.getNumPayment().toString());
+					report.setAmountPayment(instructorBean.getAmount().toString());
+					report.setDatePayment(instructorBean.getFormatDatePayment());
+					report.setTypePayment(instructorBean.getTypePayment());
+					report.setRemaining(remaining.toString());
+					report.setTotalCourse(instructorBean.getTotal().toString());
+
+					listaR.add(report);
+
+					File jasper = new File(
+							FacesContext.getCurrentInstance().getExternalContext().getRealPath("/payment.jasper"));
+					JasperPrint jasperPrint = JasperFillManager.fillReport(jasper.getPath(), null,
+							new JRBeanCollectionDataSource(listaR));
+					instructorBean.setOutputStream(new ByteArrayOutputStream());
+					JasperExportManager.exportReportToPdfStream(jasperPrint, instructorBean.getOutputStream());
+
+					InputStream is = new ByteArrayInputStream(instructorBean.getOutputStream().toByteArray());
+					instructorBean.setMedia(new DefaultStreamedContent(is, "application/pdf", "Recibo.pdf"));
+
+					listaR.clear();
+
+					instructorBean.setSubject("Recibo de pago No. " + instructorBean.getNumPayment() + " para el curso "
+							+ this.newIntructorService.selectCourseName(instructorBean.getIdCourse()));
+
 					RequestContext rc = RequestContext.getCurrentInstance();
-					rc.execute("PF('genPago').show()");
-					log.error(e);
+					rc.execute("PF('detail').show()");
+
 				}
+			} else {
+				RequestContext rc = RequestContext.getCurrentInstance();
+				rc.execute("PF('selecionar').show()");
 			}
-			
 
-			// inserta al instructor en la base
-			public String inStudent() {
-				StudentDTO student = new StudentDTO();
-				ProfileDTO profileDTO = new ProfileDTO();
-//				RegistrationDTO register = new RegistrationDTO();
-				
-				student.setEmail(instructorBean.getEmail());
-				student.setName(instructorBean.getCompleteName());
-				student.setPhone(instructorBean.getPhone());
-				student.setStatus((short)1);
-				student.setType_register("t");
-				
-				profileDTO.setTypeStudy(instructorBean.getTypeStudy());
-				profileDTO.setCertification(instructorBean.getCertification());
-				profileDTO.setDegree(instructorBean.getTitle());
-				profileDTO.setCedula(instructorBean.getCedula());
-				
-//				register.setCourseId(instructorBean.getIdCourse());
-//				register.setProductoId(instructorBean.getIdProduct());
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			RequestContext rc = RequestContext.getCurrentInstance();
+			rc.execute("PF('genPago').show()");
+			log.error(e);
+		}
+	}
 
-				
+	// inserta al instructor en la base
+	public String inStudent() {
+		StudentDTO student = new StudentDTO();
+		ProfileDTO profileDTO = new ProfileDTO();
+		// RegistrationDTO register = new RegistrationDTO();
 
-				try {
-					newIntructorService.insertStudent(student);
-					instructorBean.setIdStudent(newIntructorService.idMax());
-					profileDTO.setStudentId(instructorBean.getIdStudent());
-					newIntructorService.insertProfile(profileDTO);
-//					register.setStudentId(instructorBean.getIdStudent());
-//					newIntructorService.insertRegister(register);
-					insertPayment();
-				} catch (Exception e) {
-					// TODO Auto-generated catch block
-					log.error(e);
-				}
-				return "next";
-			}
-			
-			// inserta el pago en la base
-			private void insertPayment() {
-				PaymentDTO payment = new PaymentDTO();
+		student.setEmail(instructorBean.getEmail());
+		student.setName(instructorBean.getCompleteName());
+		student.setPhone(instructorBean.getPhone());
+		student.setStatus((short) 1);
+		student.setType_register("t");
 
-				payment.setStudent_id(instructorBean.getIdStudent());
-				payment.setCourse_id(instructorBean.getIdCourse());
-				payment.setNum_payment(instructorBean.getNumPayment());
-				payment.setAmount_payment(instructorBean.getAmount());
-				payment.setType_payment(instructorBean.getTypePayment());
-				payment.setDate_payment(instructorBean.getDatePayment());
-				payment.setTotal_course(instructorBean.getTotal());
-				payment.setProduct_id(instructorBean.getIdProduct());
-				payment.setType_register("t");
+		profileDTO.setTypeStudy(instructorBean.getTypeStudy());
+		profileDTO.setCertification(instructorBean.getCertification());
+		profileDTO.setDegree(instructorBean.getTitle());
+		profileDTO.setCedula(instructorBean.getCedula());
 
-				try {
-					this.newIntructorService.insertPayment(payment);
-					RequestContext rc = RequestContext.getCurrentInstance();
-					rc.execute("PF('regExito').show()");
+		// register.setCourseId(instructorBean.getIdCourse());
+		// register.setProductoId(instructorBean.getIdProduct());
 
-				} catch (Exception e) {
-					// TODO Auto-generated catch block
-					RequestContext rc = RequestContext.getCurrentInstance();
-					rc.execute("PF('regFallido').show()");
-					log.error(e);
-				}
+		try {
+			newIntructorService.insertStudent(student);
+			instructorBean.setIdStudent(newIntructorService.idMax());
+			profileDTO.setStudentId(instructorBean.getIdStudent());
+			newIntructorService.insertProfile(profileDTO);
+			// register.setStudentId(instructorBean.getIdStudent());
+			// newIntructorService.insertRegister(register);
+			insertPayment();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			log.error(e);
+		}
+		return "next";
+	}
 
-			}
-			
-			public void addAttribute(){
-				HttpSession session = (HttpSession)FacesContext.getCurrentInstance().getExternalContext().getSession(true);
-				session.setAttribute("new", this.instructorBean);				
-				
-			}	
-	
-	
+	// inserta el pago en la base
+	private void insertPayment() {
+		PaymentDTO payment = new PaymentDTO();
+
+		payment.setStudent_id(instructorBean.getIdStudent());
+		payment.setCourse_id(instructorBean.getIdCourse());
+		payment.setNum_payment(instructorBean.getNumPayment());
+		payment.setAmount_payment(instructorBean.getAmount());
+		payment.setType_payment(instructorBean.getTypePayment());
+		payment.setDate_payment(instructorBean.getDatePayment());
+		payment.setTotal_course(instructorBean.getTotal());
+		payment.setProduct_id(instructorBean.getIdProduct());
+		payment.setType_register("t");
+		payment.setPlaceCourse(instructorBean.getPlaceCourse());
+		payment.setTimeCourse(instructorBean.getTimeCourse());
+
+		try {
+			this.newIntructorService.insertPayment(payment);
+			RequestContext rc = RequestContext.getCurrentInstance();
+			rc.execute("PF('regExito').show()");
+
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			RequestContext rc = RequestContext.getCurrentInstance();
+			rc.execute("PF('regFallido').show()");
+			log.error(e);
+		}
+
+	}
+
+	public void addAttribute() {
+		HttpSession session = (HttpSession) FacesContext.getCurrentInstance().getExternalContext().getSession(true);
+		session.setAttribute("new", this.instructorBean);
+
+	}
 
 	/* getters and setters */
 	public INewInstructorServices getNewIntructorService() {

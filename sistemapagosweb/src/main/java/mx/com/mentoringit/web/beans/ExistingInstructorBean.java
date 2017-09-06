@@ -34,6 +34,8 @@ public class ExistingInstructorBean {
 	private Boolean validation;
 	private Boolean paymentStatus;
 	private Boolean valData;
+	private String placeCourse;
+	private String timeCourse;
 
 	private String from;
 	private String subject;
@@ -138,6 +140,22 @@ public class ExistingInstructorBean {
 
 	public Boolean getValData() {
 		return valData;
+	}
+
+	public String getPlaceCourse() {
+		return placeCourse;
+	}
+
+	public String getTimeCourse() {
+		return timeCourse;
+	}
+
+	public void setPlaceCourse(String placeCourse) {
+		this.placeCourse = placeCourse;
+	}
+
+	public void setTimeCourse(String timeCourse) {
+		this.timeCourse = timeCourse;
 	}
 
 	public String getFrom() {
