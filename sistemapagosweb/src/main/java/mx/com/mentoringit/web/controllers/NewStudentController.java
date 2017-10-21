@@ -278,11 +278,18 @@ public class NewStudentController implements Serializable {
 
 			if (controller(c)) {
 				FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("MbExistingStudentBean", null);
+				FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("MbExistingStudentController", null);
 				FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("MbNewStudent", null);
+				FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("MbNewStudentController", null);			
 				FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("MbStudentList", null);
+				FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("MbStudentController", null);
+							
 				FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("MbNewInstructorBean", null);
+				FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("MbNewInstructorController", null);
 				FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("MbExistingInstructor", null);
+				FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("MbExistingInstructorController", null);
 				FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("MbPaymentByInstructor", null);
+				FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("MbPaymentByInstructorController", null);
 				
 				RequestContext rc = RequestContext.getCurrentInstance();
 				rc.execute("PF('success').show()");

@@ -56,6 +56,7 @@ public class ExistingStudentController {
 	private ICourseService courseService;
 	
 	public ExistingStudentController(){
+		System.out.println("entrando al constructor controller");
 		try {
 			InputStream in = getClass().getClassLoader().getResourceAsStream("log4j.properties");
 			PropertyConfigurator.configure(in);
@@ -89,7 +90,7 @@ public class ExistingStudentController {
 
 		// obtiene las fechas de inicio
 		public void startDates() {
-
+			System.out.println("validacion1: " + esb.getValidation());
 			try {
 				esb.setListaD(courseService.startDates(esb.getIdCourse(), esb.getFormatDate1(), esb.getFormatDate2()));
 				if (esb.getListaD().size() != 0) {
@@ -98,6 +99,7 @@ public class ExistingStudentController {
 					esb.setValidation(false);
 				}
 
+				System.out.println("validacion2: " + esb.getValidation());
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
 				log.error(e);
@@ -363,11 +365,18 @@ public class ExistingStudentController {
 
 			if (controller(c)) {
 				FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("MbExistingStudentBean", null);
+				FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("MbExistingStudentController", null);
 				FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("MbNewStudent", null);
+				FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("MbNewStudentController", null);			
 				FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("MbStudentList", null);
+				FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("MbStudentController", null);
+							
 				FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("MbNewInstructorBean", null);
+				FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("MbNewInstructorController", null);
 				FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("MbExistingInstructor", null);
+				FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("MbExistingInstructorController", null);
 				FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("MbPaymentByInstructor", null);
+				FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("MbPaymentByInstructorController", null);
 				
 				RequestContext rc = RequestContext.getCurrentInstance();
 				rc.execute("PF('success').show()");
